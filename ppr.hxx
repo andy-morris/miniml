@@ -15,6 +15,7 @@ namespace miniml
 class Ppr
 {
 public:
+  using Char = wchar_t;
   using String = std::wstring;
   using OStream = std::wostream;
   using SStream = std::wstringstream;
@@ -97,12 +98,18 @@ public:
 };
 
 
+namespace ppr
+{
+  Ptr<Ppr> string(const Ppr::String&);
+  Ptr<Ppr> string(const Ppr::Char*);
+  Ptr<Ppr> indent(Ptr<Ppr>, unsigned indent = Ppr::default_indent);
+}
+
 Ptr<Ppr> operator>>(Ptr<Ppr>, unsigned);
-Ptr<Ppr> indent(Ptr<Ppr>, unsigned indent = Ppr::default_indent);
 Ptr<Ppr> operator*(Ptr<Ppr>, Ptr<Ppr>);
 Ptr<Ppr> operator+(Ptr<Ppr>, Ptr<Ppr>);
-Ptr<Ppr> operator""_p(const wchar_t*, size_t);
-Ptr<Ppr> operator""_p(wchar_t);
+Ptr<Ppr> operator""_p(const Ppr::Char*, size_t);
+Ptr<Ppr> operator""_p(Ppr::Char);
 Ptr<Ppr> operator+(Ptr<Ppr>);
 
 

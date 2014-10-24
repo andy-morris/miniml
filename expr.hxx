@@ -21,6 +21,8 @@ public:
   virtual ~Expr() {}
 
   virtual ExprType type() = 0;
+
+  virtual Ptr<Ppr> ppr(unsigned prec = 0) = 0;
 };
 
 
@@ -29,9 +31,11 @@ class IdExpr final: public Expr
 public:
   IdExpr(const Ptr<Id> i): m_id(i) {}
 
-  const Ptr<Id> id() const { return m_id; }
-
   ExprType type() { return ExprType::ID; }
+
+  Ptr<Ppr> ppr(unsigned prec = 0);
+
+  const Ptr<Id> id() const { return m_id; }
 
 private:
   const Ptr<Id> m_id;
@@ -47,6 +51,11 @@ public:
 
   ExprType type() { return ExprType::APP; }
 
+  Ptr<Ppr> ppr(unsigned prec = 0);
+
+  const Ptr<Expr> left() const { return m_left; }
+  const Ptr<Expr> right() const { return m_right; }
+
 private:
   const Ptr<Expr> m_left, m_right;
 };
@@ -60,6 +69,11 @@ public:
   {}
 
   ExprType type() { return ExprType::LAM; }
+
+  Ptr<Ppr> ppr(unsigned prec = 0);
+
+  const Ptr<Id> var() const { return m_var; }
+  const Ptr<Expr> body() const { return m_body; }
 
 private:
   const Ptr<Id> m_var;

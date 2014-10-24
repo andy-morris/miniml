@@ -2,6 +2,7 @@
 #define ID_HXX_HQ5DONMJ
 
 #include "ptr.hxx"
+#include "ppr.hxx"
 
 #include <string>
 #include <ostream>
@@ -29,6 +30,8 @@ public:
   const Ptr<String> val() const { return m_val; }
 
   operator const Ptr<String>() const { return val(); }
+
+  const Ptr<Ppr> ppr() const { return ppr::string(*val()); }
 
 private:
   static std::hash<String> make_hash;

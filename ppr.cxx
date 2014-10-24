@@ -7,6 +7,7 @@ namespace miniml
 
 namespace
 {
+  using Char    = Ppr::Char;
   using String  = Ppr::String;
   using Strings = Ppr::Strings;
   template <typename T> using List = Ppr::List<T>;
@@ -50,16 +51,6 @@ void PprVCat::output(OStream &out, unsigned indent) const
 }
 
 
-Ptr<Ppr> indent(Ptr<Ppr> ppr, unsigned ind)
-{
-  return ptr<PprIndent>(ppr, ind);
-}
-
-Ptr<Ppr> operator>>(Ptr<Ppr> ppr, unsigned ind)
-{
-  return indent(ppr, ind * Ppr::default_indent);
-}
-
 namespace
 {
   template <typename T>
@@ -69,6 +60,30 @@ namespace
   }
 }
 
+
+namespace ppr
+{
+  Ptr<Ppr> string(const String &str)
+  {
+    return ptr<PprString>(str);
+  }
+
+  Ptr<Ppr> string(const Char *str)
+  {
+    return ptr<PprString>(String(str));
+  }
+
+  Ptr<Ppr> indent(Ptr<Ppr> ppr, unsigned ind)
+  {
+    return ptr<PprIndent>(ppr, ind);
+  }
+}
+
+
+Ptr<Ppr> operator>>(Ptr<Ppr> ppr, unsigned ind)
+{
+  return ppr::indent(ppr, ind * Ppr::default_indent);
+}
 
 Ptr<Ppr> operator*(Ptr<Ppr> left, Ptr<Ppr> right)
 {
@@ -80,12 +95,12 @@ Ptr<Ppr> operator+(Ptr<Ppr> top, Ptr<Ppr> bottom)
   return cat<PprVCat>(top, bottom);
 }
 
-Ptr<Ppr> operator""_p(const wchar_t *str, size_t len)
+Ptr<Ppr> operator""_p(const Char *str, size_t len)
 {
-  return ptr<PprString>(std::wstring(str));
+  return ptr<PprString>(String(str));
 }
 
-Ptr<Ppr> operator""_p(wchar_t c)
+Ptr<Ppr> operator""_p(Char c)
 {
   return ptr<PprString>(std::wstring(1, c));
 }
@@ -94,7 +109,6 @@ Ptr<Ppr> operator+(Ptr<Ppr> p)
 {
   return L' '_p * p;
 }
-
 
 
 }
