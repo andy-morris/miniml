@@ -92,7 +92,7 @@ Ptr<Ppr> operator""_p(const Char *str, size_t len)
 
 Ptr<Ppr> operator""_p(Char c)
 {
-  return ptr<PprString>(std::wstring(1, c));
+  return ptr<PprString>(String(1, c));
 }
 
 Ptr<Ppr> operator+(Ptr<Ppr> p)
