@@ -13,21 +13,25 @@
 namespace miniml
 {
 
+/// Abstract base class for pretty printed fragments.
 class Ppr
 {
 public:
   virtual ~Ppr() {}
 
+  /// Convert a pretty printed object to a string.
   Ptr<String> string() const;
 
+  /// Default indent amount.
   static const unsigned default_indent = 4;
 
-  friend OStream &operator<<(OStream&, const Ppr&);
-
+  /// Outputs the document to the given output stream.
+  /// \param[in] indent The amount to indent, in characters.
   virtual void output(OStream&, unsigned indent = 0) const = 0;
 };
 
 
+/// Pretty printed string fragment.
 class PprString final: public Ppr
 {
 public:
@@ -41,6 +45,7 @@ private:
   const String m_val;
 };
 
+/// Indents an existing document by a given amount.
 class PprIndent final: public Ppr
 {
 public:
@@ -57,8 +62,14 @@ private:
   unsigned m_indent;
 };
 
+
+/// Concatenated fragments.
+/// \see PprVCat \see PprHCat
 class PprCat: public Ppr
 {
+public:
+  template <typename T> using List = std::list<T>;
+
 protected:
   PprCat(std::initializer_list<Ptr<Ppr>> lst):
     m_children(ptr<List<Ptr<Ppr>>>(lst))
@@ -70,6 +81,7 @@ protected:
 };
 
 
+/// Vertically concatenated fragments.
 class PprVCat: public PprCat
 {
 public:
@@ -81,6 +93,7 @@ public:
 };
 
 
+/// Horizontally concatenated fragments.
 class PprHCat: public PprCat
 {
 public:
@@ -94,19 +107,39 @@ public:
 
 namespace ppr
 {
+  /// Constructs a \ref Ppr from a \ref String.
   Ptr<Ppr> string(const String&);
+  /// Constructs a \ref Ppr from a C string.
   Ptr<Ppr> string(const Char*);
+  /// Indent a \ref Ppr by a given amount of characters.
+  /// \see operator>>(Ptr<Ppr>, unsigned)
   Ptr<Ppr> indent(Ptr<Ppr>, unsigned indent = Ppr::default_indent);
 }
 
+/// Indent a \ref Ppr by a multiple of \ref Ppr::default_indent.
 Ptr<Ppr> operator>>(Ptr<Ppr>, unsigned);
+
+/// Horizontally concatenate two documents.
+/// \see operator+(Ptr<Ppr>, Ptr<Ppr>)
+/// \see operator+(Ptr<Ppr>)
 Ptr<Ppr> operator*(Ptr<Ppr>, Ptr<Ppr>);
+
+/// Vertically concatenate two documents.
+/// \see operator*(Ptr<Ppr>, Ptr<Ppr>)
 Ptr<Ppr> operator+(Ptr<Ppr>, Ptr<Ppr>);
+
+/// Creates a document from a string literal.
 Ptr<Ppr> operator""_p(const Char*, size_t);
+
+/// Creates a (single-character) document from a \c char literal.
 Ptr<Ppr> operator""_p(Char);
+
+/// Inserts a space before a document.
+/// \see operator*(Ptr<Ppr>, Ptr<Ppr>)
 Ptr<Ppr> operator+(Ptr<Ppr>);
 
 
+/// Outputs a document to an \ref OStream.
 inline OStream &operator<<(OStream &out, const Ppr &p)
 {
   p.output(out);

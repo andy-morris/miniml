@@ -6,8 +6,10 @@
 namespace miniml
 {
 
+/// Pointers used by syntax trees, etc.
 template <typename T> using Ptr = std::shared_ptr<T>;
 
+/// Allocates an object and makes a \ref Ptr to it.
 template <typename T, typename... Args>
 Ptr<T> ptr(Args... args)
 {

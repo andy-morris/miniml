@@ -1,6 +1,7 @@
 #ifndef ID_HXX_HQ5DONMJ
 #define ID_HXX_HQ5DONMJ
 
+#include "string.hxx"
 #include "ptr.hxx"
 #include "ppr.hxx"
 
@@ -11,9 +12,7 @@
 namespace miniml
 {
 
-/**
- * Identifiers. They keep a hash for quick equality testing.
- */
+/// Identifiers keep a hash for quick equality testing.
 class Id final
 {
 public:
@@ -22,13 +21,20 @@ public:
     m_hash(make_hash(*str))
   { }
 
+  /// If the hashes are the same then the values are also checked in case of a
+  /// collision.
+  /// \return Whether the two identifiers are the same.
   bool operator==(const Id &other) const
   { return m_hash == other.m_hash && m_val == other.m_val; }
 
+  /// \return The value of the identifier.
   const Ptr<String> val() const { return m_val; }
 
+  /// \return The identifier in \ref String form.
   operator const Ptr<String>() const { return val(); }
 
+  /// Pretty prints an identifier.
+  /// \relates PprString
   const Ptr<Ppr> ppr() const { return ppr::string(*val()); }
 
 private:
@@ -39,11 +45,11 @@ private:
 };
 
 
+/// Outputs an identifier to the given output stream.
 inline OStream& operator<<(OStream &out, const Id &id)
 {
   return out << *id.val();
 }
-
 
 }
 
