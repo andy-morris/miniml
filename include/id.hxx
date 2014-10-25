@@ -17,8 +17,6 @@ namespace miniml
 class Id final
 {
 public:
-  using String = std::wstring;
-
   Id(const Ptr<String> str):
     m_val(str),
     m_hash(make_hash(*str))
@@ -41,7 +39,7 @@ private:
 };
 
 
-inline std::wostream& operator<<(std::wostream &out, const Id &id)
+inline OStream& operator<<(OStream &out, const Id &id)
 {
   return out << *id.val();
 }

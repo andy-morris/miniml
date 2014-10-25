@@ -3,6 +3,6 @@
 namespace miniml
 {
 
-std::hash<Id::String> Id::make_hash;
+std::hash<String> Id::make_hash;
 
 }

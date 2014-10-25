@@ -1,6 +1,7 @@
 #ifndef PPR_HXX_MJEKHUYS
 #define PPR_HXX_MJEKHUYS
 
+#include "string.hxx"
 #include "ptr.hxx"
 
 #include <string>
@@ -15,13 +16,6 @@ namespace miniml
 class Ppr
 {
 public:
-  using Char = wchar_t;
-  using String = std::wstring;
-  using OStream = std::wostream;
-  using SStream = std::wstringstream;
-  template <typename T> using List = std::list<T>;
-  using Strings = List<Ptr<String>>;
-
   virtual ~Ppr() {}
 
   Ptr<String> string() const;
@@ -100,20 +94,20 @@ public:
 
 namespace ppr
 {
-  Ptr<Ppr> string(const Ppr::String&);
-  Ptr<Ppr> string(const Ppr::Char*);
+  Ptr<Ppr> string(const String&);
+  Ptr<Ppr> string(const Char*);
   Ptr<Ppr> indent(Ptr<Ppr>, unsigned indent = Ppr::default_indent);
 }
 
 Ptr<Ppr> operator>>(Ptr<Ppr>, unsigned);
 Ptr<Ppr> operator*(Ptr<Ppr>, Ptr<Ppr>);
 Ptr<Ppr> operator+(Ptr<Ppr>, Ptr<Ppr>);
-Ptr<Ppr> operator""_p(const Ppr::Char*, size_t);
-Ptr<Ppr> operator""_p(Ppr::Char);
+Ptr<Ppr> operator""_p(const Char*, size_t);
+Ptr<Ppr> operator""_p(Char);
 Ptr<Ppr> operator+(Ptr<Ppr>);
 
 
-inline Ppr::OStream &operator<<(Ppr::OStream &out, const Ppr &p)
+inline OStream &operator<<(OStream &out, const Ppr &p)
 {
   p.output(out);
   return out;

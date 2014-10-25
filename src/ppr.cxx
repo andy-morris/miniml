@@ -4,15 +4,6 @@
 namespace miniml
 {
 
-namespace
-{
-  using Char    = Ppr::Char;
-  using String  = Ppr::String;
-  using Strings = Ppr::Strings;
-  template <typename T> using List = Ppr::List<T>;
-  using OStream = Ppr::OStream;
-}
-
 Ptr<String> Ppr::string() const
 {
   SStream stream;
