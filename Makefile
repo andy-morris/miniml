@@ -1,25 +1,29 @@
-CXXFLAGS += -std=c++11 -Wall -g
+CXXFLAGS += -std=c++11 -Wall -g -Iinclude
 
-SRCS := $(wildcard *.cxx)
-HDRS := $(wildcard *.hxx)
-
-OBJS := $(SRCS:.cxx=.o)
+SRCS := $(wildcard src/*.cxx)
+HDRS := $(wildcard include/*.hxx)
+OBJS := $(patsubst src/%.cxx,build/%.o,$(SRCS))
+DEPS := $(patsubst src/%.cxx,build/%.d,$(SRCS))
 
 all: miniml
 
-%.o: %.cxx $(wildcard %.hxx)
+build/%.o: src/%.cxx
+	@mkdir -p build
 	$(CXX) $(CXXFLAGS) -c -o $@ $<
 
-main.o: id.hxx
-ppr.o:  util.hxx
-
-miniml: main.o $(OBJS)
+miniml: $(OBJS)
 	$(CXX) $(LDFLAGS) -o $@ $(OBJS)
 
+tags: $(SRCS) $(HDRS)
+	ctags $^
+
 clean:
-	$(RM) *.o
-
-tags:
-	ctags $(SRCS) $(HDRS)
-
+	$(RM) -r build tags miniml
 .PHONY: clean
+
+## Dependencies
+Makefile: $(DEPS)
+build/%.d: src/%.cxx
+	@mkdir -p build
+	$(CXX) -Iinclude -MM $< -o $@
+-include $(DEPS)
