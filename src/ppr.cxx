@@ -97,7 +97,7 @@ Ptr<Ppr> operator""_p(Char c)
 
 Ptr<Ppr> operator+(Ptr<Ppr> p)
 {
-  return L' '_p * p;
+  return ' '_p * p;
 }
 
 

@@ -8,7 +8,7 @@ namespace
   Ptr<Ppr> parens_if(bool b, Ptr<Ppr> ppr)
   {
     if (b)
-      return L'('_p * ppr * L')'_p;
+      return '('_p * ppr * ')'_p;
     else
       return ppr;
   }
@@ -30,7 +30,7 @@ Ptr<Ppr> AppExpr::ppr(unsigned prec)
 Ptr<Ppr> LamExpr::ppr(unsigned prec)
 {
   return parens_if(prec > 0,
-                   L"fn"_p * +var()->ppr() * +L"->"_p +
+                   "fn"_p * +var()->ppr() * +"->"_p +
                      (body()->ppr(0) >> 1));
 }
 
