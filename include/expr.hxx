@@ -50,7 +50,7 @@ public:
   const Ptr<Id> id() const { return m_id; }
 
 private:
-  const Ptr<Id> m_id;
+  const Ptr<Id> m_id;   ///< Identifier value.
 };
 
 
@@ -73,7 +73,8 @@ public:
   const Ptr<Expr> right() const { return m_right; }
 
 private:
-  const Ptr<Expr> m_left, m_right;
+  const Ptr<Expr> m_left;   ///< Operator.
+  const Ptr<Expr> m_right;  ///< Operand.
 };
 
 
@@ -96,8 +97,8 @@ public:
   const Ptr<Expr> body() const { return m_body; }
 
 private:
-  const Ptr<Id> m_var;
-  const Ptr<Expr> m_body;
+  const Ptr<Id> m_var;      ///< Bound variable.
+  const Ptr<Expr> m_body;   ///< Body.
 };
 
 }

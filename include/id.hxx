@@ -16,6 +16,7 @@ namespace miniml
 class Id final
 {
 public:
+  /// Creates an identifier. \a str isn't copied.
   Id(const Ptr<String> str):
     m_val(str),
     m_hash(make_hash(*str))
@@ -38,10 +39,11 @@ public:
   const Ptr<Ppr> ppr() const { return ppr::string(*val()); }
 
 private:
+  /// Hash function for \ref String.
   static std::hash<String> make_hash;
 
-  const Ptr<String> m_val;
-  unsigned long m_hash;
+  const Ptr<String> m_val;  ///< Value.
+  unsigned long m_hash;     ///< Hash.
 };
 
 
