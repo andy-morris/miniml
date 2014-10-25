@@ -11,6 +11,9 @@ build/%.o: src/%.cxx
 	@mkdir -p build
 	$(CXX) $(CXXFLAGS) -c -o $@ $<
 
+doc: Doxyfile $(SRCS) $(HDRS)
+	doxygen
+
 miniml: $(OBJS)
 	$(CXX) $(LDFLAGS) -o $@ $(OBJS)
 
@@ -18,7 +21,7 @@ tags: $(SRCS) $(HDRS)
 	ctags $^
 
 clean:
-	$(RM) -r build tags miniml
+	$(RM) -r build doc tags miniml
 .PHONY: clean
 
 ## Dependencies
