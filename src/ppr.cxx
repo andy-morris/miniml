@@ -1,5 +1,4 @@
 #include "ppr.hxx"
-#include "util.hxx"
 #include <list>
 
 namespace miniml
