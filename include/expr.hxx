@@ -24,12 +24,12 @@ public:
 
   /// Get the type of the expression.
   /// \see ExprType
-  virtual ExprType type() = 0;
+  virtual ExprType type() const = 0;
 
   /// Pretty print an expression.
   /// \param[in] prec The outermost precedence for inserting brackets.
   /// \related Ppr
-  virtual Ptr<Ppr> ppr(unsigned prec = 0) = 0;
+  virtual Ptr<Ppr> ppr(unsigned prec = 0) const = 0;
 };
 
 
@@ -37,20 +37,19 @@ public:
 class IdExpr final: public Expr
 {
 public:
-  /// \param[in] i The identifier this expression represents.
-  IdExpr(const Ptr<Id> i): m_id(i) {}
+  /// \param[in] id The identifier this expression represents.
+  IdExpr(const Ptr<Id> id): m_id(id) {}
 
   /// \return ExprType::ID
-  ExprType type() { return ExprType::ID; }
+  ExprType type() const { return ExprType::ID; }
 
   /// \param prec Ignored, since variables are always atomic.
-  Ptr<Ppr> ppr(unsigned prec = 0);
+  Ptr<Ppr> ppr(unsigned prec = 0) const;
 
-  /// \return The identifier this expression stands for.
-  const Ptr<Id> id() const { return m_id; }
+  const Ptr<const Id> id() const { return m_id; }
 
 private:
-  const Ptr<Id> m_id;   ///< Identifier value.
+  Ptr<Id> m_id;   ///< Identifier value.
 };
 
 
@@ -63,18 +62,18 @@ public:
   {}
 
   /// \return ExprType::APP
-  ExprType type() { return ExprType::APP; }
+  ExprType type() const { return ExprType::APP; }
 
-  Ptr<Ppr> ppr(unsigned prec = 0);
+  Ptr<Ppr> ppr(unsigned prec = 0) const;
 
   /// \return The left part (operator).
-  const Ptr<Expr> left() const { return m_left; }
+  const Ptr<const Expr> left() const { return m_left; }
   /// \return The right part (operand).
-  const Ptr<Expr> right() const { return m_right; }
+  const Ptr<const Expr> right() const { return m_right; }
 
 private:
-  const Ptr<Expr> m_left;   ///< Operator.
-  const Ptr<Expr> m_right;  ///< Operand.
+  Ptr<Expr> m_left;   ///< Operator.
+  Ptr<Expr> m_right;  ///< Operand.
 };
 
 
@@ -87,18 +86,18 @@ public:
   {}
 
   /// \return ExprType::LAM
-  ExprType type() { return ExprType::LAM; }
+  ExprType type() const { return ExprType::LAM; }
 
-  Ptr<Ppr> ppr(unsigned prec = 0);
+  Ptr<Ppr> ppr(unsigned prec = 0) const;
 
   /// \return The bound variable.
-  const Ptr<Id> var() const { return m_var; }
+  const Ptr<const Id> var() const { return m_var; }
   /// \return The body of the term.
-  const Ptr<Expr> body() const { return m_body; }
+  const Ptr<const Expr> body() const { return m_body; }
 
 private:
-  const Ptr<Id> m_var;      ///< Bound variable.
-  const Ptr<Expr> m_body;   ///< Body.
+  Ptr<Id> m_var;      ///< Bound variable.
+  Ptr<Expr> m_body;   ///< Body.
 };
 
 }
