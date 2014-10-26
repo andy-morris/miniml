@@ -1,4 +1,5 @@
 #include "expr.hxx"
+#include <sstream>
 
 namespace miniml
 {
@@ -18,6 +19,14 @@ namespace
 Ptr<Ppr> IdExpr::ppr(unsigned) const
 {
   return id()->ppr();
+}
+
+
+Ptr<Ppr> IntExpr::ppr(unsigned) const
+{
+  std::stringstream str;
+  str << val();
+  return ptr<PprString>(str.str());
 }
 
 

@@ -14,6 +14,7 @@ enum class ExprType
   ID,   ///< Identifier
   APP,  ///< Application
   LAM,  ///< Lambda term
+  INT,  ///< Integer literal
 };
 
 /// Abstract base class for expressions.
@@ -50,6 +51,27 @@ public:
 
 private:
   Ptr<Id> m_id;   ///< Identifier value.
+};
+
+
+/// Integer literals.
+class IntExpr final: public Expr
+{
+public:
+  /// \param[in] val The value of this literal.
+  IntExpr(long val): m_val(val) {}
+
+  /// \return ExprType::INT
+  ExprType type() const { return ExprType::INT; }
+
+  /// \param prec Ignored, since literals are always atomic.
+  Ptr<Ppr> ppr(unsigned prec = 0) const;
+
+  /// \return The value of this literal.
+  long val() const { return m_val; }
+
+private:
+  long m_val;
 };
 
 
