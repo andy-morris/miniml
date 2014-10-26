@@ -1,4 +1,4 @@
-CXXFLAGS += -std=c++11 -Wall -g -Iinclude
+CXXFLAGS += -std=c++1y -Wall -g -Iinclude
 
 SRCS := $(wildcard src/*.cxx)
 HDRS := $(wildcard include/*.hxx)
