@@ -22,6 +22,11 @@ public:
     m_hash(make_hash(*str))
   { }
 
+  /// Copies a string onto the heap and constructs an identifier from it.
+  Id(const String &str):
+    Id(ptr<String>(str))
+  { }
+
   /// If the hashes are the same then the values are also checked in case of a
   /// collision.
   /// \return Whether the two identifiers are the same.
