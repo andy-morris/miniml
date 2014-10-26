@@ -28,5 +28,5 @@ clean:
 Makefile: $(DEPS)
 build/%.d: src/%.cxx
 	@mkdir -p build
-	$(CXX) -Iinclude -MM $< -o $@
+	$(CXX) -Iinclude -MM $< -MF $@ -MT build/$(basename $*).o
 -include $(DEPS)
