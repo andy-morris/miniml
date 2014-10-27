@@ -16,6 +16,9 @@ namespace miniml
 class Id final
 {
 public:
+  Id(const Id&) = default;
+  Id(Id&&) = default;
+
   /// Creates an identifier. \a str isn't copied.
   Id(const Ptr<String> str):
     m_val(str),

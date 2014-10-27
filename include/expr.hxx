@@ -38,6 +38,9 @@ public:
 class IdExpr final: public Expr
 {
 public:
+  IdExpr(const IdExpr&) = default;
+  IdExpr(IdExpr&&) = default;
+
   /// \param[in] id The identifier this expression represents.
   IdExpr(const Ptr<Id> id): m_id(id) {}
 
@@ -59,6 +62,9 @@ private:
 class IntExpr final: public Expr
 {
 public:
+  IntExpr(const IntExpr&) = default;
+  IntExpr(IntExpr&&) = default;
+
   /// \param[in] val The value of this literal.
   IntExpr(long val): m_val(val) {}
 
@@ -80,6 +86,9 @@ private:
 class AppExpr final: public Expr
 {
 public:
+  AppExpr(const AppExpr&) = default;
+  AppExpr(AppExpr&&) = default;
+
   AppExpr(const Ptr<Expr> left, const Ptr<Expr> right):
     m_left(left), m_right(right)
   {}
@@ -104,6 +113,9 @@ private:
 class LamExpr final: public Expr
 {
 public:
+  LamExpr(const LamExpr&) = default;
+  LamExpr(LamExpr&&) = default;
+
   LamExpr(const Ptr<Id> var, const Ptr<Expr> body):
     m_var(var), m_body(body)
   {}
