@@ -47,6 +47,7 @@ public:
   /// \param prec Ignored, since variables are always atomic.
   Ptr<Ppr> ppr(unsigned prec = 0) const;
 
+  /// \return The identifier value.
   const Ptr<const Id> id() const { return m_id; }
 
 private:
