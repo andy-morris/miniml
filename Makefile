@@ -1,14 +1,18 @@
-CXXFLAGS += -std=c++1y -Wall -Wdocumentation -g -Iinclude
+INCLUDES += -Iinclude -Ibuild
+WARNS    += -Wall -Wdocumentation
+CXXFLAGS += -std=c++1y $(WARNS) -g $(INCLUDES)
 
 SRCS := $(wildcard src/*.cxx)
 HDRS := $(wildcard include/*.hxx)
-OBJS := $(patsubst src/%.cxx,build/%.o,$(SRCS))
-DEPS := $(patsubst src/%.cxx,build/%.d,$(SRCS))
+OBJS := $(patsubst src/%,build/%,$(patsubst %.cxx,%.o,$(SRCS)))
+DEPS := $(patsubst src/%,build/%,$(patsubst %.cxx,%.d,$(SRCS)))
 
 all: miniml
 
 build/%.o: src/%.cxx
 	@mkdir -p build
+	$(CXX) $(CXXFLAGS) -c -o $@ $<
+build/%.o: build/%.cxx
 	$(CXX) $(CXXFLAGS) -c -o $@ $<
 
 doc: Doxyfile $(SRCS) $(HDRS)
@@ -28,5 +32,7 @@ clean:
 Makefile: $(DEPS)
 build/%.d: src/%.cxx
 	@mkdir -p build
-	$(CXX) -Iinclude -MM $< -MF $@ -MT build/$(basename $*).o
+	$(CXX) $(INCLUDES) -MM $< -MF $@ -MT build/$(basename $*).o
+build/%.d: build/%.cxx
+	$(CXX) $(INCLUDES) -MM $< -MF $@ -MT build/$(basename $*).o
 -include $(DEPS)
