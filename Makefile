@@ -1,8 +1,9 @@
 INCLUDES += -Iinclude -Ibuild
 WARNS    += -Wall -Wdocumentation
 CXXFLAGS += -std=c++1y $(WARNS) -g $(INCLUDES)
+RAGELFLAGS += -G2
 
-SRCS := $(wildcard src/*.cxx)
+SRCS := $(wildcard src/*.cxx)     build/lexer.cxx
 HDRS := $(wildcard include/*.hxx)
 OBJS := $(patsubst src/%,build/%,$(patsubst %.cxx,%.o,$(SRCS)))
 DEPS := $(patsubst src/%,build/%,$(patsubst %.cxx,%.d,$(SRCS)))
@@ -14,6 +15,12 @@ build/%.o: src/%.cxx
 	$(CXX) $(CXXFLAGS) -c -o $@ $<
 build/%.o: build/%.cxx
 	$(CXX) $(CXXFLAGS) -c -o $@ $<
+
+# Ragel
+build/%.cxx: src/%.cxx.rl
+	@mkdir -p build
+	ragel $(RAGELFLAGS) -o $@ $<
+
 
 doc: Doxyfile $(SRCS) $(HDRS)
 	doxygen
