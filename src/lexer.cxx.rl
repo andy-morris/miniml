@@ -56,23 +56,28 @@ Lexer::LexicalError::LexicalError(char c_, ptrdiff_t pos_):
 }
 
 
+void IdToken::out(OStream &o) const
+{
+  o << "ID(" << *id << ")";
+}
+
+void IntToken::out(OStream &o) const
+{
+  o << "INT(" << val << ")";
+}
+
+template<>
+void AtomicToken<Token::Type::FN>::out(OStream &o) const
+{ o << "'fn'"; }
+
+template<>
+void AtomicToken<Token::Type::ARROW>::out(OStream &o) const
+{ o << "'=>'"; }
+
+
 OStream &operator<<(OStream &out, const Token &tok)
 {
-  using Ty = Token::Type;
-  switch (tok.type()) {
-  case Ty::ID:
-    out << *dynamic_cast<const IdToken&>(tok).id;
-    break;
-  case Ty::INT:
-    out << dynamic_cast<const IntToken&>(tok).val;
-    break;
-  case Ty::FN:
-    out << "'fn'";
-    break;
-  case Ty::ARROW:
-    out << "'=>'";
-    break;
-  }
+  tok.out(out);
   return out;
 }
 

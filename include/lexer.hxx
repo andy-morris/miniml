@@ -6,7 +6,7 @@
 namespace miniml
 {
 
-class Token;
+struct Token;
 
 /// Lexer class that wraps a
 /// <a href="http://www.colm.net/open-source/ragel/">Ragel</a>
@@ -57,9 +57,8 @@ private:
 
 
 /// Abstract class for tokens.
-class Token
+struct Token
 {
-public:
   enum class Type;                ///< Token types.
   virtual Type type() const = 0;  ///< What type of token is this?
 
@@ -70,6 +69,8 @@ public:
 
   /// Whether a token type is atomic (needs no data).
   static constexpr bool is_atomic(Type);
+
+  virtual void out(OStream &) const = 0;
 };
 
 
@@ -103,6 +104,8 @@ struct IdToken final: public Token
   Ptr<Id> id;
 
   virtual Token::Type type() const override { return Token::Type::ID; }
+
+  virtual void out(OStream &) const;
 };
 
 
@@ -112,6 +115,8 @@ struct IntToken final: public Token
   long val;
 
   virtual Token::Type type() const override { return Token::Type::INT; }
+
+  virtual void out(OStream &) const;
 };
 
 
@@ -123,6 +128,8 @@ public:
 
 static_assert(Token::is_atomic(Ty),
               "tried to make an atomic token of a nonatomic type");
+
+  virtual void out(OStream &) const;
 };
 
 
