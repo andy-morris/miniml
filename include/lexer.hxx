@@ -1,3 +1,6 @@
+#ifndef LEXER_HXX_FHKS2ENC
+#define LEXER_HXX_FHKS2ENC
+
 #include "id.hxx"
 #include "string.hxx"
 #include <vector>
@@ -141,3 +144,4 @@ Ptr<Token> Token::atomic()
 
 
 }
+#endif /* end of include guard: LEXER_HXX_FHKS2ENC */

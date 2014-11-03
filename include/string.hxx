@@ -1,3 +1,6 @@
+#ifndef STRING_HXX_W6YNF9SR
+#define STRING_HXX_W6YNF9SR
+
 #include <string>
 #include <iostream>
 #include <iterator>
@@ -23,3 +26,5 @@ using OStream = std::ostream;
 /// The variety of std::basic_stringstream that supports \ref String.
 using SStream = std::stringstream;
 }
+
+#endif /* end of include guard: STRING_HXX_W6YNF9SR */
