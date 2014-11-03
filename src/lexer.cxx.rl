@@ -1,4 +1,5 @@
 #include "lexer.hxx"
+#include "token.hxx"
 
 namespace miniml
 {
@@ -54,32 +55,5 @@ Lexer::LexicalError::LexicalError(char c_, ptrdiff_t pos_):
   s << "Lexical error at '" << c << "', position " << pos;
   text = s.str();
 }
-
-
-void IdToken::out(OStream &o) const
-{
-  o << "ID(" << *id << ")";
-}
-
-void IntToken::out(OStream &o) const
-{
-  o << "INT(" << val << ")";
-}
-
-template<>
-void AtomicToken<Token::Type::FN>::out(OStream &o) const
-{ o << "'fn'"; }
-
-template<>
-void AtomicToken<Token::Type::ARROW>::out(OStream &o) const
-{ o << "'=>'"; }
-
-
-OStream &operator<<(OStream &out, const Token &tok)
-{
-  tok.out(out);
-  return out;
-}
-
 
 }
