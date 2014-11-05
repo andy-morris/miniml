@@ -61,6 +61,7 @@ namespace
       CASE(INT);
       CASE(FN);
       CASE(ARROW);
+      CASE(TYARROW);
       CASE(LPAR);
       CASE(RPAR);
 #undef CASE

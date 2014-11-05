@@ -21,6 +21,7 @@ void IntToken::out(OStream &o) const
 
 ATOMIC_OUT(FN, "'fn'")
 ATOMIC_OUT(ARROW, "'=>'")
+ATOMIC_OUT(TYARROW, "'->'")
 ATOMIC_OUT(LPAR, "'('")
 ATOMIC_OUT(RPAR, "')'")
 

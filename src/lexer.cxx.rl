@@ -21,6 +21,7 @@ int = ('+'|'-')? [0-9]+;
 token := |*
   "fn"  => { push(ATOMIC(FN)); };
   "=>"  => { push(ATOMIC(ARROW)); };
+  "->"  => { push(ATOMIC(TYARROW)); };
   "("   => { push(ATOMIC(LPAR)); };
   ")"   => { push(ATOMIC(RPAR)); };
   id    => {

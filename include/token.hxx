@@ -31,6 +31,7 @@ enum class Token::Type
   INT,      ///< integer literal
   FN,       ///< `fn`
   ARROW,    ///< `=>`
+  TYARROW,  ///< `->`
   LPAR,     ///< `(`
   RPAR,     ///< `)`
 };

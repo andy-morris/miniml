@@ -22,6 +22,9 @@
 %token_prefix TOK_
 %token_type {Token*}
 
+%right TYARROW.
+%left FN.
+
 %type start {Expr*}
 start(X) ::= expr(A).
   { *expr = X = A; }
@@ -49,6 +52,15 @@ aexpr(X) ::= INT(I).
 aexpr(X) ::= LPAR expr(A) RPAR.
   { X = A; }
 %destructor aexpr {delete $$;}
+
+
+%type type {Type*}
+type(X) ::= id(A).
+  { X = new IdType(ptr(A)); }
+type(X) ::= type(L) TYARROW type(R).
+  { X = new ArrowType(ptr(L), ptr(R)); }
+%destructor type {delete $$;}
+
 
 %type id {Id*}
 id(X) ::= ID(I).
