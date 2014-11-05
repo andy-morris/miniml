@@ -67,6 +67,14 @@ namespace ppr
   {
     return ptr<PprIndent>(ppr, ind);
   }
+
+  Ptr<Ppr> parens_if(bool b, const Ptr<Ppr> ppr)
+  {
+    if (b)
+      return '('_p * ppr * ')'_p;
+    else
+      return ppr;
+  }
 }
 
 

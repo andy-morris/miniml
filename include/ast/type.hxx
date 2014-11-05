@@ -3,6 +3,7 @@
 
 #include "ptr.hxx"
 #include "id.hxx"
+#include "ppr.hxx"
 
 namespace miniml
 {
@@ -13,7 +14,7 @@ enum class TypeType
   ARROW,
 };
 
-class Type
+class Type: public Pretty
 {
 public:
   virtual ~Type() {}
@@ -36,6 +37,8 @@ public:
 
   virtual bool operator==(const Type &other) const override;
 
+  virtual Ptr<Ppr> ppr(unsigned prec = 0) const override;
+
   const Ptr<const Id> id() const { return m_id; }
 
 private:
@@ -55,6 +58,8 @@ public:
   virtual TypeType type() const override { return TypeType::ARROW; }
 
   virtual bool operator==(const Type &other) const override;
+
+  virtual Ptr<Ppr> ppr(unsigned prec = 0) const override;
 
   const Ptr<const Type> left() const { return m_left; }
   const Ptr<const Type> right() const { return m_right; }

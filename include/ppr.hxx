@@ -123,6 +123,8 @@ namespace ppr
   /// Indent a \ref Ppr by a given amount of characters.
   /// \see operator>>(Ptr<Ppr>, unsigned)
   Ptr<Ppr> indent(Ptr<Ppr>, unsigned indent = Ppr::default_indent);
+  /// Add parentheses if the first argument is true.
+  Ptr<Ppr> parens_if(bool b, const Ptr<Ppr> ppr);
 }
 
 /// Indent a \ref Ppr by a multiple of \ref Ppr::default_indent.
