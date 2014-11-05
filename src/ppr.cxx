@@ -26,8 +26,9 @@ void PprIndent::output(OStream &out, unsigned indent) const
 
 void PprHCat::output(OStream &out, unsigned indent) const
 {
+  out << String(indent, ' ');
   for (auto child: *m_children) {
-    child->output(out, indent);
+    child->output(out, 0);
   }
 }
 
