@@ -5,6 +5,7 @@
 #include "string.hxx"
 #include "id.hxx"
 
+#include "ast/type.hxx"
 #include "ast/expr.hxx"
 
 #endif /* end of include guard: AST_HXX_7IWKV1PR */
