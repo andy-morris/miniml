@@ -23,7 +23,7 @@ class Expr
 public:
   virtual ~Expr() {}
 
-  /// Get the type of the expression.
+  /// Get the (syntactic) type of the expression.
   /// \see ExprType
   virtual ExprType type() const = 0;
 
