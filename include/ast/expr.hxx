@@ -113,8 +113,8 @@ public:
   LamExpr(const LamExpr&) = default;
   LamExpr(LamExpr&&) = default;
 
-  LamExpr(const Ptr<Id> var, const Ptr<Expr> body):
-    m_var(var), m_body(body)
+  LamExpr(const Ptr<Id> var, const Ptr<Type> ty, const Ptr<Expr> body):
+    m_var(var), m_ty(ty), m_body(body)
   {}
 
   /// \return ExprType::LAM
@@ -124,11 +124,14 @@ public:
 
   /// \return The bound variable.
   const Ptr<const Id> var() const { return m_var; }
+  /// \return The argument type.
+  const Ptr<const Type> ty() const { return m_ty; }
   /// \return The body of the term.
   const Ptr<const Expr> body() const { return m_body; }
 
 private:
   Ptr<Id> m_var;      ///< Bound variable.
+  Ptr<Type> m_ty;     ///< Argument type.
   Ptr<Expr> m_body;   ///< Body.
 };
 
