@@ -47,12 +47,14 @@ constexpr bool Token::is_atomic(Token::Type ty)
 
 struct IdToken final: public Token
 {
-  IdToken(Ptr<Id> id_): id(id_) {}
+  IdToken(Id *id_): id(id_) {}
   IdToken(const Char *start, ptrdiff_t size):
-    IdToken(ptr<Id>(ptr<String>(start, size)))
+    IdToken(new Id(ptr<String>(start, size)))
   {}
 
-  Ptr<Id> id;
+  virtual ~IdToken() { delete id; }
+
+  Id *id;
 
   virtual Token::Type type() const override { return Token::Type::ID; }
 
