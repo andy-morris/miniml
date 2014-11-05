@@ -46,6 +46,8 @@ aexpr(X) ::= id(I).
   { X = new IdExpr(ptr(I)); }
 aexpr(X) ::= INT(I).
   { X = new IntExpr(get_int(I)); }
+aexpr(X) ::= LPAR expr(A) RPAR.
+  { X = A; }
 %destructor aexpr {delete $$;}
 
 %type id {Id*}

@@ -56,10 +56,14 @@ namespace
   {
     using Ty = Token::Type;
     switch (tok.type()) {
-      case Ty::FN:    return TOK_FN;
-      case Ty::ARROW: return TOK_ARROW;
-      case Ty::ID:    return TOK_ID;
-      case Ty::INT:   return TOK_INT;
+#define CASE(t) case Ty::t: return TOK_ ## t
+      CASE(ID);
+      CASE(INT);
+      CASE(FN);
+      CASE(ARROW);
+      CASE(LPAR);
+      CASE(RPAR);
+#undef CASE
     }
   }
 }

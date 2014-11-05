@@ -32,7 +32,7 @@ Ptr<Ppr> IntExpr::ppr(unsigned) const
 
 Ptr<Ppr> AppExpr::ppr(unsigned prec) const
 {
-  return parens_if(prec > 10, left()->ppr() * +right()->ppr());
+  return parens_if(prec > 10, left()->ppr(10) * +right()->ppr(11));
 }
 
 

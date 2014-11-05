@@ -13,14 +13,16 @@ void IntToken::out(OStream &o) const
   o << "INT(" << val << ")";
 }
 
-template<>
-void AtomicToken<Token::Type::FN>::out(OStream &o) const
-{ o << "'fn'"; }
 
-template<>
-void AtomicToken<Token::Type::ARROW>::out(OStream &o) const
-{ o << "'=>'"; }
+#define ATOMIC_OUT(t, str) \
+  template<> \
+  void AtomicToken<Token::Type::t>::out(OStream &o) const \
+  { o << str; }
 
+ATOMIC_OUT(FN, "'fn'")
+ATOMIC_OUT(ARROW, "'=>'")
+ATOMIC_OUT(LPAR, "'('")
+ATOMIC_OUT(RPAR, "')'")
 
 OStream &operator<<(OStream &out, const Token &tok)
 {

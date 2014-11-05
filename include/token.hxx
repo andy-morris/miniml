@@ -27,10 +27,12 @@ struct Token
 
 enum class Token::Type
 {
-  ID,     ///< identifier
-  INT,    ///< integer literal
-  FN,     ///< `fn`
-  ARROW,  ///< `=>`
+  ID,       ///< identifier
+  INT,      ///< integer literal
+  FN,       ///< `fn`
+  ARROW,    ///< `=>`
+  LPAR,     ///< `(`
+  RPAR,     ///< `)`
 };
 
 

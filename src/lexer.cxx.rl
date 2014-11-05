@@ -6,6 +6,8 @@ namespace miniml
 
 using TokType = Token::Type;
 
+#define ATOMIC(t) Token::atomic<TokType::t>()
+
 %%{
 machine Lexer;
 alphtype char;
@@ -17,8 +19,10 @@ id       = idstart idletter*;
 int = ('+'|'-')? [0-9]+;
 
 token := |*
-  "fn"  => { push(Token::atomic<TokType::FN>()); };
-  "=>"  => { push(Token::atomic<TokType::ARROW>()); };
+  "fn"  => { push(ATOMIC(FN)); };
+  "=>"  => { push(ATOMIC(ARROW)); };
+  "("   => { push(ATOMIC(LPAR)); };
+  ")"   => { push(ATOMIC(RPAR)); };
   id    => {
     push(ptr<IdToken>(ts, te - ts));
   };
