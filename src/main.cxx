@@ -1,5 +1,6 @@
+#include "expr.hxx"
 #include "ppr.hxx"
-#include "lexer.hxx"
+#include "parser.hxx"
 
 #include <memory>
 #include <iostream>
@@ -25,11 +26,11 @@ auto read_file(const char *file)
 int main(int argc, char **argv)
 {
   if (argc <= 1) return 1;
-
   auto str = read_file(argv[1]);
-  Lexer l(str);
-
-  for (auto tok: l.tokens()) {
-    cout << *tok << endl;
+  auto expr = Parser().parse(str);
+  if (expr) {
+    cout << *expr->ppr() << endl;
+  } else {
+    cout << "parser error" << endl;
   }
 }
