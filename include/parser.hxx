@@ -1,3 +1,6 @@
+#ifndef PARSER_HXX_RGFUMH5N
+#define PARSER_HXX_RGFUMH5N
+
 #include "ast.hxx"
 #include "token.hxx"
 #include "lemon.hxx"
@@ -17,3 +20,5 @@ private:
 };
 
 }
+
+#endif /* end of include guard: PARSER_HXX_RGFUMH5N */
