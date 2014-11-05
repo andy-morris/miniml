@@ -64,6 +64,7 @@ namespace
       CASE(TYARROW);
       CASE(LPAR);
       CASE(RPAR);
+      CASE(COLON);
 #undef CASE
     }
   }

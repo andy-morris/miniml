@@ -23,6 +23,7 @@
 %token_type {Token*}
 
 %right TYARROW.
+%nonassoc COLON.
 %left FN.
 
 %type start {Expr*}
@@ -35,6 +36,8 @@ expr(X) ::= aexprs(A).
   { X = A; }
 expr(X) ::= FN id(I) ARROW expr(R).
   { X = new LamExpr(ptr(I), ptr(R)); }
+expr(X) ::= expr(A) COLON type(T).
+  { X = new TypeExpr(ptr(A), ptr(T)); }
 %destructor expr {delete $$;}
 
 %type aexprs {Expr*}

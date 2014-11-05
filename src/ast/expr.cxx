@@ -29,8 +29,14 @@ Ptr<Ppr> AppExpr::ppr(unsigned prec) const
 Ptr<Ppr> LamExpr::ppr(unsigned prec) const
 {
   return parens_if(prec > 0,
-                   "fn"_p * +var()->ppr() * +"=>"_p +
-                     (body()->ppr(0) >> 1));
+      "fn"_p * +var()->ppr() * +"=>"_p + (body()->ppr(0) >> 1));
+}
+
+
+Ptr<Ppr> TypeExpr::ppr(unsigned prec) const
+{
+  return parens_if(prec > 0,
+      expr()->ppr() * ":"_p * +ty()->ppr());
 }
 
 }

@@ -34,6 +34,7 @@ enum class Token::Type
   TYARROW,  ///< `->`
   LPAR,     ///< `(`
   RPAR,     ///< `)`
+  COLON,    ///< `:`
 };
 
 

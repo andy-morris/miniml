@@ -24,6 +24,7 @@ token := |*
   "->"  => { push(ATOMIC(TYARROW)); };
   "("   => { push(ATOMIC(LPAR)); };
   ")"   => { push(ATOMIC(RPAR)); };
+  ":"   => { push(ATOMIC(COLON)); };
   id    => {
     push(ptr<IdToken>(ts, te - ts));
   };

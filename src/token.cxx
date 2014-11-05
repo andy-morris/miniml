@@ -24,6 +24,7 @@ ATOMIC_OUT(ARROW, "'=>'")
 ATOMIC_OUT(TYARROW, "'->'")
 ATOMIC_OUT(LPAR, "'('")
 ATOMIC_OUT(RPAR, "')'")
+ATOMIC_OUT(COLON, "':'")
 
 OStream &operator<<(OStream &out, const Token &tok)
 {

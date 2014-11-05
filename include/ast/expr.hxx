@@ -4,6 +4,7 @@
 #include "ppr.hxx"
 #include "id.hxx"
 #include "ptr.hxx"
+#include "ast/type.hxx"
 
 namespace miniml
 {
@@ -15,6 +16,7 @@ enum class ExprType
   APP,  ///< Application
   LAM,  ///< Lambda term
   INT,  ///< Integer literal
+  TYPE, ///< Typed expression
 };
 
 /// Abstract base class for expressions.
@@ -128,6 +130,33 @@ public:
 private:
   Ptr<Id> m_var;      ///< Bound variable.
   Ptr<Expr> m_body;   ///< Body.
+};
+
+
+/// Expressions with type annotations.
+class TypeExpr final: public Expr
+{
+public:
+  TypeExpr(const TypeExpr&) = default;
+  TypeExpr(TypeExpr&&) = default;
+
+  TypeExpr(const Ptr<Expr> expr, const Ptr<Type> ty):
+    m_expr(expr), m_ty(ty)
+  {}
+
+  /// \return ExprType::TYPE
+  ExprType type() const override { return ExprType::TYPE; }
+
+  virtual Ptr<Ppr> ppr(unsigned prec = 0) const override;
+
+  /// \return The inner expression.
+  const Ptr<const Expr> expr() const { return m_expr; }
+  /// \return The assigned type.
+  const Ptr<const Type> ty() const { return m_ty; }
+
+private:
+  Ptr<Expr> m_expr;   ///< Expression.
+  Ptr<Type> m_ty;   ///< Assigned type.
 };
 
 }
