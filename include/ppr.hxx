@@ -31,6 +31,15 @@ public:
 };
 
 
+class Pretty
+{
+public:
+  /// \param prec [in] the surrounding precedence level for the
+  //                   insertion of brackets.
+  virtual Ptr<Ppr> ppr(unsigned prec = 0) const = 0;
+};
+
+
 /// Pretty printed string fragment.
 class PprString final: public Ppr
 {

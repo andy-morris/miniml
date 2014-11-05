@@ -18,7 +18,7 @@ enum class ExprType
 };
 
 /// Abstract base class for expressions.
-class Expr
+class Expr: public Pretty
 {
 public:
   virtual ~Expr() {}
@@ -26,11 +26,6 @@ public:
   /// Get the (syntactic) type of the expression.
   /// \see ExprType
   virtual ExprType type() const = 0;
-
-  /// Pretty print an expression.
-  /// \param[in] prec The outermost precedence for inserting brackets.
-  /// \related Ppr
-  virtual Ptr<Ppr> ppr(unsigned prec = 0) const = 0;
 };
 
 
