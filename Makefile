@@ -4,27 +4,27 @@ CXXFLAGS += -std=c++1y $(WARNS) -g $(INCLUDES)
 CFLAGS   += $(WARNS) -g $(INCLUDES)
 RAGELFLAGS += -G2
 
-SRCS := $(wildcard src/*.cxx) build/lexer.cxx build/lemon.cxx
-HDRS := $(wildcard include/*.hxx) build/lemon.hxx
-OBJS := $(addprefix build/,$(addsuffix .o,$(basename $(notdir $(SRCS)))))
-DEPS := $(addprefix build/,$(addsuffix .d,$(basename $(notdir $(SRCS)))))
+SRCS := $(shell find src -name '*.cxx') build/lexer.cxx build/lemon.cxx
+HDRS := $(shell find include -name '*.hxx') build/lemon.hxx
+OBJS := $(patsubst src/%,build/%,$(patsubst %.cxx,%.o,$(SRCS)))
+DEPS := $(OBJS:.o=.d)
 
 all: miniml
 
 build/%.o: src/%.cxx
-	@mkdir -p build
+	@mkdir -p $(dir $@)
 	$(CXX) $(CXXFLAGS) -c -o $@ $<
 build/%.o: build/%.cxx
 	$(CXX) $(CXXFLAGS) -c -o $@ $<
 
 # Ragel
 build/%.cxx: src/%.cxx.rl
-	@mkdir -p build
+	@mkdir -p $(dir $@)
 	ragel $(RAGELFLAGS) -o $@ $<
 
 # Lemon
 build/%.cxx build/%.hxx %.out: src/%.y
-	@mkdir -p build
+	@mkdir -p $(dir $@)
 	lemon -l $<
 	mv src/$*.out .
 	mv src/$*.c build/$*.cxx
@@ -47,7 +47,7 @@ clean:
 ## Dependencies
 Makefile: $(DEPS)
 build/%.d: src/%.cxx
-	@mkdir -p build
+	@mkdir -p $(dir $@)
 	$(CXX) $(INCLUDES) -MM $< -MF $@ -MT build/$(basename $*).o
 build/%.d: build/%.cxx
 	$(CXX) $(INCLUDES) -MM $< -MF $@ -MT build/$(basename $*).o
