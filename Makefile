@@ -1,6 +1,6 @@
 INCLUDES += -Iinclude -Ibuild
 WARNS    += -Wall -Wdocumentation
-CXXFLAGS += -std=c++1y $(WARNS) -g $(INCLUDES)
+CXXFLAGS += -std=c++11 $(WARNS) -g $(INCLUDES)
 CFLAGS   += $(WARNS) -g $(INCLUDES)
 RAGELFLAGS += -G2
 

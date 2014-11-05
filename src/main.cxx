@@ -9,7 +9,7 @@
 using namespace std;
 using namespace miniml;
 
-auto read_file(const char *file)
+Ptr<String> read_file(const char *file)
 {
   ifstream in(file);
   in >> noskipws;
