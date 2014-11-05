@@ -1,7 +1,6 @@
 %include {
+  #include "ast.hxx"
   #include "token.hxx"
-  #include "ptr.hxx"
-  #include "expr.hxx"
   #include <assert.h>
 
   using namespace miniml;
