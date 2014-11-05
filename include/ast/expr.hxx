@@ -45,10 +45,10 @@ public:
   IdExpr(const Ptr<Id> id): m_id(id) {}
 
   /// \return ExprType::ID
-  ExprType type() const { return ExprType::ID; }
+  virtual ExprType type() const override { return ExprType::ID; }
 
   /// \param prec Ignored, since variables are always atomic.
-  Ptr<Ppr> ppr(unsigned prec = 0) const;
+  virtual Ptr<Ppr> ppr(unsigned prec = 0) const override;
 
   /// \return The identifier value.
   const Ptr<const Id> id() const { return m_id; }
@@ -69,10 +69,10 @@ public:
   IntExpr(long val): m_val(val) {}
 
   /// \return ExprType::INT
-  ExprType type() const { return ExprType::INT; }
+  virtual ExprType type() const override { return ExprType::INT; }
 
   /// \param prec Ignored, since literals are always atomic.
-  Ptr<Ppr> ppr(unsigned prec = 0) const;
+  virtual Ptr<Ppr> ppr(unsigned prec = 0) const override;
 
   /// \return The value of this literal.
   long val() const { return m_val; }
@@ -94,9 +94,9 @@ public:
   {}
 
   /// \return ExprType::APP
-  ExprType type() const { return ExprType::APP; }
+  virtual ExprType type() const override { return ExprType::APP; }
 
-  Ptr<Ppr> ppr(unsigned prec = 0) const;
+  virtual Ptr<Ppr> ppr(unsigned prec = 0) const override;
 
   /// \return The left part (operator).
   const Ptr<const Expr> left() const { return m_left; }
@@ -121,9 +121,9 @@ public:
   {}
 
   /// \return ExprType::LAM
-  ExprType type() const { return ExprType::LAM; }
+  virtual ExprType type() const override { return ExprType::LAM; }
 
-  Ptr<Ppr> ppr(unsigned prec = 0) const;
+  virtual Ptr<Ppr> ppr(unsigned prec = 0) const override;
 
   /// \return The bound variable.
   const Ptr<const Id> var() const { return m_var; }
