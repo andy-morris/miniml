@@ -19,6 +19,9 @@ public:
   Id(const Id&) = default;
   Id(Id&&) = default;
 
+  Id &operator=(const Id&) = default;
+  Id &operator=(Id&&) = default;
+
   /// Creates an identifier. \a str isn't copied.
   Id(const Ptr<String> str):
     m_val(str),
