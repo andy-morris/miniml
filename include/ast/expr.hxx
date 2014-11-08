@@ -5,6 +5,7 @@
 #include "id.hxx"
 #include "ptr.hxx"
 #include "ast/type.hxx"
+#include "visitor.hxx"
 
 namespace miniml
 {
@@ -162,5 +163,31 @@ private:
   Ptr<Type> m_ty;   ///< Assigned type.
 };
 
+template <typename T, typename... Args>
+struct ExprVisitor
+{
+  virtual Ptr<T> operator()(Ptr<Expr> e, Args... args)
+  {
+    switch (e->type()) {
+#define CASE(x,t) \
+      case ExprType::x: \
+        return operator()(std::dynamic_pointer_cast<t>(e), args...);
+      CASE(ID, IdExpr)
+      CASE(APP, AppExpr)
+      CASE(LAM, LamExpr)
+      CASE(INT, IntExpr)
+      CASE(TYPE, TypeExpr)
+#undef CASE
+    }
+  }
+
+  virtual Ptr<T> operator()(Ptr<IdExpr>, Args...) = 0;
+  virtual Ptr<T> operator()(Ptr<AppExpr>, Args...) = 0;
+  virtual Ptr<T> operator()(Ptr<IntExpr>, Args...) = 0;
+  virtual Ptr<T> operator()(Ptr<LamExpr>, Args...) = 0;
+  virtual Ptr<T> operator()(Ptr<TypeExpr>, Args...) = 0;
+};
+
+}
 
 #endif /* end of include guard: EXPR_HXX_SPN8H6I7 */
