@@ -42,6 +42,8 @@ public:
   /// \return The value of the identifier.
   const Ptr<String> val() const { return m_val; }
 
+  size_t hash() const { return m_hash; }
+
   /// \return The identifier in \ref String form.
   operator const Ptr<String>() const { return val(); }
 
@@ -54,7 +56,7 @@ private:
   static std::hash<String> make_hash;
 
   const Ptr<String> m_val;  ///< Value.
-  unsigned long m_hash;     ///< Hash.
+  size_t m_hash;     ///< Hash.
 };
 
 
