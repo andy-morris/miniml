@@ -11,6 +11,7 @@ namespace miniml
 enum class TypeType
 {
   ID,
+  INT,
   ARROW,
 };
 
@@ -44,6 +45,19 @@ public:
 private:
   Ptr<Id> m_id;
 };
+
+
+class IntType final: public Type
+{
+  virtual TypeType type() const override { return TypeType::INT; }
+
+  virtual bool operator==(const Type &other) const override
+  { return other.type() == type(); }
+
+  virtual Ptr<Ppr> ppr(unsigned prec = 0) const override
+  { return "int"_p; }
+};
+
 
 class ArrowType final: public Type
 {
