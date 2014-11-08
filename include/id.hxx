@@ -13,7 +13,7 @@ namespace miniml
 {
 
 /// Identifiers keep a hash for quick equality testing.
-class Id final
+class Id final: public Pretty
 {
 public:
   Id(const Id&) = default;
@@ -49,7 +49,8 @@ public:
 
   /// Pretty prints an identifier.
   /// \relates PprString
-  Ptr<Ppr> ppr() const { return ppr::string(*val()); }
+  Ptr<Ppr> ppr(unsigned prec = 0) const override
+  { return ppr::string(*val()); }
 
 private:
   /// Hash function for \ref String.
