@@ -120,6 +120,9 @@ namespace ppr
   Ptr<Ppr> string(const String&);
   /// Constructs a \ref Ppr from a C string.
   Ptr<Ppr> string(const Char*);
+  /// Constructs a \ref Ppr from an numeric value.
+  template <typename T>
+  Ptr<Ppr> num(T);
   /// Indent a \ref Ppr by a given amount of characters.
   /// \see operator>>(Ptr<Ppr>, unsigned)
   Ptr<Ppr> indent(Ptr<Ppr>, unsigned indent = Ppr::default_indent);
@@ -161,6 +164,20 @@ inline OStream &operator<<(OStream &out, const Ppr &p)
 inline OStream &operator<<(OStream &out, const Pretty &p)
 {
   return out << p.ppr();
+}
+
+
+namespace ppr
+{
+  template <typename T>
+  Ptr<Ppr> num(T x)
+  {
+    static_assert(std::is_integral<T>::value, "non-numeric type");
+
+    std::stringstream str;
+    str << x;
+    return ptr<PprString>(str.str());
+  }
 }
 
 

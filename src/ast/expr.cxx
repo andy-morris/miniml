@@ -14,9 +14,7 @@ Ptr<Ppr> IdExpr::ppr(unsigned) const
 
 Ptr<Ppr> IntExpr::ppr(unsigned) const
 {
-  std::stringstream str;
-  str << val();
-  return ptr<PprString>(str.str());
+  return num(val());
 }
 
 
