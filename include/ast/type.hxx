@@ -4,6 +4,8 @@
 #include "ptr.hxx"
 #include "id.hxx"
 #include "ppr.hxx"
+#include "env.hxx"
+#include "visitor.hxx"
 
 namespace miniml
 {
@@ -82,6 +84,16 @@ private:
   Ptr<Type> m_left, m_right;
 };
 
+
+template <typename T, typename... Args>
+struct TypeVisitor
+{
+  virtual Ptr<T> operator()(Ptr<Type>, Args...)
+  { throw AbstractVisit("Type"); }
+  virtual Ptr<T> operator()(Ptr<IdType>, Args...) = 0;
+  virtual Ptr<T> operator()(Ptr<IntType>, Args...) = 0;
+  virtual Ptr<T> operator()(Ptr<ArrowType>, Args...) = 0;
+};
 
 }
 
