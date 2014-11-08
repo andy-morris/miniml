@@ -32,7 +32,8 @@ Ptr<Expr> Parser::parse(const Ptr<String> input)
   Expr *expr = nullptr;
 
 #ifndef NDEBUG
-  MiniMLParserTrace(stdout, "parser: ");
+  // lemon forgot a const :(
+  MiniMLParserTrace(stdout, const_cast<char*>("parser: "));
 #endif
 
   for (auto tok: toks) {
