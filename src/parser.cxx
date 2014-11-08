@@ -31,10 +31,12 @@ Ptr<Expr> Parser::parse(const Ptr<String> input)
   auto toks = Lexer(input).tokens();
   Expr *expr = nullptr;
 
+  /*
 #ifndef NDEBUG
   // lemon forgot a const :(
   MiniMLParserTrace(stdout, const_cast<char*>("parser: "));
 #endif
+  */
 
   for (auto tok: toks) {
     MiniMLParser(parser, token_id(*tok), tok.get(), &expr);
