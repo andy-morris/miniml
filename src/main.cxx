@@ -1,5 +1,6 @@
 #include "ast.hxx"
 #include "parser.hxx"
+#include "tc.hxx"
 
 #include <memory>
 #include <iostream>
@@ -27,8 +28,10 @@ int main(int argc, char **argv)
   if (argc <= 1) return 1;
   auto str = read_file(argv[1]);
   auto expr = Parser().parse(str);
+  auto env = ptr<Env<Type>>();
   if (expr) {
     cout << *expr->ppr() << endl;
+    cout << *type_of(expr, env)->ppr() << endl;
   } else {
     cout << "parser error" << endl;
   }
