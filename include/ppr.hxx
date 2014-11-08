@@ -157,6 +157,13 @@ inline OStream &operator<<(OStream &out, const Ppr &p)
   return out;
 }
 
+/// Outputs a pretty-printable object to an \ref OStream.
+inline OStream &operator<<(OStream &out, const Pretty &p)
+{
+  return out << p.ppr();
+}
+
+
 }
 
 #endif /* end of include guard: PPR_HXX_MJEKHUYS */
