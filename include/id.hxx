@@ -37,7 +37,7 @@ public:
   /// collision.
   /// \return Whether the two identifiers are the same.
   bool operator==(const Id &other) const
-  { return m_hash == other.m_hash && m_val == other.m_val; }
+  { return m_hash == other.m_hash && *m_val == *other.m_val; }
 
   /// \return The value of the identifier.
   Ptr<String> val() const { return m_val; }
