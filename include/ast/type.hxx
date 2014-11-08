@@ -95,6 +95,18 @@ struct TypeVisitor
   virtual Ptr<T> operator()(Ptr<ArrowType>, Args...) = 0;
 };
 
+struct TypeNF final: public TypeVisitor<Type, Ptr<Env<Type>>>
+{
+  using TypeVisitor<Type, Ptr<Env<Type>>>::operator();
+  virtual Ptr<Type> operator()(Ptr<IdType>, Ptr<Env<Type>>) override;
+  virtual Ptr<Type> operator()(Ptr<IntType>, Ptr<Env<Type>>) override;
+  virtual Ptr<Type> operator()(Ptr<ArrowType>, Ptr<Env<Type>>) override;
+};
+
+inline Ptr<Type> type_nf(Ptr<Type> t, Ptr<Env<Type>> env)
+{ return TypeNF()(t, env); }
+
+
 }
 
 #endif /* end of include guard: TYPE_HXX_PHQ9E7V1 */
