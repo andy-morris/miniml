@@ -66,12 +66,18 @@ inline OStream& operator<<(OStream &out, const Id &id)
   return out << *id.val();
 }
 
-struct IdHash
+}
+
+
+namespace std
 {
-  typedef Id argument_type;
+
+template <>
+struct hash<miniml::Id>
+{
+  typedef miniml::Id argument_type;
   typedef size_t result_type;
-  size_t operator()(const Id &i) const { return i.hash(); }
-  size_t operator()(const Ptr<Id> i) const { return i->hash(); }
+  size_t operator()(const miniml::Id &i) const { return i.hash(); }
 };
 
 }
