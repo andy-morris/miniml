@@ -40,7 +40,7 @@ public:
   { return m_hash == other.m_hash && m_val == other.m_val; }
 
   /// \return The value of the identifier.
-  const Ptr<String> val() const { return m_val; }
+  Ptr<String> val() const { return m_val; }
 
   size_t hash() const { return m_hash; }
 
@@ -49,13 +49,13 @@ public:
 
   /// Pretty prints an identifier.
   /// \relates PprString
-  const Ptr<Ppr> ppr() const { return ppr::string(*val()); }
+  Ptr<Ppr> ppr() const { return ppr::string(*val()); }
 
 private:
   /// Hash function for \ref String.
   static std::hash<String> make_hash;
 
-  const Ptr<String> m_val;  ///< Value.
+  Ptr<String> m_val;  ///< Value.
   size_t m_hash;     ///< Hash.
 };
 

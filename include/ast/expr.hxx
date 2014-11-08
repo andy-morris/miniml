@@ -48,7 +48,7 @@ public:
   virtual Ptr<Ppr> ppr(unsigned prec = 0) const override;
 
   /// \return The identifier value.
-  const Ptr<const Id> id() const { return m_id; }
+  Ptr<Id> id() const { return m_id; }
 
 private:
   Ptr<Id> m_id;   ///< Identifier value.
@@ -96,9 +96,9 @@ public:
   virtual Ptr<Ppr> ppr(unsigned prec = 0) const override;
 
   /// \return The left part (operator).
-  const Ptr<const Expr> left() const { return m_left; }
+  Ptr<Expr> left() const { return m_left; }
   /// \return The right part (operand).
-  const Ptr<const Expr> right() const { return m_right; }
+  Ptr<Expr> right() const { return m_right; }
 
 private:
   Ptr<Expr> m_left;   ///< Operator.
@@ -123,11 +123,11 @@ public:
   virtual Ptr<Ppr> ppr(unsigned prec = 0) const override;
 
   /// \return The bound variable.
-  const Ptr<const Id> var() const { return m_var; }
+  Ptr<Id> var() const { return m_var; }
   /// \return The argument type.
-  const Ptr<const Type> ty() const { return m_ty; }
+  Ptr<Type> ty() const { return m_ty; }
   /// \return The body of the term.
-  const Ptr<const Expr> body() const { return m_body; }
+  Ptr<Expr> body() const { return m_body; }
 
 private:
   Ptr<Id> m_var;      ///< Bound variable.
@@ -153,15 +153,14 @@ public:
   virtual Ptr<Ppr> ppr(unsigned prec = 0) const override;
 
   /// \return The inner expression.
-  const Ptr<const Expr> expr() const { return m_expr; }
+  Ptr<Expr> expr() const { return m_expr; }
   /// \return The assigned type.
-  const Ptr<const Type> ty() const { return m_ty; }
+  Ptr<Type> ty() const { return m_ty; }
 
 private:
   Ptr<Expr> m_expr;   ///< Expression.
   Ptr<Type> m_ty;   ///< Assigned type.
 };
 
-}
 
 #endif /* end of include guard: EXPR_HXX_SPN8H6I7 */

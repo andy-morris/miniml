@@ -39,7 +39,7 @@ public:
 
   virtual Ptr<Ppr> ppr(unsigned prec = 0) const override;
 
-  const Ptr<const Id> id() const { return m_id; }
+  const Ptr<Id> id() const { return m_id; }
 
 private:
   Ptr<Id> m_id;
@@ -61,8 +61,8 @@ public:
 
   virtual Ptr<Ppr> ppr(unsigned prec = 0) const override;
 
-  const Ptr<const Type> left() const { return m_left; }
-  const Ptr<const Type> right() const { return m_right; }
+  Ptr<Type> left() const { return m_left; }
+  Ptr<Type> right() const { return m_right; }
 
 private:
   Ptr<Type> m_left, m_right;
