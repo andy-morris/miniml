@@ -3,8 +3,8 @@
 
 #include "token.hxx"
 #include "string.hxx"
+#include "exception.hxx"
 #include <vector>
-#include <stdexcept>
 
 namespace miniml
 {
@@ -16,7 +16,7 @@ class Lexer
 {
 public:
   /// Exception thrown when a lexical error is enountered.
-  struct LexicalError: public std::exception
+  struct LexicalError: public Exception
   {
     LexicalError(char c_, ptrdiff_t pos_);
 

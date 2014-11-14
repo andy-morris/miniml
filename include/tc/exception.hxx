@@ -1,10 +1,12 @@
 #ifndef EXCEPTION_HXX_HZM9ECFD
 #define EXCEPTION_HXX_HZM9ECFD
 
+#include "../exception.hxx"
+
 namespace miniml
 {
 
-struct TCException: public std::exception {};
+struct TCException: public Exception {};
 
 struct NotInScope: public TCException
 {
