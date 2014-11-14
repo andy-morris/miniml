@@ -4,6 +4,7 @@
 #include "ast.hxx"
 #include "token.hxx"
 #include "lemon.hxx"
+#include <vector>
 
 namespace miniml
 {
@@ -14,6 +15,7 @@ struct Parser
   ~Parser();
 
   Ptr<Expr> parse(const Ptr<String>);
+  Ptr<Expr> parse(const std::vector<Ptr<Token>>&);
 
 private:
   void *parser;
