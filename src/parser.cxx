@@ -34,7 +34,7 @@ Ptr<Expr> Parser::parse(const Ptr<String> input)
   /*
 #ifndef NDEBUG
   // lemon forgot a const :(
-  MiniMLParserTrace(stdout, const_cast<char*>("parser: "));
+  MiniMLParserTrace(stderr, const_cast<char*>("parser: "));
 #endif
   */
 

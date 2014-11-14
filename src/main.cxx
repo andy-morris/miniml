@@ -30,9 +30,9 @@ int main(int argc, char **argv)
   auto expr = Parser().parse(str);
   auto env = ptr<Env<Type>>();
   if (expr) {
-    cout << *expr->ppr() << endl;
-    cout << *type_of(expr, env)->ppr() << endl;
+    cerr << *expr->ppr() << endl;
+    cerr << *type_of(expr, env)->ppr() << endl;
   } else {
-    cout << "parser error" << endl;
+    cerr << "parser error" << endl;
   }
 }
