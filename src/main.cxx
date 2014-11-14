@@ -1,4 +1,5 @@
 #include "ast.hxx"
+#include "lexer.hxx"
 #include "parser.hxx"
 #include "tc.hxx"
 
@@ -27,7 +28,16 @@ int main(int argc, char **argv)
 {
   if (argc <= 1) return 1;
   auto str = read_file(argv[1]);
+
+  auto toks = Lexer(str).tokens();
+  for (auto tok: toks) {
+    cerr << *tok << endl;
+  }
+  cerr << endl;
+
   auto expr = Parser().parse(str);
+  cerr << endl;
+
   auto env = ptr<Env<Type>>();
   if (expr) {
     cerr << *expr->ppr() << endl;

@@ -35,12 +35,10 @@ Ptr<Expr> Parser::parse(const std::vector<Ptr<Token>>& toks)
 {
   Expr *expr = nullptr;
 
-  /*
 #ifndef NDEBUG
   // lemon forgot a const :(
   MiniMLParserTrace(stderr, const_cast<char*>("parser: "));
 #endif
-  */
 
   for (auto tok: toks) {
     MiniMLParser(parser, token_id(*tok), tok.get(), &expr);
