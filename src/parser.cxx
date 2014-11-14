@@ -28,7 +28,11 @@ Parser::Parser()
 
 Ptr<Expr> Parser::parse(const Ptr<String> input)
 {
-  auto toks = Lexer(input).tokens();
+  return parse(Lexer(input).tokens());
+}
+
+Ptr<Expr> Parser::parse(const std::vector<Ptr<Token>>& toks)
+{
   Expr *expr = nullptr;
 
   /*
