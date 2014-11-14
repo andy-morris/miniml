@@ -6,36 +6,43 @@ namespace miniml
 
 using TokType = Token::Type;
 
-#define ATOMIC(t) Token::atomic<TokType::t>()
+#define ATOMIC(t) Token::atomic<TokType::t>(start, end)
 
 %%{
 machine Lexer;
 alphtype char;
 
-idstart  = alpha | "_";
-idletter = idstart | digit | "'";
-id       = idstart idletter*;
+action ws   { end = start += fc; }
+action bump { end += fc; }
 
-int = ('+'|'-')? [0-9]+;
+idstart  = (alpha | "_");
+idletter = (idstart | digit | "'");
+
+ID      = (idstart idletter*) $bump;
+INT     = (('+'|'-')? [0-9]+) $bump;
+FN      = "fn" $bump;
+ARROW   = "=>" $bump;
+TYARROW = "->" $bump;
+LPAR    = "(" $bump;
+RPAR    = ")" $bump;
+COLON   = ":" $bump;
+WS      = (space+ | ("//" . [^\n] . "\n")) $ws;
 
 token := |*
-  "fn"  => { push(ATOMIC(FN)); };
-  "=>"  => { push(ATOMIC(ARROW)); };
-  "->"  => { push(ATOMIC(TYARROW)); };
-  "("   => { push(ATOMIC(LPAR)); };
-  ")"   => { push(ATOMIC(RPAR)); };
-  ":"   => { push(ATOMIC(COLON)); };
-  id    => {
-    push(ptr<IdToken>(ts, te - ts));
-  };
-  int   => {
+  FN      => { push(ATOMIC(FN)); };
+  ARROW   => { push(ATOMIC(ARROW)); };
+  TYARROW => { push(ATOMIC(TYARROW)); };
+  LPAR    => { push(ATOMIC(LPAR)); };
+  RPAR    => { push(ATOMIC(RPAR)); };
+  COLON   => { push(ATOMIC(COLON)); };
+  ID      => { push(ptr<IdToken>(ts, te - ts, start, end)); };
+  INT     => {
     std::string str(ts, te - ts);
     std::stringstream s(str); long x;
     s >> x;
-    push(ptr<IntToken>(x));
+    push(ptr<IntToken>(x, start, end));
   };
-  space+;
-  "//" . [^\n] . "\n";
+  WS;
 *|;
 }%%
 
@@ -55,15 +62,22 @@ Lexer::Lexer(const Ptr<String> str) throw(Lexer::LexicalError):
   %% write exec;
 
   if (cs == Lexer_error)
-    throw LexicalError(*p, p - begin);
+    throw LexicalError(*p, end);
 }
 
-Lexer::LexicalError::LexicalError(char c_, ptrdiff_t pos_):
+Lexer::LexicalError::LexicalError(char c_, Pos pos_):
   c(c_), pos(pos_)
 {
   std::stringstream s;
-  s << "Lexical error at '" << c << "', position " << pos;
+  s << pos << ": lexical error at char '" << c << "'";
   text = s.str();
+}
+
+
+void Lexer::push(Ptr<Token> &&tok)
+{
+  m_tokens.push_back(tok);
+  start = end;
 }
 
 }

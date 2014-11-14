@@ -18,7 +18,7 @@ public:
   /// Exception thrown when a lexical error is enountered.
   struct LexicalError: public Exception
   {
-    LexicalError(char c_, ptrdiff_t pos_);
+    LexicalError(char c_, Pos pos_);
 
     /// \return the value of \ref text.
     virtual const char *what() const noexcept override
@@ -29,7 +29,7 @@ public:
     /// The character at the position the error occurred.
     char c;
     /// The position that the error occurred.
-    ptrdiff_t pos;
+    Pos pos;
   };
 
 
@@ -46,6 +46,8 @@ private:
   const Char *p, *begin, *pe, *eof, *ts, *te;
   // }
 
+  Pos start, end;
+
   /// The string being read.
   Ptr<String> data;
 
@@ -53,7 +55,7 @@ private:
   std::vector<Ptr<Token>> m_tokens;
 
   /// Add a token to the vector.
-  void push(Ptr<Token> &&tok) { m_tokens.push_back(tok); }
+  void push(Ptr<Token> &&tok);
 };
 
 }
