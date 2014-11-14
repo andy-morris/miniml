@@ -11,7 +11,7 @@ struct NotInScope: public TCException
   NotInScope(const Ptr<Id> id):
     msg("not in scope: " + *id->val())
   {}
-  const char *what() const noexcept override { return msg.c_str(); }
+  virtual const char *what() const noexcept override { return msg.c_str(); }
   String msg;
 };
 
@@ -26,7 +26,7 @@ struct Clash: public TCException
       (actual->ppr() >> 1);
     msg = *ppr->string();
   }
-  const char *what() const noexcept override { return msg.c_str(); }
+  virtual const char *what() const noexcept override { return msg.c_str(); }
   String msg;
 };
 
@@ -37,7 +37,7 @@ struct NotArrow: public TCException
     auto ppr = "not an arrow type:"_p + (t->ppr() >> 1);
     msg = *ppr->string();
   }
-  const char *what() const noexcept override { return msg.c_str(); }
+  virtual const char *what() const noexcept override { return msg.c_str(); }
   String msg;
 };
 
