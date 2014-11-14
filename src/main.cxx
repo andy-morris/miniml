@@ -31,18 +31,24 @@ int main(int argc, char **argv)
     auto str = read_file(argv[1]);
 
     auto toks = Lexer(str).tokens();
+#ifndef NDEBUG
     for (auto tok: toks) {
       cerr << *tok << endl;
     }
     cerr << endl;
+#endif
 
     auto expr = Parser().parse(str);
+#ifndef NDEBUG
     cerr << endl;
+#endif
 
     auto env = ptr<Env<Type>>();
     if (expr) {
-      cerr << *expr->ppr() << endl;
-      cerr << *type_of(expr, env)->ppr() << endl;
+#ifndef NDEBUG
+      cerr << "Pretty printed AST:" << endl << *expr->ppr() << endl;
+      cerr << "Type:" << endl << *type_of(expr, env)->ppr() << endl;
+#endif
     } else {
       cerr << "parser error" << endl;
     }
