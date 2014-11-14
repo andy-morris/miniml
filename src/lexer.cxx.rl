@@ -40,7 +40,11 @@ token := |*
 }%%
 
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wunused-const-variable"
 %% write data;
+#pragma clang diagnostic pop
+
 
 Lexer::Lexer(const Ptr<String> str) throw(Lexer::LexicalError):
   data(str)

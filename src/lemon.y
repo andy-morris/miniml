@@ -14,6 +14,8 @@
 
   long get_int(Token *t)
   { return dynamic_cast<IntToken*>(t)->val; }
+
+#pragma clang diagnostic ignored "-Wunused-variable"
 }
 
 %name MiniMLParser
