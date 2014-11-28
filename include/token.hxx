@@ -2,26 +2,14 @@
 #define TOKEN_HXX_LGIKOUIZ
 
 #include "id.hxx"
+#include "pos.hxx"
 #include "string.hxx"
 
 namespace miniml
 {
 
-struct Pos
-{
-  size_t line = 1,  ///< Line number
-         col,       ///< Column number
-         pos;       ///< File position
-
-  Pos operator+(const char c) const;
-  Pos &operator+=(const char c);
-};
-
-OStream &operator<<(OStream&, const Pos&);
-
-
 /// Abstract class for tokens.
-struct Token
+struct Token: public HasPos
 {
   enum class Type;                ///< Token types.
   virtual Type type() const = 0;  ///< What type of token is this?
@@ -37,12 +25,7 @@ struct Token
   virtual void out(OStream &) const = 0;
 
 protected:
-  Token(Pos start_, Pos end_):
-    start(start_), end(end_)
-  {}
-
-public:
-  Pos start, end;
+  Token(Pos start, Pos end): HasPos(start, end) {}
 };
 
 

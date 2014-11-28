@@ -1,6 +1,7 @@
 #ifndef EXPR_HXX_SPN8H6I7
 #define EXPR_HXX_SPN8H6I7
 
+#include "pos.hxx"
 #include "ppr.hxx"
 #include "id.hxx"
 #include "ptr.hxx"
@@ -21,14 +22,15 @@ enum class ExprType
 };
 
 /// Abstract base class for expressions.
-class Expr: public Pretty
+class Expr: public Pretty, public HasPos
 {
 public:
   virtual ~Expr() {}
-
   /// Get the (syntactic) type of the expression.
   /// \see ExprType
   virtual ExprType type() const = 0;
+protected:
+  Expr(Pos start = Pos(), Pos end = Pos()): HasPos(start, end) {}
 };
 
 
@@ -40,7 +42,9 @@ public:
   IdExpr(IdExpr&&) = default;
 
   /// \param[in] id The identifier this expression represents.
-  IdExpr(const Ptr<Id> id): m_id(id) {}
+  IdExpr(const Ptr<Id> id, Pos start = Pos(), Pos end = Pos()):
+    Expr(start, end), m_id(id)
+  {}
 
   /// \return ExprType::ID
   virtual ExprType type() const override { return ExprType::ID; }
@@ -64,7 +68,9 @@ public:
   IntExpr(IntExpr&&) = default;
 
   /// \param[in] val The value of this literal.
-  IntExpr(long val): m_val(val) {}
+  IntExpr(long val, Pos start = Pos(), Pos end = Pos()):
+    Expr(start, end), m_val(val)
+  {}
 
   /// \return ExprType::INT
   virtual ExprType type() const override { return ExprType::INT; }
@@ -87,8 +93,9 @@ public:
   AppExpr(const AppExpr&) = default;
   AppExpr(AppExpr&&) = default;
 
-  AppExpr(const Ptr<Expr> left, const Ptr<Expr> right):
-    m_left(left), m_right(right)
+  AppExpr(const Ptr<Expr> left, const Ptr<Expr> right,
+          Pos start = Pos(), Pos end = Pos()):
+    Expr(start, end), m_left(left), m_right(right)
   {}
 
   /// \return ExprType::APP
@@ -114,8 +121,9 @@ public:
   LamExpr(const LamExpr&) = default;
   LamExpr(LamExpr&&) = default;
 
-  LamExpr(const Ptr<Id> var, const Ptr<Type> ty, const Ptr<Expr> body):
-    m_var(var), m_ty(ty), m_body(body)
+  LamExpr(const Ptr<Id> var, const Ptr<Type> ty, const Ptr<Expr> body,
+          Pos start = Pos(), Pos end = Pos()):
+    Expr(start, end), m_var(var), m_ty(ty), m_body(body)
   {}
 
   /// \return ExprType::LAM
@@ -144,8 +152,9 @@ public:
   TypeExpr(const TypeExpr&) = default;
   TypeExpr(TypeExpr&&) = default;
 
-  TypeExpr(const Ptr<Expr> expr, const Ptr<Type> ty):
-    m_expr(expr), m_ty(ty)
+  TypeExpr(const Ptr<Expr> expr, const Ptr<Type> ty,
+          Pos start = Pos(), Pos end = Pos()):
+    Expr(start, end), m_expr(expr), m_ty(ty)
   {}
 
   /// \return ExprType::TYPE

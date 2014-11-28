@@ -1,6 +1,7 @@
 #ifndef ID_HXX_HQ5DONMJ
 #define ID_HXX_HQ5DONMJ
 
+#include "pos.hxx"
 #include "string.hxx"
 #include "ptr.hxx"
 #include "ppr.hxx"
@@ -13,7 +14,7 @@ namespace miniml
 {
 
 /// Identifiers keep a hash for quick equality testing.
-class Id final: public Pretty
+class Id final: public Pretty, public HasPos
 {
 public:
   Id(const Id&) = default;
@@ -23,9 +24,8 @@ public:
   Id &operator=(Id&&) = default;
 
   /// Creates an identifier. \a str isn't copied.
-  Id(const Ptr<String> str):
-    m_val(str),
-    m_hash(make_hash(*str))
+  Id(const Ptr<String> str, Pos start = Pos(), Pos end = Pos()):
+    HasPos(start, end), m_val(str), m_hash(make_hash(*str))
   { }
 
   /// Copies a string onto the heap and constructs an identifier from it.

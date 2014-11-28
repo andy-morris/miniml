@@ -1,6 +1,7 @@
 #ifndef TYPE_HXX_PHQ9E7V1
 #define TYPE_HXX_PHQ9E7V1
 
+#include "pos.hxx"
 #include "ptr.hxx"
 #include "id.hxx"
 #include "ppr.hxx"
@@ -17,14 +18,14 @@ enum class TypeType
   ARROW,
 };
 
-class Type: public Pretty
+class Type: public Pretty, public HasPos
 {
 public:
   virtual ~Type() {}
-
   virtual TypeType type() const = 0;
-
   virtual bool operator==(const Type &other) const = 0;
+protected:
+  Type(Pos start = Pos(), Pos end = Pos()): HasPos(start, end) {}
 };
 
 
@@ -34,7 +35,9 @@ public:
   IdType(const IdType &other) = default;
   IdType(IdType &&other) = default;
 
-  IdType(Ptr<Id> id): m_id(id) {}
+  IdType(Ptr<Id> id, Pos start = Pos(), Pos end = Pos()):
+    Type(start, end), m_id(id)
+  {}
 
   virtual TypeType type() const override { return TypeType::ID; }
 
@@ -51,6 +54,12 @@ private:
 
 class IntType final: public Type
 {
+public:
+  IntType(const IntType &other) = default;
+  IntType(IntType &&other) = default;
+
+  IntType(Pos start = Pos(), Pos end = Pos()): Type(start, end) {}
+
   virtual TypeType type() const override { return TypeType::INT; }
 
   virtual bool operator==(const Type &other) const override
@@ -67,8 +76,9 @@ public:
   ArrowType(const ArrowType &other) = default;
   ArrowType(ArrowType &&other) = default;
 
-  ArrowType(Ptr<Type> left, Ptr<Type> right):
-    m_left(left), m_right(right)
+  ArrowType(Ptr<Type> left, Ptr<Type> right,
+            Pos start = Pos(), Pos end = Pos()):
+    Type(start, end), m_left(left), m_right(right)
   {}
 
   virtual TypeType type() const override { return TypeType::ARROW; }
