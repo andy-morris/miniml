@@ -25,7 +25,7 @@ build/%.cxx: src/%.cxx.rl
 # Lemon
 build/%.cxx build/%.hxx %.out: src/%.y
 	@mkdir -p $(dir $@)
-	lemon -l $<
+	lemon $<
 	mv src/$*.out .
 	mv src/$*.c build/$*.cxx
 	mv src/$*.h build/$*.hxx
