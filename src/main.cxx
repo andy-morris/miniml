@@ -46,7 +46,7 @@ int main(int argc, char **argv)
     auto env = ptr<Env<Type>>();
     if (expr) {
 #ifndef NDEBUG
-      cerr << "Pretty printed AST:" << endl << *expr->ppr() << endl;
+      cerr << "Pretty printed AST:" << endl << *expr->ppr(true) << endl;
       cerr << "Type:" << endl << *type_of(expr, env)->ppr() << endl;
 #endif
     } else {

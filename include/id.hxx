@@ -8,7 +8,6 @@
 
 #include <string>
 #include <ostream>
-#include <functional>
 
 namespace miniml
 {
@@ -49,7 +48,7 @@ public:
 
   /// Pretty prints an identifier.
   /// \relates PprString
-  Ptr<Ppr> ppr(unsigned prec = 0) const override
+  Ptr<Ppr> ppr(unsigned prec = 0, bool=false) const override
   { return ppr::string(*val()); }
 
 private:

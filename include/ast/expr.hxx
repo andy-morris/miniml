@@ -50,7 +50,7 @@ public:
   virtual ExprType type() const override { return ExprType::ID; }
 
   /// \param prec Ignored, since variables are always atomic.
-  virtual Ptr<Ppr> ppr(unsigned prec = 0) const override;
+  virtual Ptr<Ppr> ppr(unsigned prec = 0, bool pos = false) const override;
 
   /// \return The identifier value.
   Ptr<Id> id() const { return m_id; }
@@ -76,7 +76,7 @@ public:
   virtual ExprType type() const override { return ExprType::INT; }
 
   /// \param prec Ignored, since literals are always atomic.
-  virtual Ptr<Ppr> ppr(unsigned prec = 0) const override;
+  virtual Ptr<Ppr> ppr(unsigned prec = 0, bool pos = false) const override;
 
   /// \return The value of this literal.
   long val() const { return m_val; }
@@ -101,7 +101,7 @@ public:
   /// \return ExprType::APP
   virtual ExprType type() const override { return ExprType::APP; }
 
-  virtual Ptr<Ppr> ppr(unsigned prec = 0) const override;
+  virtual Ptr<Ppr> ppr(unsigned prec = 0, bool pos = false) const override;
 
   /// \return The left part (operator).
   Ptr<Expr> left() const { return m_left; }
@@ -129,7 +129,7 @@ public:
   /// \return ExprType::LAM
   virtual ExprType type() const override { return ExprType::LAM; }
 
-  virtual Ptr<Ppr> ppr(unsigned prec = 0) const override;
+  virtual Ptr<Ppr> ppr(unsigned prec = 0, bool pos = false) const override;
 
   /// \return The bound variable.
   Ptr<Id> var() const { return m_var; }
@@ -160,7 +160,7 @@ public:
   /// \return ExprType::TYPE
   ExprType type() const override { return ExprType::TYPE; }
 
-  virtual Ptr<Ppr> ppr(unsigned prec = 0) const override;
+  virtual Ptr<Ppr> ppr(unsigned prec = 0, bool pos = false) const override;
 
   /// \return The inner expression.
   Ptr<Expr> expr() const { return m_expr; }

@@ -43,7 +43,7 @@ public:
 
   virtual bool operator==(const Type &other) const override;
 
-  virtual Ptr<Ppr> ppr(unsigned prec = 0) const override;
+  virtual Ptr<Ppr> ppr(unsigned prec = 0, bool pos = false) const override;
 
   const Ptr<Id> id() const { return m_id; }
 
@@ -65,7 +65,7 @@ public:
   virtual bool operator==(const Type &other) const override
   { return other.type() == type(); }
 
-  virtual Ptr<Ppr> ppr(unsigned prec = 0) const override
+  virtual Ptr<Ppr> ppr(unsigned prec = 0, bool pos = false) const override
   { return "int"_p; }
 };
 
@@ -85,7 +85,7 @@ public:
 
   virtual bool operator==(const Type &other) const override;
 
-  virtual Ptr<Ppr> ppr(unsigned prec = 0) const override;
+  virtual Ptr<Ppr> ppr(unsigned prec = 0, bool pos = false) const override;
 
   Ptr<Type> left() const { return m_left; }
   Ptr<Type> right() const { return m_right; }

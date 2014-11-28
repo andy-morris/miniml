@@ -12,9 +12,9 @@ bool IdType::operator==(const Type &other) const
   return false;
 }
 
-Ptr<Ppr> IdType::ppr(unsigned) const
+Ptr<Ppr> IdType::ppr(unsigned, bool pos) const
 {
-  return id()->ppr();
+  return id()->ppr(pos);
 }
 
 
@@ -27,10 +27,10 @@ bool ArrowType::operator==(const Type &other) const
   return false;
 }
 
-Ptr<Ppr> ArrowType::ppr(unsigned prec) const
+Ptr<Ppr> ArrowType::ppr(unsigned prec, bool pos) const
 {
   return parens_if(prec > 0,
-      left()->ppr(1) * +"->"_p * +right()->ppr(0));
+      left()->ppr(1, pos) * +"->"_p * +right()->ppr(0, pos));
 }
 
 

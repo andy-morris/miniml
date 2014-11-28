@@ -36,7 +36,8 @@ class Pretty
 public:
   /// \param prec [in] the surrounding precedence level for the
   //                   insertion of brackets.
-  virtual Ptr<Ppr> ppr(unsigned prec = 0) const = 0;
+  virtual Ptr<Ppr> ppr(unsigned prec = 0, bool pos = false) const = 0;
+  Ptr<Ppr> ppr(bool pos) { return ppr(0, pos); }
 };
 
 
