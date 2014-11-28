@@ -98,8 +98,18 @@ private:
 template <typename T, typename... Args>
 struct TypeVisitor
 {
-  virtual Ptr<T> operator()(Ptr<Type>, Args...)
-  { throw AbstractVisit("Type"); }
+  virtual Ptr<T> operator()(Ptr<Type> t, Args... args)
+  {
+    switch (t->type()) {
+#define CASE(x,T) \
+      case TypeType::x: \
+        return operator()(std::dynamic_pointer_cast<T>(t), args...);
+      CASE(ID, IdType)
+      CASE(INT, IntType)
+      CASE(ARROW, ArrowType)
+#undef CASE
+    }
+  }
   virtual Ptr<T> operator()(Ptr<IdType>, Args...) = 0;
   virtual Ptr<T> operator()(Ptr<IntType>, Args...) = 0;
   virtual Ptr<T> operator()(Ptr<ArrowType>, Args...) = 0;
