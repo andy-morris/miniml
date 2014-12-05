@@ -29,6 +29,9 @@ public:
   /// Get the (syntactic) type of the expression.
   /// \see ExprType
   virtual ExprType type() const = 0;
+
+  // Substitutes \a expr for all occurrences of \a var in \a this.
+  Ptr<Expr> subst(Id var, const Ptr<Expr> expr);
 protected:
   Expr(Pos start = Pos(), Pos end = Pos()): HasPos(start, end) {}
 };
@@ -138,6 +141,8 @@ public:
   /// \return The body of the term.
   Ptr<Expr> body() const { return m_body; }
 
+  Ptr<Expr> apply(const Ptr<Expr>) const;
+
 private:
   Ptr<Id> m_var;      ///< Bound variable.
   Ptr<Type> m_ty;     ///< Argument type.
@@ -175,12 +180,15 @@ private:
 template <typename T, typename... Args>
 struct ExprVisitor
 {
-  virtual Ptr<T> operator()(Ptr<Expr> e, Args... args)
+  inline Ptr<T> operator()(Ptr<Expr> e, Args... args)
+  { return v(e, args...); }
+
+  virtual Ptr<T> v(Ptr<Expr> e, Args... args)
   {
     switch (e->type()) {
 #define CASE(x,t) \
       case ExprType::x: \
-        return operator()(std::dynamic_pointer_cast<t>(e), args...);
+        return v(std::dynamic_pointer_cast<t>(e), args...);
       CASE(ID, IdExpr)
       CASE(APP, AppExpr)
       CASE(LAM, LamExpr)
@@ -190,11 +198,11 @@ struct ExprVisitor
     }
   }
 
-  virtual Ptr<T> operator()(Ptr<IdExpr>, Args...) = 0;
-  virtual Ptr<T> operator()(Ptr<AppExpr>, Args...) = 0;
-  virtual Ptr<T> operator()(Ptr<IntExpr>, Args...) = 0;
-  virtual Ptr<T> operator()(Ptr<LamExpr>, Args...) = 0;
-  virtual Ptr<T> operator()(Ptr<TypeExpr>, Args...) = 0;
+  virtual Ptr<T> v(Ptr<IdExpr>, Args...) = 0;
+  virtual Ptr<T> v(Ptr<AppExpr>, Args...) = 0;
+  virtual Ptr<T> v(Ptr<IntExpr>, Args...) = 0;
+  virtual Ptr<T> v(Ptr<LamExpr>, Args...) = 0;
+  virtual Ptr<T> v(Ptr<TypeExpr>, Args...) = 0;
 };
 
 }
