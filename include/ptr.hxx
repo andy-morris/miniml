@@ -16,6 +16,9 @@ Ptr<T> ptr(Args... args)
   return std::make_shared<T>(args...);
 }
 
+template<class T, class U> Ptr<T> dyn_cast(const Ptr<U>& r)
+{ return std::dynamic_pointer_cast<T>(r); }
+
 }
 
 #endif /* end of include guard: PTR_HXX_OZMWHDZJ */
