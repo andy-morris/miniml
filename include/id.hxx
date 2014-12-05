@@ -51,6 +51,14 @@ public:
   Ptr<Ppr> ppr(unsigned prec = 0, bool=false) const override
   { return ppr::string(*val()); }
 
+  template <typename T>
+  Id suffix(T suf)
+  {
+    SStream ss; ss << suf;
+    auto str = ptr<String>(*m_val + ss.str());
+    return Id(str, start(), end());
+  }
+
 private:
   /// Hash function for \ref String.
   static std::hash<String> make_hash;
