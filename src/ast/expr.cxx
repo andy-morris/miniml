@@ -10,40 +10,40 @@ using std::unordered_set;
 Ptr<Ppr> IdExpr::ppr(unsigned, bool pos) const
 {
   auto p = id().ppr();
-  return pos? p * Span{start(), end()}.ppr() : p;
+  return pos ? hcat({p, Span{start(), end()}.ppr()}) : p;
 }
 
 
 Ptr<Ppr> IntExpr::ppr(unsigned, bool pos) const
 {
   auto p = num(val());
-  return pos? p * Span{start(), end()}.ppr() : p;
+  return pos ? hcat({p, Span{start(), end()}.ppr()}) : p;
 }
 
 
 Ptr<Ppr> AppExpr::ppr(unsigned prec, bool pos) const
 {
   auto p = parens_if(prec > 10 || pos,
-      left()->ppr(10, pos) * +right()->ppr(11, pos));
-  return pos? p * Span{start(), end()}.ppr() : p;
+                     hcat({left()->ppr(10, pos), +right()->ppr(11, pos)}));
+  return pos? hcat({p, Span{start(), end()}.ppr()}) : p;
 }
 
 
 Ptr<Ppr> LamExpr::ppr(unsigned prec, bool pos) const
 {
-  auto p = parens_if(prec > 0 || pos,
-      "fn ("_p * var().ppr(pos) * ':'_p * +ty()->ppr(pos) * ')'_p *
-        +"=>"_p +
-        (body()->ppr(pos) >> 1));
-  return pos? p * Span{start(), end()}.ppr() : p;
+  auto p =
+      parens_if(prec > 0 || pos, vcat({hcat({"fn ("_p, var().ppr(pos), ':'_p,
+                                             +ty()->ppr(pos), ')'_p, +"=>"_p}),
+                                       (body()->ppr(pos) >> 1)}));
+  return pos ? hcat({p, Span{start(), end()}.ppr()}) : p;
 }
 
 
 Ptr<Ppr> TypeExpr::ppr(unsigned prec, bool pos) const
 {
   auto p = parens_if(prec > 0 || pos,
-      expr()->ppr(pos) * ":"_p * +ty()->ppr(pos));
-  return pos? p * Span{start(), end()}.ppr() : p;
+      hcat({expr()->ppr(pos), ":"_p, +ty()->ppr(pos)}));
+  return pos? hcat({p, Span{start(), end()}.ppr()}) : p;
 }
 
 

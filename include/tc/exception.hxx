@@ -22,10 +22,10 @@ struct Clash: public TCException
   Clash(const Ptr<Type> expected, const Ptr<Type> actual)
   {
     auto ppr =
-      "type clash: expected type"_p +
-      (expected->ppr() >> 1) +
-      "but got type"_p +
-      (actual->ppr() >> 1);
+      ppr::vcat({"type clash: expected type"_p,
+                 expected->ppr() >> 1,
+                 "but got type"_p,
+                 actual->ppr() >> 1});
     msg = *ppr->string();
   }
   virtual const char *what() const noexcept override { return msg.c_str(); }
@@ -36,7 +36,7 @@ struct NotArrow: public TCException
 {
   NotArrow(const Ptr<Type> t)
   {
-    auto ppr = "not an arrow type:"_p + (t->ppr() >> 1);
+    auto ppr = ppr::vcat({"not an arrow type:"_p, t->ppr() >> 1});
     msg = *ppr->string();
   }
   virtual const char *what() const noexcept override { return msg.c_str(); }

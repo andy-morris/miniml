@@ -129,19 +129,14 @@ namespace ppr
   Ptr<Ppr> indent(Ptr<Ppr>, unsigned indent = Ppr::default_indent);
   /// Add parentheses if the first argument is true.
   Ptr<Ppr> parens_if(bool b, const Ptr<Ppr> ppr);
+  /// Concatenate vertically.
+  Ptr<Ppr> vcat(std::initializer_list<Ptr<Ppr>> pprs);
+  /// Concatenate horizontally.
+  Ptr<Ppr> hcat(std::initializer_list<Ptr<Ppr>> pprs);
 }
 
 /// Indent a \ref Ppr by a multiple of \ref Ppr::default_indent.
 Ptr<Ppr> operator>>(Ptr<Ppr>, unsigned);
-
-/// Horizontally concatenate two documents.
-/// \see operator+(Ptr<Ppr>, Ptr<Ppr>)
-/// \see operator+(Ptr<Ppr>)
-Ptr<Ppr> operator*(Ptr<Ppr>, Ptr<Ppr>);
-
-/// Vertically concatenate two documents.
-/// \see operator*(Ptr<Ppr>, Ptr<Ppr>)
-Ptr<Ppr> operator+(Ptr<Ppr>, Ptr<Ppr>);
 
 /// Creates a document from a string literal.
 Ptr<Ppr> operator""_p(const Char*, size_t);

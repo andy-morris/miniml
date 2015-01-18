@@ -30,7 +30,7 @@ bool ArrowType::operator==(const Type &other) const
 Ptr<Ppr> ArrowType::ppr(unsigned prec, bool pos) const
 {
   return parens_if(prec > 0,
-      left()->ppr(1, pos) * +"->"_p * +right()->ppr(0, pos));
+                   hcat({left()->ppr(1, pos), +"->"_p, +right()->ppr(0, pos)}));
 }
 
 

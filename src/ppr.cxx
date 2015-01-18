@@ -72,9 +72,19 @@ namespace ppr
   Ptr<Ppr> parens_if(bool b, const Ptr<Ppr> ppr)
   {
     if (b)
-      return '('_p * ppr * ')'_p;
+      return hcat({'('_p, ppr, ')'_p});
     else
       return ppr;
+  }
+
+  Ptr<Ppr> vcat(std::initializer_list<Ptr<Ppr>> pprs)
+  {
+    return ptr<PprVCat>(pprs);
+  }
+
+  Ptr<Ppr> hcat(std::initializer_list<Ptr<Ppr>> pprs)
+  {
+    return ptr<PprHCat>(pprs);
   }
 }
 
@@ -82,16 +92,6 @@ namespace ppr
 Ptr<Ppr> operator>>(Ptr<Ppr> ppr, unsigned ind)
 {
   return ppr::indent(ppr, ind * Ppr::default_indent);
-}
-
-Ptr<Ppr> operator*(Ptr<Ppr> left, Ptr<Ppr> right)
-{
-  return cat<PprHCat>(left, right);
-}
-
-Ptr<Ppr> operator+(Ptr<Ppr> top, Ptr<Ppr> bottom)
-{
-  return cat<PprVCat>(top, bottom);
 }
 
 Ptr<Ppr> operator""_p(const Char *str, size_t len)
@@ -106,7 +106,7 @@ Ptr<Ppr> operator""_p(Char c)
 
 Ptr<Ppr> operator+(Ptr<Ppr> p)
 {
-  return ' '_p * p;
+  return ppr::hcat({' '_p, p});
 }
 
 
