@@ -18,7 +18,7 @@ enum class TypeType
   ARROW,
 };
 
-class Type: public Pretty, public HasPos
+class Type: public Pretty, public HasPos, public Dup<Type>
 {
 public:
   virtual ~Type() {}
@@ -45,6 +45,9 @@ public:
 
   virtual Ptr<Ppr> ppr(unsigned prec = 0, bool pos = false) const override;
 
+  virtual Ptr<Type> dup() const override
+  { return ptr<IdType>(id(), start(), end()); }
+
   const Id id() const { return m_id; }
 
 private:
@@ -67,6 +70,9 @@ public:
 
   virtual Ptr<Ppr> ppr(unsigned prec = 0, bool pos = false) const override
   { return "int"_p; }
+
+  virtual Ptr<Type> dup() const override
+  { return ptr<IntType>(); }
 };
 
 
@@ -86,6 +92,9 @@ public:
   virtual bool operator==(const Type &other) const override;
 
   virtual Ptr<Ppr> ppr(unsigned prec = 0, bool pos = false) const override;
+
+  virtual Ptr<Type> dup() const override
+  { return ptr<ArrowType>(left(), right(), start(), end()); }
 
   Ptr<Type> left() const { return m_left; }
   Ptr<Type> right() const { return m_right; }

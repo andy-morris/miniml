@@ -2,6 +2,7 @@
 #define EXPR_HXX_SPN8H6I7
 
 #include "pos.hxx"
+#include "dup.hxx"
 #include "ppr.hxx"
 #include "id.hxx"
 #include "ptr.hxx"
@@ -22,7 +23,7 @@ enum class ExprType
 };
 
 /// Abstract base class for expressions.
-class Expr: public Pretty, public HasPos
+class Expr: public Pretty, public HasPos, public Dup<Expr>
 {
 public:
   virtual ~Expr() {}
@@ -58,6 +59,9 @@ public:
   /// \return The identifier value.
   Id id() const { return m_id; }
 
+  virtual Ptr<Expr> dup() const override
+  { return ptr<IdExpr>(id(), start(), end()); }
+
 private:
   Id m_id;   ///< Identifier value.
 };
@@ -83,6 +87,9 @@ public:
 
   /// \return The value of this literal.
   long val() const { return m_val; }
+
+  virtual Ptr<Expr> dup() const override
+  { return ptr<IntExpr>(val(), start(), end()); }
 
 private:
   long m_val;
@@ -110,6 +117,9 @@ public:
   Ptr<Expr> left() const { return m_left; }
   /// \return The right part (operand).
   Ptr<Expr> right() const { return m_right; }
+
+  virtual Ptr<Expr> dup() const override
+  { return ptr<AppExpr>(left()->dup(), right()->dup(), start(), end()); }
 
 private:
   Ptr<Expr> m_left;   ///< Operator.
@@ -143,6 +153,9 @@ public:
 
   Ptr<Expr> apply(const Ptr<Expr>) const;
 
+  virtual Ptr<Expr> dup() const override
+  { return ptr<LamExpr>(var(), ty(), body()->dup(), start(), end()); }
+
 private:
   Id m_var;           ///< Bound variable.
   Ptr<Type> m_ty;     ///< Argument type.
@@ -171,6 +184,9 @@ public:
   Ptr<Expr> expr() const { return m_expr; }
   /// \return The assigned type.
   Ptr<Type> ty() const { return m_ty; }
+
+  virtual Ptr<Expr> dup() const override
+  { return ptr<TypeExpr>(expr()->dup(), ty(), start(), end()); }
 
 private:
   Ptr<Expr> m_expr;   ///< Expression.
