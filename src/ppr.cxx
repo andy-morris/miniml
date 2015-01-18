@@ -7,7 +7,7 @@ namespace miniml
 Ptr<String> Ppr::string() const
 {
   SStream stream;
-  stream << this;
+  stream << *this;
   return ptr<String>(stream.str());
 }
 
