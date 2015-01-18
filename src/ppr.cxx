@@ -35,9 +35,14 @@ void PprHCat::output(OStream &out, unsigned indent) const
 
 void PprVCat::output(OStream &out, unsigned indent) const
 {
+  bool first = true;
   for (auto child: *m_children) {
+    if (first) {
+      first = false;
+    } else {
+      out << std::endl;
+    }
     child->output(out, indent);
-    out << std::endl;
   }
 }
 
