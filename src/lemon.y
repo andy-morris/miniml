@@ -15,6 +15,15 @@
   long get_int(Token *t)
   { return dynamic_cast<IntToken*>(t)->val; }
 
+  Type *id_type(Id *i)
+  {
+    if (*i == String("int")) {
+      return new IntType(i->start(), i->end());
+    } else {
+      return new IdType(*i, i->start(), i->end());
+    }
+  }
+
 #pragma clang diagnostic ignored "-Wunused-variable"
 }
 
@@ -61,7 +70,7 @@ aexpr(X) ::= LPAR expr(A) RPAR.
 
 %type type {Type*}
 type(X) ::= id(I).
-  { X = new IdType(*I,  I->start(), I->end()); }
+  { X = id_type(I); }
 type(X) ::= type(L) TYARROW type(R).
   { X = new ArrowType(ptr(L), ptr(R),  L->start(), R->end()); }
 %destructor type {delete $$;}
