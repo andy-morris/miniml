@@ -37,7 +37,7 @@ start(X) ::= expr(A).
 expr(X) ::= aexprs(A).
   { X = A; }
 expr(X) ::= FN(L) LPAR id(I) COLON type(T) RPAR ARROW expr(R).
-  { X = new LamExpr(ptr(I), ptr(T), ptr(R),  L->start(), R->end()); }
+  { X = new LamExpr(*I, ptr(T), ptr(R),  L->start(), R->end()); }
 expr(X) ::= expr(A) COLON type(T).
   { X = new TypeExpr(ptr(A), ptr(T),  A->start(), T->end()); }
 %destructor expr {delete $$;}
@@ -51,7 +51,7 @@ aexprs(X) ::= aexpr(A).
 
 %type aexpr {Expr*}
 aexpr(X) ::= id(I).
-  { X = new IdExpr(ptr(I),  I->start(), I->end()); }
+  { X = new IdExpr(*I,  I->start(), I->end()); }
 aexpr(X) ::= INT(I).
   { X = new IntExpr(get_int(I),  I->start(), I->end()); }
 aexpr(X) ::= LPAR expr(A) RPAR.
@@ -60,8 +60,8 @@ aexpr(X) ::= LPAR expr(A) RPAR.
 
 
 %type type {Type*}
-type(X) ::= id(A).
-  { X = new IdType(ptr(A),  A->start(), A->end()); }
+type(X) ::= id(I).
+  { X = new IdType(*I,  I->start(), I->end()); }
 type(X) ::= type(L) TYARROW type(R).
   { X = new ArrowType(ptr(L), ptr(R),  L->start(), R->end()); }
 %destructor type {delete $$;}

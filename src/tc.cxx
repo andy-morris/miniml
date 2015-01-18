@@ -11,7 +11,7 @@ namespace
 
     virtual Ptr<Type> v(Ptr<IdExpr> id, Ptr<Env<Type>> env) override
     {
-      auto ty = env->lookup(*id->id());
+      auto ty = env->lookup(id->id());
       return ty? ty: throw NotInScope(id->id());
     }
 
@@ -37,7 +37,7 @@ namespace
     virtual Ptr<Type> v(Ptr<LamExpr> e, Ptr<Env<Type>> env) override
     {
       auto inner = ptr<Env<Type>>(env);
-      inner->insert(*e->var(), e->ty());
+      inner->insert(e->var(), e->ty());
       auto t = this->v(e->body(), inner);
       return ptr<ArrowType>(e->ty(), t);
     }

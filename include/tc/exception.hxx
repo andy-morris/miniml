@@ -11,7 +11,7 @@ struct TCException: public Exception {};
 struct NotInScope: public TCException
 {
   NotInScope(const Id id):
-    msg("not in scope: " + *id->val())
+    msg("not in scope: " + *id.val())
   {}
   virtual const char *what() const noexcept override { return msg.c_str(); }
   String msg;
