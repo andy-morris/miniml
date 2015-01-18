@@ -49,7 +49,7 @@ namespace
     }
 
     void check_eq(Ptr<Type> s, Ptr<Type> t)
-    { if (s != t) throw Clash(s, t); }
+    { if (*s != *t) throw Clash(s, t); }
   };
 }
 
