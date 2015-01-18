@@ -8,6 +8,7 @@
 #include "ptr.hxx"
 #include "ast/type.hxx"
 #include "visitor.hxx"
+#include <unordered_set>
 
 namespace miniml
 {
@@ -220,6 +221,8 @@ struct ExprVisitor
   virtual Ptr<T> v(Ptr<LamExpr>, Args...) = 0;
   virtual Ptr<T> v(Ptr<TypeExpr>, Args...) = 0;
 };
+
+Ptr<std::unordered_set<Id>> fv(const Ptr<Expr> expr);
 
 }
 
