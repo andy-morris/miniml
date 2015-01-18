@@ -25,6 +25,7 @@ public:
   virtual ~Type() {}
   virtual TypeType type() const = 0;
   virtual bool operator==(const Type &other) const = 0;
+  inline bool operator!=(const Type &other) const { return !(*this == other); }
 protected:
   Type(Pos start = Pos(), Pos end = Pos()): HasPos(start, end) {}
 };
