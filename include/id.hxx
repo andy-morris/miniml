@@ -28,8 +28,8 @@ public:
   { }
 
   /// Copies a string onto the heap and constructs an identifier from it.
-  Id(const String &str):
-    Id(ptr<String>(str))
+  Id(const String &str, Pos start = Pos(), Pos end = Pos()):
+    Id(ptr<String>(str), start, end)
   { }
 
   /// If the hashes are the same then the values are also checked in case of a
