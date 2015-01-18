@@ -5,10 +5,11 @@ namespace miniml
 {
 
 using namespace ppr;
+using std::unordered_set;
 
 Ptr<Ppr> IdExpr::ppr(unsigned, bool pos) const
 {
-  auto p = id()->ppr();
+  auto p = id().ppr();
   return pos? p * Span{start(), end()}.ppr() : p;
 }
 
@@ -31,7 +32,7 @@ Ptr<Ppr> AppExpr::ppr(unsigned prec, bool pos) const
 Ptr<Ppr> LamExpr::ppr(unsigned prec, bool pos) const
 {
   auto p = parens_if(prec > 0 || pos,
-      "fn ("_p * var()->ppr(pos) * ':'_p * +ty()->ppr(pos) * ')'_p *
+      "fn ("_p * var().ppr(pos) * ':'_p * +ty()->ppr(pos) * ')'_p *
         +"=>"_p +
         (body()->ppr(pos) >> 1));
   return pos? p * Span{start(), end()}.ppr() : p;

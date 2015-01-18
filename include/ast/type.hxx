@@ -35,7 +35,7 @@ public:
   IdType(const IdType &other) = default;
   IdType(IdType &&other) = default;
 
-  IdType(Ptr<Id> id, Pos start = Pos(), Pos end = Pos()):
+  IdType(Id id, Pos start = Pos(), Pos end = Pos()):
     Type(start, end), m_id(id)
   {}
 
@@ -45,10 +45,10 @@ public:
 
   virtual Ptr<Ppr> ppr(unsigned prec = 0, bool pos = false) const override;
 
-  const Ptr<Id> id() const { return m_id; }
+  const Id id() const { return m_id; }
 
 private:
-  Ptr<Id> m_id;
+  Id m_id;
 };
 
 

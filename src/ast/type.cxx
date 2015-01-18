@@ -14,7 +14,7 @@ bool IdType::operator==(const Type &other) const
 
 Ptr<Ppr> IdType::ppr(unsigned, bool pos) const
 {
-  return id()->ppr(pos);
+  return id().ppr(pos);
 }
 
 
@@ -36,7 +36,7 @@ Ptr<Ppr> ArrowType::ppr(unsigned prec, bool pos) const
 
 Ptr<Type> TypeNF::v(Ptr<IdType> id, Ptr<Env<Type>> env)
 {
-  auto t = env->lookup(*id->id());
+  auto t = env->lookup(id->id());
   return t? t: id;
 }
 

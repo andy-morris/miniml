@@ -45,7 +45,7 @@ public:
   IdExpr(IdExpr&&) = default;
 
   /// \param[in] id The identifier this expression represents.
-  IdExpr(const Ptr<Id> id, Pos start = Pos(), Pos end = Pos()):
+  IdExpr(const Id id, Pos start = Pos(), Pos end = Pos()):
     Expr(start, end), m_id(id)
   {}
 
@@ -56,10 +56,10 @@ public:
   virtual Ptr<Ppr> ppr(unsigned prec = 0, bool pos = false) const override;
 
   /// \return The identifier value.
-  Ptr<Id> id() const { return m_id; }
+  Id id() const { return m_id; }
 
 private:
-  Ptr<Id> m_id;   ///< Identifier value.
+  Id m_id;   ///< Identifier value.
 };
 
 
@@ -124,7 +124,7 @@ public:
   LamExpr(const LamExpr&) = default;
   LamExpr(LamExpr&&) = default;
 
-  LamExpr(const Ptr<Id> var, const Ptr<Type> ty, const Ptr<Expr> body,
+  LamExpr(const Id var, const Ptr<Type> ty, const Ptr<Expr> body,
           Pos start = Pos(), Pos end = Pos()):
     Expr(start, end), m_var(var), m_ty(ty), m_body(body)
   {}
@@ -135,7 +135,7 @@ public:
   virtual Ptr<Ppr> ppr(unsigned prec = 0, bool pos = false) const override;
 
   /// \return The bound variable.
-  Ptr<Id> var() const { return m_var; }
+  Id var() const { return m_var; }
   /// \return The argument type.
   Ptr<Type> ty() const { return m_ty; }
   /// \return The body of the term.
@@ -144,7 +144,7 @@ public:
   Ptr<Expr> apply(const Ptr<Expr>) const;
 
 private:
-  Ptr<Id> m_var;      ///< Bound variable.
+  Id m_var;           ///< Bound variable.
   Ptr<Type> m_ty;     ///< Argument type.
   Ptr<Expr> m_body;   ///< Body.
 };
