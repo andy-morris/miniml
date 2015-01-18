@@ -3,6 +3,7 @@
 
 #include "pos.hxx"
 #include "ptr.hxx"
+#include "dup.hxx"
 #include "id.hxx"
 #include "ppr.hxx"
 #include "env.hxx"
