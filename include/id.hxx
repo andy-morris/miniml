@@ -60,7 +60,7 @@ public:
 
 private:
   /// Hash function for \ref String.
-  static std::hash<String> make_hash;
+  const static std::hash<String> make_hash;
 
   Ptr<String> m_val;  ///< Value.
   size_t m_hash;     ///< Hash.
