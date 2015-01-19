@@ -8,7 +8,11 @@ namespace
 {
   using ENV = Ptr<Env<Expr>>;
 
-  inline long INT(Ptr<Expr> e) { return dyn_cast<IntExpr>(e)->val(); }
+  inline long INT(Ptr<Expr> e)
+  {
+    assert(e->type() == ExprType::INT);
+    return dyn_cast<IntExpr>(e)->val();
+  }
 
   struct Eval final: public ExprVisitor<Expr, ENV>
   {
@@ -44,17 +48,19 @@ namespace
       return x;
     }
 
-    Ptr<Expr> v(Ptr<BinOpExpr> x, ENV) override
+    Ptr<Expr> v(Ptr<BinOpExpr> x, ENV env) override
     {
+      auto l = v(x->left(), env),
+           r = v(x->right(), env);
       switch (x->op()) {
       case BinOp::PLUS:
-        return ptr<IntExpr>(INT(x->left()) + INT(x->right()));
+        return ptr<IntExpr>(INT(l) + INT(r));
       case BinOp::MINUS:
-        return ptr<IntExpr>(INT(x->left()) - INT(x->right()));
+        return ptr<IntExpr>(INT(l) - INT(r));
       case BinOp::TIMES:
-        return ptr<IntExpr>(INT(x->left()) * INT(x->right()));
+        return ptr<IntExpr>(INT(l) * INT(r));
       case BinOp::DIVIDE:
-        return ptr<IntExpr>(INT(x->left()) / INT(x->right()));
+        return ptr<IntExpr>(INT(l) / INT(r));
       }
     }
 
