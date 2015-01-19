@@ -19,7 +19,7 @@ idstart  = (alpha | "_");
 idletter = (idstart | digit | "'");
 
 ID      = (idstart idletter*) $bump;
-INT     = (('+'|'-')? [0-9]+) $bump;
+INT     = ('~'? [0-9]+) $bump;
 FN      = "fn" $bump;
 ARROW   = "=>" $bump;
 TYARROW = "->" $bump;
@@ -38,8 +38,8 @@ token := |*
   ID      => { push(ptr<IdToken>(ts, te - ts, start, end)); };
   INT     => {
     std::string str(ts, te - ts);
-    std::stringstream s(str); long x;
-    s >> x;
+    if (str[0] == '~') { str[0] = '-'; }
+    long x = std::stol(str);
     push(ptr<IntToken>(x, start, end));
   };
   WS;

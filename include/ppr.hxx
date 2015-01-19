@@ -170,9 +170,9 @@ namespace ppr
   {
     static_assert(std::is_integral<T>::value, "non-numeric type");
 
-    std::stringstream str;
-    str << x;
-    return ptr<PprString>(str.str());
+    auto str = std::to_string(x);
+    if (str[0] == '-') str[0] = '~';
+    return string(str);
   }
 }
 
