@@ -116,7 +116,7 @@ namespace
   {
     using ExprVisitor<Expr, const Id, Ptr<Expr>, Ptr<unordered_set<Id>>>::v;
 
-    Ptr<Expr> v(Ptr<IdExpr> e, const Id x, Ptr<Expr> arg, FV::Ret fv) override
+    Ptr<Expr> v(Ptr<IdExpr> e, const Id x, Ptr<Expr> arg, FV::Ret) override
     {
       return e->id() == x? arg : e;
     }

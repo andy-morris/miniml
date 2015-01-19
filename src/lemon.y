@@ -25,6 +25,7 @@
   }
 
 #pragma clang diagnostic ignored "-Wunused-variable"
+#pragma clang diagnostic ignored "-Wunused-parameter"
 }
 
 %name MiniMLParser

@@ -1,5 +1,5 @@
 INCLUDES += -Iinclude -Ibuild
-WARNS    += -Wall -Wdocumentation
+WARNS    += -Wall -Wextra -pedantic -Wdocumentation
 CXXFLAGS += -std=c++11 $(WARNS) -g $(INCLUDES) $(DEFINES)
 CFLAGS   += $(WARNS) -g $(INCLUDES) $(DEFINES)
 DEFINES  += -DNDEBUG

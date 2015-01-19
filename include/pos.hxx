@@ -15,7 +15,7 @@ struct Pos final: public Pretty
   Pos operator+(const char c) const;
   Pos &operator+=(const char c);
 
-  Ptr<Ppr> ppr(unsigned prec = 0, bool=false) const override
+  Ptr<Ppr> ppr(unsigned=0, bool=false) const override
   { return ppr::hcat({ppr::num(line), ":"_p, ppr::num(col)}); }
 };
 
