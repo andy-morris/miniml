@@ -1,7 +1,8 @@
 INCLUDES += -Iinclude -Ibuild
 WARNS    += -Wall -Wdocumentation
-CXXFLAGS += -std=c++11 $(WARNS) -g $(INCLUDES)
-CFLAGS   += $(WARNS) -g $(INCLUDES)
+CXXFLAGS += -std=c++11 $(WARNS) -g $(INCLUDES) $(DEFINES)
+CFLAGS   += $(WARNS) -g $(INCLUDES) $(DEFINES)
+DEFINES  += -DNDEBUG
 RAGELFLAGS += -G2
 
 SRCS := $(shell find src -name '*.cxx') build/lexer.cxx build/lemon.cxx
