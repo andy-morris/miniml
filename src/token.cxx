@@ -58,6 +58,10 @@ ATOMIC_OUT(TYARROW, "'->'")
 ATOMIC_OUT(LPAR, "'('")
 ATOMIC_OUT(RPAR, "')'")
 ATOMIC_OUT(COLON, "':'")
+ATOMIC_OUT(PLUS, "'+'")
+ATOMIC_OUT(MINUS, "'-'")
+ATOMIC_OUT(TIMES, "'*'")
+ATOMIC_OUT(DIVIDE, "'/'")
 #undef ATOMIC_OUT
 
 OStream &operator<<(OStream &out, const Token &tok)

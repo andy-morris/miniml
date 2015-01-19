@@ -16,11 +16,12 @@ namespace miniml
 /// Type of expression.
 enum class ExprType
 {
-  ID,   ///< Identifier
-  APP,  ///< Application
-  LAM,  ///< Lambda term
-  INT,  ///< Integer literal
-  TYPE, ///< Typed expression
+  ID,     ///< Identifier
+  APP,    ///< Application
+  LAM,    ///< Lambda term
+  INT,    ///< Integer literal
+  TYPE,   ///< Typed expression
+  BINOP,  ///< Binary operator expression
 };
 
 /// Abstract base class for expressions.
@@ -201,6 +202,71 @@ private:
   Ptr<Type> m_ty;   ///< Assigned type.
 };
 
+
+/// Operators. \see OpExpr
+enum class BinOp { PLUS, MINUS, TIMES, DIVIDE };
+
+enum class OpAssoc { LEFT, NONE, RIGHT };
+
+inline unsigned prec(BinOp op)
+{
+  switch (op) {
+  case BinOp::PLUS:
+  case BinOp::MINUS:
+    return 6;
+  case BinOp::TIMES:
+  case BinOp::DIVIDE:
+    return 7;
+  }
+}
+
+inline Ptr<Ppr> name(BinOp op)
+{
+  switch (op) {
+  case BinOp::PLUS:   return '+'_p;
+  case BinOp::MINUS:  return '-'_p;
+  case BinOp::TIMES:  return '*'_p;
+  case BinOp::DIVIDE: return '/'_p;
+  }
+}
+
+inline OpAssoc assoc(BinOp op)
+{
+  switch (op) {
+  case BinOp::PLUS:
+  case BinOp::MINUS:
+  case BinOp::TIMES:
+  case BinOp::DIVIDE:
+    return OpAssoc::LEFT;
+  }
+}
+
+/// Binary operator expressions. \see OpType
+class BinOpExpr final: public Expr
+{
+public:
+  BinOpExpr(BinOp op, Ptr<Expr> left, Ptr<Expr> right,
+            Pos start = Pos(), Pos end = Pos()):
+    Expr(start, end), m_op(op), m_left(left), m_right(right)
+  {}
+
+  ExprType type() const override { return ExprType::BINOP; }
+
+  virtual Ptr<Ppr> ppr(unsigned prec = 0, bool pos = false) const override;
+
+  virtual Ptr<Expr> dup() const override
+  { return ptr<BinOpExpr>(op(), left(), right()); }
+
+  BinOp op() const { return m_op; }
+  Ptr<Expr> left() const { return m_left; }
+  Ptr<Expr> right() const { return m_right; }
+
+private:
+  BinOp m_op;
+  Ptr<Expr> m_left, m_right;
+};
+
+
 template <typename T, typename... Args>
 struct ExprVisitor
 {
@@ -218,6 +284,7 @@ struct ExprVisitor
       CASE(LAM, LamExpr)
       CASE(INT, IntExpr)
       CASE(TYPE, TypeExpr)
+      CASE(BINOP, BinOpExpr)
 #undef CASE
     }
   }
@@ -227,6 +294,7 @@ struct ExprVisitor
   virtual Ptr<T> v(Ptr<IntExpr>, Args...) = 0;
   virtual Ptr<T> v(Ptr<LamExpr>, Args...) = 0;
   virtual Ptr<T> v(Ptr<TypeExpr>, Args...) = 0;
+  virtual Ptr<T> v(Ptr<BinOpExpr>, Args...) = 0;
 };
 
 Ptr<std::unordered_set<Id>> fv(const Ptr<Expr> expr);

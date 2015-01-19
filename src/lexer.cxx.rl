@@ -26,6 +26,10 @@ TYARROW = "->" $bump;
 LPAR    = "(" $bump;
 RPAR    = ")" $bump;
 COLON   = ":" $bump;
+PLUS    = "+" $bump;
+MINUS   = "-" $bump;
+TIMES   = "*" $bump;
+DIVIDE  = "/" $bump;
 WS      = (space+ | ("//" . [^\n] . "\n")) $ws;
 
 token := |*
@@ -35,6 +39,10 @@ token := |*
   LPAR    => { push(ATOMIC(LPAR)); };
   RPAR    => { push(ATOMIC(RPAR)); };
   COLON   => { push(ATOMIC(COLON)); };
+  PLUS    => { push(ATOMIC(PLUS)); };
+  MINUS   => { push(ATOMIC(MINUS)); };
+  TIMES   => { push(ATOMIC(TIMES)); };
+  DIVIDE  => { push(ATOMIC(DIVIDE)); };
   ID      => { push(ptr<IdToken>(ts, te - ts, start, end)); };
   INT     => {
     std::string str(ts, te - ts);

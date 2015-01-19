@@ -36,6 +36,8 @@
 %right TYARROW.
 %nonassoc COLON.
 %left FN.
+%left PLUS MINUS.
+%left TIMES DIVIDE.
 
 %type start {Expr*}
 start(X) ::= expr(A).
@@ -49,6 +51,14 @@ expr(X) ::= FN(L) LPAR id(I) COLON type(T) RPAR ARROW expr(R).
   { X = new LamExpr(*I, ptr(T), ptr(R),  L->start(), R->end()); }
 expr(X) ::= expr(A) COLON type(T).
   { X = new TypeExpr(ptr(A), ptr(T),  A->start(), T->end()); }
+expr(X) ::= expr(L) PLUS expr(R).
+  { X = new BinOpExpr(BinOp::PLUS, ptr(L), ptr(R), L->start(), R->end()); }
+expr(X) ::= expr(L) MINUS expr(R).
+  { X = new BinOpExpr(BinOp::MINUS, ptr(L), ptr(R), L->start(), R->end()); }
+expr(X) ::= expr(L) TIMES expr(R).
+  { X = new BinOpExpr(BinOp::TIMES, ptr(L), ptr(R), L->start(), R->end()); }
+expr(X) ::= expr(L) DIVIDE expr(R).
+  { X = new BinOpExpr(BinOp::DIVIDE, ptr(L), ptr(R), L->start(), R->end()); }
 %destructor expr {delete $$;}
 
 %type aexprs {Expr*}

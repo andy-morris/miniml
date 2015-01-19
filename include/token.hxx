@@ -39,6 +39,10 @@ enum class Token::Type
   LPAR,     ///< `(`
   RPAR,     ///< `)`
   COLON,    ///< `:`
+  PLUS,     ///< `+`
+  MINUS,    ///< `-`
+  TIMES,    ///< `*`
+  DIVIDE,   ///< `/`
 };
 
 

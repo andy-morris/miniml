@@ -48,6 +48,20 @@ namespace
       return e->ty();
     }
 
+    virtual Ptr<Type> v(Ptr<BinOpExpr> e, Ptr<Env<Type>> env) override
+    {
+      switch (e->op()) {
+      case BinOp::PLUS:
+      case BinOp::MINUS:
+      case BinOp::TIMES:
+      case BinOp::DIVIDE:
+        auto int_ = ptr<IntType>();
+        check_eq(v(e->left(), env), int_);
+        check_eq(v(e->right(), env), int_);
+        return int_;
+      }
+    }
+
     void check_eq(Ptr<Type> s, Ptr<Type> t)
     { if (*s != *t) throw Clash(s, t); }
   };

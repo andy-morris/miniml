@@ -70,6 +70,10 @@ namespace
       CASE(LPAR);
       CASE(RPAR);
       CASE(COLON);
+      CASE(PLUS);
+      CASE(MINUS);
+      CASE(TIMES);
+      CASE(DIVIDE);
 #undef CASE
     }
   }

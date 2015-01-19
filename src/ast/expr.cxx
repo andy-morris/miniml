@@ -47,6 +47,18 @@ Ptr<Ppr> TypeExpr::ppr(unsigned prec, bool pos) const
   return pos? hcat({p, Span{start(), end()}.ppr()}) : p;
 }
 
+Ptr<Ppr> BinOpExpr::ppr(unsigned pr, bool pos) const
+{
+  unsigned oprec = prec(op());
+  unsigned lprec = assoc(op()) == OpAssoc::LEFT?  oprec : oprec + 1;
+  unsigned rprec = assoc(op()) == OpAssoc::RIGHT? oprec : oprec + 1;
+  auto p = parens_if(pr > oprec || pos,
+                     hcat({left()->ppr(lprec, pos),
+                           +name(op()),
+                           +right()->ppr(rprec, pos)}));
+  return pos? hcat({p, Span{start(), end()}.ppr()}) : p;
+}
+
 
 namespace
 {
@@ -77,6 +89,13 @@ namespace
     Ret v(Ptr<TypeExpr> e) override
     {
       return v(e->expr());
+    }
+
+    Ret v(Ptr<BinOpExpr> e) override
+    {
+      auto s1 = v(e->left()), s2 = v(e->right());
+      s1->insert(s2->begin(), s2->end());
+      return s1;
     }
 
     static Ret single(const Id x)
@@ -136,6 +155,14 @@ namespace
     Ptr<Expr> v(Ptr<TypeExpr> e, const Id x, Ptr<Expr> arg, FV::Ret fv) override
     {
       return ptr<TypeExpr>(v(e->expr(), x, arg, fv), e->ty());
+    }
+
+    Ptr<Expr> v(Ptr<BinOpExpr> e, const Id x, Ptr<Expr> arg, FV::Ret fv)
+      override
+    {
+      return ptr<BinOpExpr>(e->op(),
+                            v(e->left(), x, arg, fv),
+                            v(e->right(), x, arg, fv));
     }
   };
 }
