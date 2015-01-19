@@ -47,8 +47,8 @@ Ptr<Type> TypeNF::v(Ptr<IntType>, Ptr<Env<Type>>)
 
 Ptr<Type> TypeNF::v(Ptr<ArrowType> ty, Ptr<Env<Type>> env)
 {
-  auto l = this->v(ty->left(), env),
-       r = this->v(ty->right(), env);
+  auto l = v(ty->left(), env),
+       r = v(ty->right(), env);
   return ptr<ArrowType>(l, r);
 }
 

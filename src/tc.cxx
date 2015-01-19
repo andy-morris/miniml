@@ -22,8 +22,8 @@ namespace
 
     virtual Ptr<Type> v(Ptr<AppExpr> e, Ptr<Env<Type>> env) override
     {
-      auto ty_f0 = this->v(e->left(), env);
-      auto ty_x = this->v(e->right(), env);
+      auto ty_f0 = v(e->left(), env);
+      auto ty_x = v(e->right(), env);
 
       if (ty_f0->type() == TypeType::ARROW) {
         auto ty_f = std::dynamic_pointer_cast<ArrowType>(ty_f0);
@@ -38,13 +38,13 @@ namespace
     {
       auto inner = ptr<Env<Type>>(env);
       inner->insert(e->var(), e->ty());
-      auto t = this->v(e->body(), inner);
+      auto t = v(e->body(), inner);
       return ptr<ArrowType>(e->ty(), t);
     }
 
     virtual Ptr<Type> v(Ptr<TypeExpr> e, Ptr<Env<Type>> env) override
     {
-      check_eq(this->v(e->expr(), env), type_nf(e->ty(), env));
+      check_eq(v(e->expr(), env), type_nf(e->ty(), env));
       return e->ty();
     }
 
