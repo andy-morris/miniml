@@ -141,7 +141,7 @@ namespace
         // find fresh variable
         unsigned i = 0;
         while (fv->find(id) != fv->end())
-          id = id.suffix(i++);
+          id2 = id.suffix(i++);
       }
 
       auto body =
