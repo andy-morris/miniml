@@ -32,6 +32,11 @@ struct Span final
   Pos start, end;
 };
 
+namespace ppr
+{
+  Ptr<Ppr> pos_if(bool, Ptr<Ppr>, Pos start, Pos end);
+}
+
 
 struct HasPos
 {

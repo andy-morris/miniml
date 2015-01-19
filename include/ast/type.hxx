@@ -70,8 +70,7 @@ public:
   virtual bool operator==(const Type &other) const override
   { return other.type() == type(); }
 
-  virtual Ptr<Ppr> ppr(unsigned prec = 0, bool pos = false) const override
-  { return "int"_p; }
+  virtual Ptr<Ppr> ppr(unsigned prec = 0, bool pos = false) const override;
 
   virtual Ptr<Type> dup() const override
   { return ptr<IntType>(); }

@@ -48,8 +48,7 @@ public:
 
   /// Pretty prints an identifier.
   /// \relates PprString
-  Ptr<Ppr> ppr(unsigned prec = 0, bool=false) const override
-  { return ppr::string(*val()); }
+  Ptr<Ppr> ppr(unsigned=0, bool=false) const override;
 
   template <typename T>
   Id suffix(T suf)

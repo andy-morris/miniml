@@ -9,54 +9,59 @@ using std::unordered_set;
 
 Ptr<Ppr> IdExpr::ppr(unsigned, bool pos) const
 {
-  auto p = id().ppr();
-  return pos ? hcat({p, Span{start(), end()}.ppr()}) : p;
+  return pos_if(pos, id().ppr(), start(), end());
 }
 
 
 Ptr<Ppr> IntExpr::ppr(unsigned, bool pos) const
 {
-  auto p = num(val());
-  return pos ? hcat({p, Span{start(), end()}.ppr()}) : p;
+  return pos_if(pos, num(val()), start(), end());
 }
 
 
 Ptr<Ppr> AppExpr::ppr(unsigned prec, bool pos) const
 {
-  auto p = parens_if(prec > 10 || pos,
-                     hcat({left()->ppr(10, pos), +right()->ppr(11, pos)}));
-  return pos? hcat({p, Span{start(), end()}.ppr()}) : p;
+  return pos_if(pos,
+                parens_if(prec > 10 || pos,
+                          hcat({left()->ppr(10, pos),
+                                +right()->ppr(11, pos)})),
+                start(), end());
 }
 
 
 Ptr<Ppr> LamExpr::ppr(unsigned prec, bool pos) const
 {
-  auto p =
-      parens_if(prec > 0 || pos,
-                vcat({hcat({"fn ("_p, var().ppr(pos), ':'_p,
-                            +ty()->ppr(pos), ')'_p, +"=>"_p}),
-                      (body()->ppr(pos) >> 1)}));
-  return pos ? hcat({p, Span{start(), end()}.ppr()}) : p;
+  return pos_if(pos,
+                parens_if(prec > 0 || pos,
+                          vcat({hcat({"fn ("_p, var().ppr(pos),
+                                      ':'_p,
+                                      +ty()->ppr(pos), ')'_p, +"=>"_p}),
+                                (body()->ppr(pos) >> 1)})),
+                start(), end());
 }
 
 
 Ptr<Ppr> TypeExpr::ppr(unsigned prec, bool pos) const
 {
-  auto p = parens_if(prec > 0 || pos,
-      hcat({expr()->ppr(pos), ':'_p, +ty()->ppr(pos)}));
-  return pos? hcat({p, Span{start(), end()}.ppr()}) : p;
+  return pos_if(pos,
+                parens_if(prec > 0 || pos,
+                          hcat({expr()->ppr(pos),
+                                ':'_p,
+                                +ty()->ppr(pos)})),
+                start(), end());
 }
 
 Ptr<Ppr> BinOpExpr::ppr(unsigned pr, bool pos) const
 {
-  unsigned oprec = prec(op());
-  unsigned lprec = assoc(op()) == OpAssoc::LEFT?  oprec : oprec + 1;
-  unsigned rprec = assoc(op()) == OpAssoc::RIGHT? oprec : oprec + 1;
-  auto p = parens_if(pr > oprec || pos,
-                     hcat({left()->ppr(lprec, pos),
-                           +name(op()),
-                           +right()->ppr(rprec, pos)}));
-  return pos? hcat({p, Span{start(), end()}.ppr()}) : p;
+  unsigned oprec = prec(op()),
+           lprec = assoc(op()) == OpAssoc::LEFT?  oprec : oprec + 1,
+           rprec = assoc(op()) == OpAssoc::RIGHT? oprec : oprec + 1;
+  return pos_if(pos,
+                parens_if(pr > oprec || pos,
+                          hcat({left()->ppr(lprec, pos),
+                                +name(op()),
+                                +right()->ppr(rprec, pos)})),
+                start(), end());
 }
 
 
