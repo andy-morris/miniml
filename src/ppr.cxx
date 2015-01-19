@@ -101,7 +101,7 @@ Ptr<Ppr> operator>>(Ptr<Ppr> ppr, unsigned ind)
 
 Ptr<Ppr> operator""_p(const Char *str, size_t len)
 {
-  return ptr<PprString>(String(str));
+  return ptr<PprString>(String(str, len));
 }
 
 Ptr<Ppr> operator""_p(Char c)
