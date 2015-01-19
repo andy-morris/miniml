@@ -139,7 +139,7 @@ public:
   LamExpr(const Id var, const Ptr<Type> ty, const Ptr<Expr> body,
           Pos start = Pos(), Pos end = Pos(),
           const Ptr<Env<Expr>> env = nullptr):
-    Expr(start, end), m_var(var), m_ty(ty), m_body(body)
+    Expr(start, end), m_var(var), m_ty(ty), m_body(body), m_env(env)
   {}
 
   /// \return ExprType::LAM
