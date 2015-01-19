@@ -32,9 +32,10 @@ Ptr<Ppr> AppExpr::ppr(unsigned prec, bool pos) const
 Ptr<Ppr> LamExpr::ppr(unsigned prec, bool pos) const
 {
   auto p =
-      parens_if(prec > 0 || pos, vcat({hcat({"fn ("_p, var().ppr(pos), ':'_p,
-                                             +ty()->ppr(pos), ')'_p, +"=>"_p}),
-                                       (body()->ppr(pos) >> 1)}));
+      parens_if(prec > 0 || pos,
+                vcat({hcat({"fn ("_p, var().ppr(pos), ':'_p,
+                            +ty()->ppr(pos), ')'_p, +"=>"_p}),
+                      (body()->ppr(pos) >> 1)}));
   return pos ? hcat({p, Span{start(), end()}.ppr()}) : p;
 }
 
@@ -42,7 +43,7 @@ Ptr<Ppr> LamExpr::ppr(unsigned prec, bool pos) const
 Ptr<Ppr> TypeExpr::ppr(unsigned prec, bool pos) const
 {
   auto p = parens_if(prec > 0 || pos,
-      hcat({expr()->ppr(pos), ":"_p, +ty()->ppr(pos)}));
+      hcat({expr()->ppr(pos), ':'_p, +ty()->ppr(pos)}));
   return pos? hcat({p, Span{start(), end()}.ppr()}) : p;
 }
 

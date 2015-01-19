@@ -179,7 +179,7 @@ public:
   TypeExpr(TypeExpr&&) = default;
 
   TypeExpr(const Ptr<Expr> expr, const Ptr<Type> ty,
-          Pos start = Pos(), Pos end = Pos()):
+           Pos start = Pos(), Pos end = Pos()):
     Expr(start, end), m_expr(expr), m_ty(ty)
   {}
 
@@ -197,7 +197,7 @@ public:
   { return ptr<TypeExpr>(expr()->dup(), ty(), start(), end()); }
 
 private:
-  Ptr<Expr> m_expr;   ///< Expression.
+  Ptr<Expr> m_expr; ///< Expression.
   Ptr<Type> m_ty;   ///< Assigned type.
 };
 
