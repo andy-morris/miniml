@@ -32,31 +32,27 @@ public:
     Id(ptr<String>(str), start, end)
   { }
 
+  Id(const Id &other, Pos start, Pos end = Pos()):
+    Id(other.val(), start, end)
+  { }
+
   /// If the hashes are the same then the values are also checked in case of a
   /// collision.
   /// \return Whether the two identifiers are the same.
-  bool operator==(const Id &other) const
+  inline bool operator==(const Id &other) const
   { return m_hash == other.m_hash && *m_val == *other.m_val; }
 
   /// \return The value of the identifier.
-  Ptr<String> val() const { return m_val; }
+  inline Ptr<String> val() const { return m_val; }
 
-  size_t hash() const { return m_hash; }
-
-  /// \return The identifier in \ref String form.
-  operator const Ptr<String>() const { return val(); }
+  inline size_t hash() const { return m_hash; }
 
   /// Pretty prints an identifier.
   /// \relates PprString
   Ptr<Ppr> ppr(unsigned=0, bool=false) const override;
 
   template <typename T>
-  Id suffix(T suf)
-  {
-    SStream ss; ss << suf;
-    auto str = ptr<String>(*m_val + ss.str());
-    return Id(str, start(), end());
-  }
+  Id suffix(T suf);
 
 private:
   /// Hash function for \ref String.
@@ -65,6 +61,13 @@ private:
   Ptr<String> m_val;  ///< Value.
   size_t m_hash;     ///< Hash.
 };
+
+template <typename T>
+inline Id Id::suffix(T suf)
+{
+  auto str = ptr<String>(*m_val + std::to_string(suf));
+  return Id(str, start(), end());
+}
 
 
 /// Outputs an identifier to the given output stream.

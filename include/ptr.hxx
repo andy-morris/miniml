@@ -11,12 +11,11 @@ template <typename T> using Ptr = std::shared_ptr<T>;
 
 /// Allocates an object and makes a \ref Ptr to it.
 template <typename T, typename... Args>
-Ptr<T> ptr(Args... args)
-{
-  return std::make_shared<T>(args...);
-}
+inline Ptr<T> ptr(Args... args)
+{ return std::make_shared<T>(args...); }
 
-template<class T, class U> Ptr<T> dyn_cast(const Ptr<U>& r)
+template<class T, class U>
+inline Ptr<T> dyn_cast(const Ptr<U>& r)
 { return std::dynamic_pointer_cast<T>(r); }
 
 }

@@ -36,7 +36,7 @@ public:
   // Substitutes \a expr for all occurrences of \a var in \a this.
   Ptr<Expr> subst(Id var, const Ptr<Expr> expr);
 protected:
-  Expr(Pos start = Pos(), Pos end = Pos()): HasPos(start, end) {}
+  inline Expr(Pos start = Pos(), Pos end = Pos()): HasPos(start, end) {}
 };
 
 
@@ -53,15 +53,15 @@ public:
   {}
 
   /// \return ExprType::ID
-  virtual ExprType type() const override { return ExprType::ID; }
+  inline ExprType type() const override { return ExprType::ID; }
 
   /// \param prec Ignored, since variables are always atomic.
-  virtual Ptr<Ppr> ppr(unsigned prec = 0, bool pos = false) const override;
+  Ptr<Ppr> ppr(unsigned prec = 0, bool pos = false) const override;
 
   /// \return The identifier value.
-  Id id() const { return m_id; }
+  inline Id id() const { return m_id; }
 
-  virtual Ptr<Expr> dup() const override
+  inline Ptr<Expr> dup() const override
   { return ptr<IdExpr>(id(), start(), end()); }
 
 private:
@@ -82,15 +82,15 @@ public:
   {}
 
   /// \return ExprType::INT
-  virtual ExprType type() const override { return ExprType::INT; }
+  inline ExprType type() const override { return ExprType::INT; }
 
   /// \param prec Ignored, since literals are always atomic.
-  virtual Ptr<Ppr> ppr(unsigned prec = 0, bool pos = false) const override;
+  Ptr<Ppr> ppr(unsigned prec = 0, bool pos = false) const override;
 
   /// \return The value of this literal.
-  long val() const { return m_val; }
+  inline long val() const { return m_val; }
 
-  virtual Ptr<Expr> dup() const override
+  inline Ptr<Expr> dup() const override
   { return ptr<IntExpr>(val(), start(), end()); }
 
 private:
@@ -111,16 +111,16 @@ public:
   {}
 
   /// \return ExprType::APP
-  virtual ExprType type() const override { return ExprType::APP; }
+  inline ExprType type() const override { return ExprType::APP; }
 
   virtual Ptr<Ppr> ppr(unsigned prec = 0, bool pos = false) const override;
 
   /// \return The left part (operator).
-  Ptr<Expr> left() const { return m_left; }
+  inline Ptr<Expr> left() const { return m_left; }
   /// \return The right part (operand).
-  Ptr<Expr> right() const { return m_right; }
+  inline Ptr<Expr> right() const { return m_right; }
 
-  virtual Ptr<Expr> dup() const override
+  inline Ptr<Expr> dup() const override
   { return ptr<AppExpr>(left()->dup(), right()->dup(), start(), end()); }
 
 private:
@@ -143,23 +143,23 @@ public:
   {}
 
   /// \return ExprType::LAM
-  virtual ExprType type() const override { return ExprType::LAM; }
+  inline ExprType type() const override { return ExprType::LAM; }
 
-  virtual Ptr<Ppr> ppr(unsigned prec = 0, bool pos = false) const override;
+  Ptr<Ppr> ppr(unsigned prec = 0, bool pos = false) const override;
 
   /// \return The bound variable.
-  Id var() const { return m_var; }
+  inline Id var() const { return m_var; }
   /// \return The argument type.
-  Ptr<Type> ty() const { return m_ty; }
+  inline Ptr<Type> ty() const { return m_ty; }
   /// \return The body of the term.
-  Ptr<Expr> body() const { return m_body; }
+  inline Ptr<Expr> body() const { return m_body; }
 
   Ptr<Expr> apply(const Ptr<Expr>) const;
 
-  Ptr<Env<Expr>> env() { return m_env; }
-  void set_env(Ptr<Env<Expr>> env) { m_env = env; }
+  inline Ptr<Env<Expr>> env() { return m_env; }
+  inline void set_env(Ptr<Env<Expr>> env) { m_env = env; }
 
-  virtual Ptr<Expr> dup() const override
+  inline Ptr<Expr> dup() const override
   { return ptr<LamExpr>(var(), ty(), body()->dup(), start(), end()); }
 
 private:
@@ -185,16 +185,16 @@ public:
   {}
 
   /// \return ExprType::TYPE
-  ExprType type() const override { return ExprType::TYPE; }
+  inline ExprType type() const override { return ExprType::TYPE; }
 
   virtual Ptr<Ppr> ppr(unsigned prec = 0, bool pos = false) const override;
 
   /// \return The inner expression.
-  Ptr<Expr> expr() const { return m_expr; }
+  inline Ptr<Expr> expr() const { return m_expr; }
   /// \return The assigned type.
-  Ptr<Type> ty() const { return m_ty; }
+  inline Ptr<Type> ty() const { return m_ty; }
 
-  virtual Ptr<Expr> dup() const override
+  inline Ptr<Expr> dup() const override
   { return ptr<TypeExpr>(expr()->dup(), ty(), start(), end()); }
 
 private:
@@ -250,16 +250,16 @@ public:
     Expr(start, end), m_op(op), m_left(left), m_right(right)
   {}
 
-  ExprType type() const override { return ExprType::BINOP; }
+  inline ExprType type() const override { return ExprType::BINOP; }
 
   virtual Ptr<Ppr> ppr(unsigned prec = 0, bool pos = false) const override;
 
-  virtual Ptr<Expr> dup() const override
+  inline Ptr<Expr> dup() const override
   { return ptr<BinOpExpr>(op(), left(), right()); }
 
-  BinOp op() const { return m_op; }
-  Ptr<Expr> left() const { return m_left; }
-  Ptr<Expr> right() const { return m_right; }
+  inline BinOp op() const { return m_op; }
+  inline Ptr<Expr> left() const { return m_left; }
+  inline Ptr<Expr> right() const { return m_right; }
 
 private:
   BinOp m_op;

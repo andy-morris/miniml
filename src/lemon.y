@@ -5,22 +5,25 @@
 
   using namespace miniml;
 
-  template <typename T>
-  Ptr<T> ptr(T *t)
-  { return Ptr<T>(t); }
-
-  Id *get_id(Token *t)
-  { return dynamic_cast<IdToken*>(t)->id; }
-
-  long get_int(Token *t)
-  { return dynamic_cast<IntToken*>(t)->val; }
-
-  Type *id_type(Id *i)
+  namespace
   {
-    if (*i == String("int")) {
-      return new IntType(i->start(), i->end());
-    } else {
-      return new IdType(*i, i->start(), i->end());
+    template <typename T>
+    inline Ptr<T> ptr(T *t)
+    { return Ptr<T>(t); }
+
+    inline Id *get_id(Token *t)
+    { return dynamic_cast<IdToken*>(t)->id; }
+
+    inline long get_int(Token *t)
+    { return dynamic_cast<IntToken*>(t)->val; }
+
+    inline Type *id_type(Id *i)
+    {
+      if (*i == String("int")) {
+        return new IntType(i->start(), i->end());
+      } else {
+        return new IdType(*i, i->start(), i->end());
+      }
     }
   }
 

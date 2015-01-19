@@ -18,6 +18,8 @@ public:
   /// Exception thrown when a lexical error is enountered.
   struct LexicalError: public Exception
   {
+    virtual ~LexicalError() {}
+
     LexicalError(char c_, Pos pos_);
 
     /// \return the value of \ref text.

@@ -7,12 +7,12 @@
 namespace miniml
 {
 
-struct AbstractVisit: public std::exception
+struct AbstractVisit final: public std::exception
 {
   AbstractVisit(const std::string &cls):
     msg("tried to visit an abstract class " + cls)
   {}
-  virtual const char *what() const noexcept override { return msg.c_str(); }
+  inline const char *what() const noexcept override { return msg.c_str(); }
   std::string msg;
 };
 

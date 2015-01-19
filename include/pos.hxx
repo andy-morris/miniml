@@ -15,7 +15,7 @@ struct Pos final: public Pretty
   Pos operator+(const char c) const;
   Pos &operator+=(const char c);
 
-  Ptr<Ppr> ppr(unsigned=0, bool=false) const override
+  inline Ptr<Ppr> ppr(unsigned=0, bool=false) const override
   { return ppr::hcat({ppr::num(line), ":"_p, ppr::num(col)}); }
 };
 
@@ -24,7 +24,7 @@ OStream &operator<<(OStream&, const Pos&);
 
 struct Span final
 {
-  Ptr<Ppr> ppr() const
+  inline Ptr<Ppr> ppr() const
   {
     return ppr::hcat({"@("_p, start.ppr(), ";"_p, end.ppr(), ")"_p});
   }
@@ -40,11 +40,12 @@ namespace ppr
 
 struct HasPos
 {
-  Pos start() const { return m_start; }
-  Pos end()   const { return m_end; }
+  inline Pos start() const { return m_start; }
+  inline Pos end()   const { return m_end; }
 
 protected:
-  HasPos(Pos start = Pos(), Pos end = Pos()): m_start(start), m_end(end) {}
+  inline HasPos(Pos start = Pos(), Pos end = Pos()): m_start(start), m_end(end)
+  {}
 
 private:
   Pos m_start, m_end;

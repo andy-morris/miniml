@@ -36,7 +36,7 @@ namespace
       }
     }
 
-    Ptr<Expr> v(Ptr<IntExpr> x, ENV) override { return x; }
+    inline Ptr<Expr> v(Ptr<IntExpr> x, ENV) override { return x; }
 
     Ptr<Expr> v(Ptr<LamExpr> x, ENV env) override
     {
@@ -58,7 +58,8 @@ namespace
       }
     }
 
-    Ptr<Expr> v(Ptr<TypeExpr> x, ENV env) override { return v(x->expr(), env); }
+    inline Ptr<Expr> v(Ptr<TypeExpr> x, ENV env) override
+    { return v(x->expr(), env); }
   };
 }
 

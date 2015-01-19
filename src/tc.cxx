@@ -9,18 +9,18 @@ namespace
   {
     using ExprVisitor<Type, Ptr<Env<Type>>>::v;
 
-    virtual Ptr<Type> v(Ptr<IdExpr> id, Ptr<Env<Type>> env) override
+    Ptr<Type> v(Ptr<IdExpr> id, Ptr<Env<Type>> env) override
     {
       auto ty = env->lookup(id->id());
       return ty? ty: throw NotInScope(id->id());
     }
 
-    virtual Ptr<Type> v(Ptr<IntExpr>, Ptr<Env<Type>>) override
+    inline Ptr<Type> v(Ptr<IntExpr>, Ptr<Env<Type>>) override
     {
       return ptr<IntType>();
     }
 
-    virtual Ptr<Type> v(Ptr<AppExpr> e, Ptr<Env<Type>> env) override
+    Ptr<Type> v(Ptr<AppExpr> e, Ptr<Env<Type>> env) override
     {
       auto ty_f0 = v(e->left(), env);
       auto ty_x = v(e->right(), env);
@@ -34,7 +34,7 @@ namespace
       }
     }
 
-    virtual Ptr<Type> v(Ptr<LamExpr> e, Ptr<Env<Type>> env) override
+    Ptr<Type> v(Ptr<LamExpr> e, Ptr<Env<Type>> env) override
     {
       auto inner = ptr<Env<Type>>(env);
       inner->insert(e->var(), e->ty());
@@ -42,13 +42,13 @@ namespace
       return ptr<ArrowType>(e->ty(), t);
     }
 
-    virtual Ptr<Type> v(Ptr<TypeExpr> e, Ptr<Env<Type>> env) override
+    inline Ptr<Type> v(Ptr<TypeExpr> e, Ptr<Env<Type>> env) override
     {
-      check_eq(v(e->expr(), env), type_nf(e->ty(), env));
+      check_eq(v(e->expr(), env), nf(e->ty(), env));
       return e->ty();
     }
 
-    virtual Ptr<Type> v(Ptr<BinOpExpr> e, Ptr<Env<Type>> env) override
+    Ptr<Type> v(Ptr<BinOpExpr> e, Ptr<Env<Type>> env) override
     {
       switch (e->op()) {
       case BinOp::PLUS:
@@ -62,7 +62,7 @@ namespace
       }
     }
 
-    void check_eq(Ptr<Type> s, Ptr<Type> t)
+    inline void check_eq(Ptr<Type> s, Ptr<Type> t)
     { if (*s != *t) throw Clash(s, t); }
   };
 }

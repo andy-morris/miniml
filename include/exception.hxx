@@ -7,7 +7,10 @@
 namespace miniml
 {
 
-class Exception: public std::exception {};
+struct Exception: public std::exception
+{
+  ~Exception() {}
+};
 
 inline OStream &operator<<(OStream &out, const Exception &e)
 {

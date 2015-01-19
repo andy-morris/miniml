@@ -17,7 +17,7 @@ struct Token: public HasPos
   virtual ~Token() {}
 
   /// Make an atomic token.
-  template <Type ty> static Ptr<Token> atomic(Pos start, Pos end);
+  template <Type ty> static inline Ptr<Token> atomic(Pos start, Pos end);
 
   /// Whether a token type is atomic (needs no data).
   static constexpr bool is_atomic(Type);
@@ -64,11 +64,11 @@ struct IdToken final: public Token
     IdToken(new Id(ptr<String>(c, size)), start, end)
   {}
 
-  virtual ~IdToken() { delete id; }
+  ~IdToken() { delete id; }
 
   Id *id;
 
-  virtual Token::Type type() const override { return Token::Type::ID; }
+  inline Token::Type type() const override { return Token::Type::ID; }
 
   virtual void out(OStream &) const;
 };
@@ -79,7 +79,7 @@ struct IntToken final: public Token
   IntToken(long val_, Pos start, Pos end): Token(start, end), val(val_) {}
   long val;
 
-  virtual Token::Type type() const override { return Token::Type::INT; }
+  inline Token::Type type() const override { return Token::Type::INT; }
 
   virtual void out(OStream &) const;
 };
@@ -91,7 +91,7 @@ class AtomicToken final: public Token
 public:
   AtomicToken(Pos start, Pos end): Token(start, end) {}
 
-  virtual Token::Type type() const { return Ty; }
+  inline Token::Type type() const { return Ty; }
 
 static_assert(Token::is_atomic(Ty),
     "tried to make an atomic token of a nonatomic type");
@@ -101,7 +101,7 @@ static_assert(Token::is_atomic(Ty),
 
 
 template <Token::Type Ty>
-Ptr<Token> Token::atomic(Pos start, Pos end)
+inline Ptr<Token> Token::atomic(Pos start, Pos end)
 {
   return ptr<AtomicToken<Ty>>(start, end);
 }

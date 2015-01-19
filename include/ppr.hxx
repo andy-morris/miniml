@@ -37,7 +37,8 @@ public:
   /// \param prec [in] the surrounding precedence level for the
   //                   insertion of brackets.
   virtual Ptr<Ppr> ppr(unsigned prec = 0, bool pos = false) const = 0;
-  Ptr<Ppr> ppr(bool pos) { return ppr(0, pos); }
+
+  inline Ptr<Ppr> ppr(bool pos) { return ppr(0, pos); }
 };
 
 
@@ -45,9 +46,7 @@ public:
 class PprString final: public Ppr
 {
 public:
-  PprString(const String val):
-    m_val(val)
-  {}
+  PprString(const String val): m_val(val) {}
 
   void output(OStream&, unsigned indent = 0) const override;
 
@@ -78,15 +77,15 @@ private:
 class PprCat: public Ppr
 {
 public:
-  template <typename T> using List = std::list<T>;
-
-protected:
-  PprCat(std::initializer_list<Ptr<Ppr>> lst):
-    m_children(ptr<List<Ptr<Ppr>>>(lst))
-  {}
   virtual ~PprCat() {}
 
 protected:
+  template <typename T> using List = std::list<T>;
+
+  PprCat(std::initializer_list<Ptr<Ppr>> lst):
+    m_children(ptr<List<Ptr<Ppr>>>(lst))
+  {}
+
   Ptr<List<Ptr<Ppr>>> m_children;
 };
 
@@ -145,7 +144,6 @@ Ptr<Ppr> operator""_p(const Char*, size_t);
 Ptr<Ppr> operator""_p(Char);
 
 /// Inserts a space before a document.
-/// \see operator*(Ptr<Ppr>, Ptr<Ppr>)
 Ptr<Ppr> operator+(Ptr<Ppr>);
 
 

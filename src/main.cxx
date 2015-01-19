@@ -12,17 +12,20 @@
 using namespace std;
 using namespace miniml;
 
-Ptr<String> read_file(const char *file)
+namespace
 {
-  ifstream in(file);
-  in >> noskipws;
-  stringstream ss;
-  while (in) {
-    string l;
-    getline(in, l);
-    ss << l;
+  Ptr<String> read_file(const char *file)
+  {
+    ifstream in(file);
+    in >> noskipws;
+    stringstream ss;
+    while (in) {
+      string l;
+      getline(in, l);
+      ss << l;
+    }
+    return ptr<String>(ss.str());
   }
-  return ptr<String>(ss.str());
 }
 
 int main(int argc, char **argv)

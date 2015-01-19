@@ -6,18 +6,21 @@
 namespace miniml
 {
 
-struct TCException: public Exception {};
+struct TCException: public Exception
+{
+  virtual ~TCException() {}
+};
 
-struct NotInScope: public TCException
+struct NotInScope final: public TCException
 {
   NotInScope(const Id id):
     msg("not in scope: " + *id.val())
   {}
-  virtual const char *what() const noexcept override { return msg.c_str(); }
+  inline const char *what() const noexcept override { return msg.c_str(); }
   String msg;
 };
 
-struct Clash: public TCException
+struct Clash final: public TCException
 {
   Clash(const Ptr<Type> expected, const Ptr<Type> actual)
   {
@@ -28,18 +31,17 @@ struct Clash: public TCException
                  actual->ppr() >> 1});
     msg = *ppr->string();
   }
-  virtual const char *what() const noexcept override { return msg.c_str(); }
+  inline const char *what() const noexcept override { return msg.c_str(); }
   String msg;
 };
 
-struct NotArrow: public TCException
+struct NotArrow final: public TCException
 {
   NotArrow(const Ptr<Type> t)
   {
-    auto ppr = ppr::vcat({"not an arrow type:"_p, t->ppr() >> 1});
-    msg = *ppr->string();
+    msg = *ppr::vcat({"not an arrow type:"_p, t->ppr() >> 1})->string();
   }
-  virtual const char *what() const noexcept override { return msg.c_str(); }
+  inline const char *what() const noexcept override { return msg.c_str(); }
   String msg;
 };
 

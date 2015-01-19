@@ -9,7 +9,7 @@
 namespace miniml
 {
 
-struct Parser
+struct Parser final
 {
   Parser();
   ~Parser();

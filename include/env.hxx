@@ -24,7 +24,7 @@ public:
   Env(const Ptr<EnvBase<T>> next): m_next(next) {}
   Env(): Env(nullptr) {}
 
-  virtual Ptr<T> lookup(const Id&) const override;
+  Ptr<T> lookup(const Id&) const override;
 
   void insert(const Id&, const Ptr<T>);
 
@@ -75,7 +75,7 @@ public:
   inline Ptr<Env<U>> inner() const { return m_inner; }
   inline Ptr<T> map(Ptr<U> x) const { return m_func(x); }
 
-  virtual Ptr<T> lookup(const Id &id) const override;
+  Ptr<T> lookup(const Id &id) const override;
 private:
   const Ptr<Env<U>> m_inner;
   const Fun m_func;

@@ -27,7 +27,7 @@ public:
   virtual bool operator==(const Type &other) const = 0;
   inline bool operator!=(const Type &other) const { return !(*this == other); }
 protected:
-  Type(Pos start = Pos(), Pos end = Pos()): HasPos(start, end) {}
+  inline Type(Pos start = Pos(), Pos end = Pos()): HasPos(start, end) {}
 };
 
 
@@ -41,16 +41,16 @@ public:
     Type(start, end), m_id(id)
   {}
 
-  virtual TypeType type() const override { return TypeType::ID; }
+  inline TypeType type() const override { return TypeType::ID; }
 
-  virtual bool operator==(const Type &other) const override;
+  bool operator==(const Type &other) const override;
 
-  virtual Ptr<Ppr> ppr(unsigned prec = 0, bool pos = false) const override;
+  Ptr<Ppr> ppr(unsigned prec = 0, bool pos = false) const override;
 
-  virtual Ptr<Type> dup() const override
+  inline Ptr<Type> dup() const override
   { return ptr<IdType>(id(), start(), end()); }
 
-  const Id id() const { return m_id; }
+  inline Id id() const { return m_id; }
 
 private:
   Id m_id;
@@ -65,14 +65,14 @@ public:
 
   IntType(Pos start = Pos(), Pos end = Pos()): Type(start, end) {}
 
-  virtual TypeType type() const override { return TypeType::INT; }
+  inline TypeType type() const override { return TypeType::INT; }
 
-  virtual bool operator==(const Type &other) const override
+  inline bool operator==(const Type &other) const override
   { return other.type() == type(); }
 
-  virtual Ptr<Ppr> ppr(unsigned prec = 0, bool pos = false) const override;
+  Ptr<Ppr> ppr(unsigned prec = 0, bool pos = false) const override;
 
-  virtual Ptr<Type> dup() const override
+  inline Ptr<Type> dup() const override
   { return ptr<IntType>(); }
 };
 
@@ -88,17 +88,17 @@ public:
     Type(start, end), m_left(left), m_right(right)
   {}
 
-  virtual TypeType type() const override { return TypeType::ARROW; }
+  inline TypeType type() const override { return TypeType::ARROW; }
 
-  virtual bool operator==(const Type &other) const override;
+  bool operator==(const Type &other) const override;
 
-  virtual Ptr<Ppr> ppr(unsigned prec = 0, bool pos = false) const override;
+  Ptr<Ppr> ppr(unsigned prec = 0, bool pos = false) const override;
 
-  virtual Ptr<Type> dup() const override
+  inline Ptr<Type> dup() const override
   { return ptr<ArrowType>(left(), right(), start(), end()); }
 
-  Ptr<Type> left() const { return m_left; }
-  Ptr<Type> right() const { return m_right; }
+  inline Ptr<Type> left() const { return m_left; }
+  inline Ptr<Type> right() const { return m_right; }
 
 private:
   Ptr<Type> m_left, m_right;
@@ -128,16 +128,7 @@ struct TypeVisitor
   virtual Ptr<T> v(Ptr<ArrowType>, Args...) = 0;
 };
 
-struct TypeNF final: public TypeVisitor<Type, Ptr<Env<Type>>>
-{
-  using TypeVisitor<Type, Ptr<Env<Type>>>::v;
-  virtual Ptr<Type> v(Ptr<IdType>, Ptr<Env<Type>>) override;
-  virtual Ptr<Type> v(Ptr<IntType>, Ptr<Env<Type>>) override;
-  virtual Ptr<Type> v(Ptr<ArrowType>, Ptr<Env<Type>>) override;
-};
-
-inline Ptr<Type> type_nf(Ptr<Type> t, Ptr<Env<Type>> env)
-{ return TypeNF()(t, env); }
+Ptr<Type> nf(Ptr<Type> t, Ptr<Env<Type>> env);
 
 
 }

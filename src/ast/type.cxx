@@ -42,22 +42,37 @@ Ptr<Ppr> ArrowType::ppr(unsigned prec, bool pos) const
 }
 
 
-Ptr<Type> TypeNF::v(Ptr<IdType> id, Ptr<Env<Type>> env)
+namespace
 {
-  auto t = env->lookup(id->id());
-  return t? t: id;
+  struct TypeNF final: public TypeVisitor<Type, Ptr<Env<Type>>>
+  {
+    using TypeVisitor<Type, Ptr<Env<Type>>>::v;
+    Ptr<Type> v(Ptr<IdType>, Ptr<Env<Type>>) override;
+    Ptr<Type> v(Ptr<IntType>, Ptr<Env<Type>>) override;
+    Ptr<Type> v(Ptr<ArrowType>, Ptr<Env<Type>>) override;
+  };
+
+
+  Ptr<Type> TypeNF::v(Ptr<IdType> id, Ptr<Env<Type>> env)
+  {
+    auto t = env->lookup(id->id());
+    return t? t: id;
+  }
+
+  Ptr<Type> TypeNF::v(Ptr<IntType>, Ptr<Env<Type>>)
+  {
+    return ptr<IntType>();
+  }
+
+  Ptr<Type> TypeNF::v(Ptr<ArrowType> ty, Ptr<Env<Type>> env)
+  {
+    auto l = v(ty->left(), env),
+         r = v(ty->right(), env);
+    return ptr<ArrowType>(l, r);
+  }
 }
 
-Ptr<Type> TypeNF::v(Ptr<IntType>, Ptr<Env<Type>>)
-{
-  return ptr<IntType>();
-}
-
-Ptr<Type> TypeNF::v(Ptr<ArrowType> ty, Ptr<Env<Type>> env)
-{
-  auto l = v(ty->left(), env),
-       r = v(ty->right(), env);
-  return ptr<ArrowType>(l, r);
-}
+Ptr<Type> nf(Ptr<Type> t, Ptr<Env<Type>> env)
+{ return TypeNF()(t, env); }
 
 }
