@@ -14,8 +14,8 @@ struct Parser final
   Parser();
   ~Parser();
 
-  Ptr<Expr> parse(const Ptr<String>);
-  Ptr<Expr> parse(const std::vector<Ptr<Token>>&);
+  Ptr<Decl> parse(const Ptr<String>);
+  Ptr<Decl> parse(const std::vector<Ptr<Token>>&);
 
 private:
   void *parser;

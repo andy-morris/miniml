@@ -43,6 +43,9 @@ enum class Token::Type
   MINUS,    ///< `-`
   TIMES,    ///< `*`
   DIVIDE,   ///< `/`
+
+  VAL,      ///< `val`
+  EQ,       ///< `=`
 };
 
 

@@ -7,5 +7,6 @@
 
 #include "ast/type.hxx"
 #include "ast/expr.hxx"
+#include "ast/decl.hxx"
 
 #endif /* end of include guard: AST_HXX_7IWKV1PR */

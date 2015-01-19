@@ -32,20 +32,21 @@
 }
 
 %name MiniMLParser
-%extra_argument {Expr **expr}
+%extra_argument {Decl **decl}
 
 %token_prefix TOK_
 %token_type {Token*}
 
+%nonassoc EQ.
 %right TYARROW.
 %nonassoc COLON.
 %left FN.
 %left PLUS MINUS.
 %left TIMES DIVIDE.
 
-%type start {Expr*}
-start(X) ::= expr(A).
-  { *expr = X = A; }
+%type start {Decl*}
+start(X) ::= decl(A).
+  { *decl = X = A; }
 %destructor start {delete $$;}
 
 %type expr {Expr*}
@@ -94,3 +95,8 @@ type(X) ::= type(L) TYARROW type(R).
 id(X) ::= ID(I).
   { X = new Id(*get_id(I),  I->start(), I->end()); }
 %destructor id {delete $$;}
+
+%type decl {Decl*}
+decl(X) ::= VAL(V) id(I) EQ expr(D).
+  { X = new ValDecl(*I, ptr(D), V->start(), D->end()); }
+%destructor decl {delete $$;}

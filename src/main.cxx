@@ -1,3 +1,4 @@
+#include "repl.hxx"
 #include "ast.hxx"
 #include "lexer.hxx"
 #include "parser.hxx"
@@ -42,18 +43,24 @@ int main(int argc, char **argv)
     cerr << endl;
 #endif
 
-    auto expr = Parser().parse(str);
+    auto decl = Parser().parse(str);
 #ifndef NDEBUG
     cerr << endl;
 #endif
 
     auto env = ptr<Env<Type>>();
-    if (expr) {
+    if (decl) {
 #ifndef NDEBUG
-      cerr << "Pretty printed AST:" << endl << *expr->ppr(true) << endl;
-      cerr << "Type:" << endl << *type_of(expr, env)->ppr() << endl;
+      cerr << "Pretty printed AST:" << endl << *decl->ppr(true) << endl;
+      cerr << "AST without location crud:" << endl << *decl->ppr() << endl;
 #endif
-      cerr << *eval(ptr<Env<Expr>>(), expr)->ppr() << endl;
+      switch (decl->type()) {
+      case DeclType::VAL:
+        auto val = dyn_cast<ValDecl>(decl);
+        cerr << "Type:" << endl << *type_of(val->def(), env)->ppr() << endl;
+        cerr << *eval(ptr<Env<Expr>>(), val->def())->ppr() << endl;
+        break;
+      }
     } else {
       cerr << "parser error" << endl;
     }

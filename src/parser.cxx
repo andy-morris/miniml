@@ -7,7 +7,7 @@ using namespace miniml;
 
 void *MiniMLParserAlloc(void* (*)(size_t));
 void MiniMLParserFree(void*, void(*)(void*));
-void MiniMLParser(void*, int, Token*, Expr**);
+void MiniMLParser(void*, int, Token*, Decl**);
 
 #ifndef NDEBUG
 void MiniMLParserTrace(FILE*, char*);
@@ -26,14 +26,14 @@ Parser::Parser()
   parser = MiniMLParserAlloc(&std::malloc);
 }
 
-Ptr<Expr> Parser::parse(const Ptr<String> input)
+Ptr<Decl> Parser::parse(const Ptr<String> input)
 {
   return parse(Lexer(input).tokens());
 }
 
-Ptr<Expr> Parser::parse(const std::vector<Ptr<Token>>& toks)
+Ptr<Decl> Parser::parse(const std::vector<Ptr<Token>>& toks)
 {
-  Expr *expr = nullptr;
+  Decl *decl = nullptr;
 
 #ifndef NDEBUG
   // lemon forgot a const :(
@@ -41,11 +41,11 @@ Ptr<Expr> Parser::parse(const std::vector<Ptr<Token>>& toks)
 #endif
 
   for (auto tok: toks) {
-    MiniMLParser(parser, token_id(*tok), tok.get(), &expr);
+    MiniMLParser(parser, token_id(*tok), tok.get(), &decl);
   }
-  MiniMLParser(parser, 0, nullptr, &expr);
+  MiniMLParser(parser, 0, nullptr, &decl);
 
-  return Ptr<Expr>(expr);
+  return Ptr<Decl>(decl);
 }
 
 Parser::~Parser()
@@ -74,6 +74,8 @@ namespace
       CASE(MINUS);
       CASE(TIMES);
       CASE(DIVIDE);
+      CASE(VAL);
+      CASE(EQ);
 #undef CASE
     }
   }

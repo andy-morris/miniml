@@ -30,6 +30,8 @@ PLUS    = "+" $bump;
 MINUS   = "-" $bump;
 TIMES   = "*" $bump;
 DIVIDE  = "/" $bump;
+VAL     = "val" $bump;
+EQ      = "=" $bump;
 WS      = (space+ | ("//" . [^\n] . "\n")) $ws;
 
 token := |*
@@ -43,6 +45,8 @@ token := |*
   MINUS   => { push(ATOMIC(MINUS)); };
   TIMES   => { push(ATOMIC(TIMES)); };
   DIVIDE  => { push(ATOMIC(DIVIDE)); };
+  VAL     => { push(ATOMIC(VAL)); };
+  EQ      => { push(ATOMIC(EQ)); };
   ID      => { push(ptr<IdToken>(ts, te - ts, start, end)); };
   INT     => {
     std::string str(ts, te - ts);
