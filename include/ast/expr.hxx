@@ -136,7 +136,8 @@ public:
   LamExpr(LamExpr&&) = default;
 
   LamExpr(const Id var, const Ptr<Type> ty, const Ptr<Expr> body,
-          Pos start = Pos(), Pos end = Pos()):
+          Pos start = Pos(), Pos end = Pos(),
+          const Ptr<Env<Expr>> env = nullptr):
     Expr(start, end), m_var(var), m_ty(ty), m_body(body)
   {}
 
@@ -154,6 +155,9 @@ public:
 
   Ptr<Expr> apply(const Ptr<Expr>) const;
 
+  Ptr<Env<Expr>> env() { return m_env; }
+  void set_env(Ptr<Env<Expr>> env) { m_env = env; }
+
   virtual Ptr<Expr> dup() const override
   { return ptr<LamExpr>(var(), ty(), body()->dup(), start(), end()); }
 
@@ -161,6 +165,9 @@ private:
   Id m_var;           ///< Bound variable.
   Ptr<Type> m_ty;     ///< Argument type.
   Ptr<Expr> m_body;   ///< Body.
+
+  /// Captured environment, or null if we're not evaluating yet.
+  Ptr<Env<Expr>> m_env;
 };
 
 

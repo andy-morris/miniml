@@ -2,6 +2,7 @@
 #include "lexer.hxx"
 #include "parser.hxx"
 #include "tc.hxx"
+#include "eval.hxx"
 
 #include <memory>
 #include <iostream>
@@ -49,6 +50,7 @@ int main(int argc, char **argv)
       cerr << "Pretty printed AST:" << endl << *expr->ppr(true) << endl;
       cerr << "Type:" << endl << *type_of(expr, env)->ppr() << endl;
 #endif
+      cerr << *eval(ptr<Env<Expr>>(), expr)->ppr() << endl;
     } else {
       cerr << "parser error" << endl;
     }
