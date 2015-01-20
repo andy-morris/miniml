@@ -43,6 +43,7 @@ tags: $(SRCS) $(HDRS)
 
 clean:
 	$(RM) -r build doc tags miniml *.out
+	$(RM) src/lemon.out src/lemon.c src/lemon.h
 .PHONY: clean
 
 ## Dependencies
