@@ -22,6 +22,11 @@ Ptr<Ppr> IntType::ppr(unsigned, bool pos) const
   return pos_if(pos, "int"_p, start(), end());
 }
 
+Ptr<Ppr> BoolType::ppr(unsigned, bool pos) const
+{
+  return pos_if(pos, "bool"_p, start(), end());
+}
+
 bool ArrowType::operator==(const Type &other) const
 {
   if (type() == other.type()) {
@@ -49,6 +54,7 @@ namespace
     using TypeVisitor<Type, Ptr<Env<Type>>>::v;
     Ptr<Type> v(Ptr<IdType>, Ptr<Env<Type>>) override;
     Ptr<Type> v(Ptr<IntType>, Ptr<Env<Type>>) override;
+    Ptr<Type> v(Ptr<BoolType>, Ptr<Env<Type>>) override;
     Ptr<Type> v(Ptr<ArrowType>, Ptr<Env<Type>>) override;
   };
 
@@ -63,6 +69,12 @@ namespace
   {
     return ptr<IntType>();
   }
+
+  Ptr<Type> TypeNF::v(Ptr<BoolType>, Ptr<Env<Type>>)
+  {
+    return ptr<BoolType>();
+  }
+
 
   Ptr<Type> TypeNF::v(Ptr<ArrowType> ty, Ptr<Env<Type>> env)
   {

@@ -20,6 +20,11 @@ namespace
       return ptr<IntType>();
     }
 
+    inline Ptr<Type> v(Ptr<BoolExpr>, Ptr<Env<Type>>) override
+    {
+      return ptr<BoolType>();
+    }
+
     Ptr<Type> v(Ptr<AppExpr> e, Ptr<Env<Type>> env) override
     {
       auto ty_f0 = v(e->left(), env);

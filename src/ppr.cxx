@@ -69,6 +69,13 @@ namespace ppr
     return ptr<PprString>(String(str));
   }
 
+  // num: see header file
+  
+  Ptr<Ppr> bool_(bool b)
+  {
+    return b? "true"_p : "false"_p;
+  }
+
   Ptr<Ppr> indent(Ptr<Ppr> ppr, unsigned ind)
   {
     return ptr<PprIndent>(ppr, ind);

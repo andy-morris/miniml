@@ -16,6 +16,7 @@ enum class TypeType
 {
   ID,
   INT,
+  BOOL,
   ARROW,
 };
 
@@ -77,6 +78,26 @@ public:
 };
 
 
+class BoolType final: public Type
+{
+public:
+  BoolType(const BoolType &other) = default;
+  BoolType(BoolType &&other) = default;
+
+  BoolType(Pos start = Pos(), Pos end = Pos()): Type(start, end) {}
+
+  inline TypeType type() const override { return TypeType::BOOL; }
+
+  inline bool operator==(const Type &other) const override
+  { return other.type() == type(); }
+
+  Ptr<Ppr> ppr(unsigned prec = 0, bool pos = false) const override;
+
+  inline Ptr<Type> dup() const override
+  { return ptr<BoolType>(); }
+};
+
+
 class ArrowType final: public Type
 {
 public:
@@ -119,12 +140,14 @@ struct TypeVisitor
         return v(std::dynamic_pointer_cast<T>(t), args...);
       CASE(ID, IdType)
       CASE(INT, IntType)
+      CASE(BOOL, BoolType)
       CASE(ARROW, ArrowType)
 #undef CASE
     }
   }
   virtual Ptr<T> v(Ptr<IdType>, Args...) = 0;
   virtual Ptr<T> v(Ptr<IntType>, Args...) = 0;
+  virtual Ptr<T> v(Ptr<BoolType>, Args...) = 0;
   virtual Ptr<T> v(Ptr<ArrowType>, Args...) = 0;
 };
 

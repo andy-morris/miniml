@@ -64,6 +64,8 @@ ATOMIC_OUT(TIMES, "'*'")
 ATOMIC_OUT(DIVIDE, "'/'")
 ATOMIC_OUT(VAL, "'val'")
 ATOMIC_OUT(EQ, "'='")
+ATOMIC_OUT(TRUE, "'true'")
+ATOMIC_OUT(FALSE, "'false'")
 #undef ATOMIC_OUT
 
 OStream &operator<<(OStream &out, const Token &tok)

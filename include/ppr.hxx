@@ -123,6 +123,8 @@ namespace ppr
   /// Constructs a \ref Ppr from an numeric value.
   template <typename T>
   Ptr<Ppr> num(T);
+  /// Prints as 'true' or 'false'.
+  Ptr<Ppr> bool_(bool);
   /// Indent a \ref Ppr by a given amount of characters.
   /// \see operator>>(Ptr<Ppr>, unsigned)
   Ptr<Ppr> indent(Ptr<Ppr>, unsigned indent = Ppr::default_indent);

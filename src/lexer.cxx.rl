@@ -32,6 +32,8 @@ TIMES   = "*" $bump;
 DIVIDE  = "/" $bump;
 VAL     = "val" $bump;
 EQ      = "=" $bump;
+TRUE    = "true" $bump;
+FALSE   = "false" $bump;
 WS      = (space+ | ("//" . [^\n] . "\n")) $ws;
 
 token := |*
@@ -47,6 +49,8 @@ token := |*
   DIVIDE  => { push(ATOMIC(DIVIDE)); };
   VAL     => { push(ATOMIC(VAL)); };
   EQ      => { push(ATOMIC(EQ)); };
+  TRUE    => { push(ATOMIC(TRUE)); };
+  FALSE   => { push(ATOMIC(FALSE)); };
   ID      => { push(ptr<IdToken>(ts, te - ts, start, end)); };
   INT     => {
     std::string str(ts, te - ts);

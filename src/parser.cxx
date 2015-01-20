@@ -108,6 +108,8 @@ namespace
       CASE(DIVIDE);
       CASE(VAL);
       CASE(EQ);
+      CASE(TRUE);
+      CASE(FALSE);
 #undef CASE
     }
   }

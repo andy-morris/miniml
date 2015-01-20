@@ -22,6 +22,8 @@
     {
       if (*i == String("int")) {
         return new IntType(i->start(), i->end());
+      } else if (*i == String("bool")) {
+        return new BoolType(i->start(), i->end());
       } else {
         return new IdType(*i, i->start(), i->end());
       }
@@ -83,9 +85,18 @@ aexpr(X) ::= id(I).
   { X = new IdExpr(*I,  I->start(), I->end()); }
 aexpr(X) ::= INT(I).
   { X = new IntExpr(get_int(I),  I->start(), I->end()); }
+aexpr(X) ::= bool(B).
+  { X = B; }
 aexpr(X) ::= LPAR expr(A) RPAR.
   { X = A; }
 %destructor aexpr {delete $$;}
+
+%type bool {Expr*}
+bool(X) ::= TRUE(T).
+  { X = new BoolExpr(true, T->start(), T->end()); }
+bool(X) ::= FALSE(T).
+  { X = new BoolExpr(false, T->start(), T->end()); }
+%destructor bool {delete $$;}
 
 
 %type type {Type*}

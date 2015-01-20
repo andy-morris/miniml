@@ -46,6 +46,9 @@ enum class Token::Type
 
   VAL,      ///< `val`
   EQ,       ///< `=`
+
+  TRUE,     ///< `true`
+  FALSE,    ///< `false`
 };
 
 

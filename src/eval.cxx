@@ -39,6 +39,8 @@ namespace
 
     inline Ptr<Expr> v(Ptr<IntExpr> x, ENV) override { return x; }
 
+    inline Ptr<Expr> v(Ptr<BoolExpr> x, ENV) override { return x; }
+
     Ptr<Expr> v(Ptr<LamExpr> x, ENV env) override
     {
       x->set_env(env);

@@ -20,6 +20,7 @@ enum class ExprType
   APP,    ///< Application
   LAM,    ///< Lambda term
   INT,    ///< Integer literal
+  BOOL,   ///< Boolean literal
   TYPE,   ///< Typed expression
   BINOP,  ///< Binary operator expression
 };
@@ -95,6 +96,35 @@ public:
 
 private:
   long m_val;
+};
+
+
+/// Boolean literals.
+class BoolExpr final: public Expr
+{
+public:
+  BoolExpr(const BoolExpr&) = default;
+  BoolExpr(BoolExpr&&) = default;
+
+  /// \param[in] val The value of this literal.
+  BoolExpr(bool val, Pos start = Pos(), Pos end = Pos()):
+    Expr(start, end), m_val(val)
+  {}
+
+  /// \return ExprType::INT
+  inline ExprType type() const override { return ExprType::BOOL; }
+
+  /// \param prec Ignored, since literals are always atomic.
+  Ptr<Ppr> ppr(unsigned prec = 0, bool pos = false) const override;
+
+  /// \return The value of this literal.
+  inline bool val() const { return m_val; }
+
+  inline Ptr<Expr> dup() const override
+  { return ptr<BoolExpr>(val(), start(), end()); }
+
+private:
+  bool m_val;
 };
 
 
@@ -283,6 +313,7 @@ struct ExprVisitor
       CASE(APP, AppExpr)
       CASE(LAM, LamExpr)
       CASE(INT, IntExpr)
+      CASE(BOOL, BoolExpr)
       CASE(TYPE, TypeExpr)
       CASE(BINOP, BinOpExpr)
 #undef CASE
@@ -292,6 +323,7 @@ struct ExprVisitor
   virtual Ptr<T> v(Ptr<IdExpr>, Args...) = 0;
   virtual Ptr<T> v(Ptr<AppExpr>, Args...) = 0;
   virtual Ptr<T> v(Ptr<IntExpr>, Args...) = 0;
+  virtual Ptr<T> v(Ptr<BoolExpr>, Args...) = 0;
   virtual Ptr<T> v(Ptr<LamExpr>, Args...) = 0;
   virtual Ptr<T> v(Ptr<TypeExpr>, Args...) = 0;
   virtual Ptr<T> v(Ptr<BinOpExpr>, Args...) = 0;
