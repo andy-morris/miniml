@@ -15,7 +15,7 @@ using namespace miniml;
 
 namespace
 {
-  Ptr<String> read_file(const char *file)
+  String read_file(const char *file)
   {
     ifstream in(file);
     in >> noskipws;
@@ -25,7 +25,7 @@ namespace
       getline(in, l);
       ss << l;
     }
-    return ptr<String>(ss.str());
+    return ss.str();
   }
 }
 

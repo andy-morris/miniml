@@ -26,7 +26,7 @@ Parser::Parser()
   parser = MiniMLParserAlloc(&std::malloc);
 }
 
-Ptr<Decl> Parser::parse(const Ptr<String> input)
+Ptr<Decl> Parser::parse(const String &input)
 {
   return parse(Lexer(input).tokens());
 }

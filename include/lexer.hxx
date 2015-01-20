@@ -36,7 +36,7 @@ public:
 
 
   /// Creates a Lexer over the given string.
-  Lexer(const Ptr<String>) throw(LexicalError);
+  Lexer(const String&) throw(LexicalError);
 
   /// \return The tokens read.
   std::vector<Ptr<Token>> &tokens()
@@ -49,9 +49,6 @@ private:
   // }
 
   Pos start, end;
-
-  /// The string being read.
-  Ptr<String> data;
 
   /// The tokens.
   std::vector<Ptr<Token>> m_tokens;

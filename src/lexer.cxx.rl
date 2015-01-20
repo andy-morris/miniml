@@ -65,11 +65,10 @@ token := |*
 #pragma clang diagnostic pop
 
 
-Lexer::Lexer(const Ptr<String> str) throw(Lexer::LexicalError):
-  data(str)
+Lexer::Lexer(const String &str) throw(Lexer::LexicalError)
 {
-  p = begin = str->data();
-  eof = pe = str->data() + str->size();
+  p = begin = str.data();
+  eof = pe = str.data() + str.size();
   %% write init;
   %% write exec;
 
