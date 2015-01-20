@@ -100,6 +100,15 @@ namespace
       CASE(EQ);
       CASE(TRUE);
       CASE(FALSE);
+      CASE(AND);
+      CASE(OR);
+      CASE(IFF);
+      CASE(LESS);
+      CASE(LEQ);
+      CASE(EQUAL);
+      CASE(GEQ);
+      CASE(GREATER);
+      CASE(NEQ);
 #undef CASE
     }
   }

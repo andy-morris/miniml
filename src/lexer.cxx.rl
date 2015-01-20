@@ -34,6 +34,15 @@ VAL     = "val" $bump;
 EQ      = "=" $bump;
 TRUE    = "true" $bump;
 FALSE   = "false" $bump;
+AND     = "&&" $bump;
+OR      = "||" $bump;
+IFF     = "<->" $bump;
+LESS    = "<" $bump;
+LEQ     = "<=" $bump;
+EQUAL   = "==" $bump;
+GEQ     = ">=" $bump;
+GREATER = ">" $bump;
+NEQ     = "!=" $bump;
 WS      = (space+ | ("//" . [^\n] . "\n")) $ws;
 
 token := |*
@@ -51,6 +60,15 @@ token := |*
   EQ      => { push(ATOMIC(EQ)); };
   TRUE    => { push(ATOMIC(TRUE)); };
   FALSE   => { push(ATOMIC(FALSE)); };
+  AND     => { push(ATOMIC(AND)); };
+  OR      => { push(ATOMIC(OR)); };
+  IFF     => { push(ATOMIC(IFF)); };
+  LESS    => { push(ATOMIC(LESS)); };
+  LEQ     => { push(ATOMIC(LEQ)); };
+  EQUAL   => { push(ATOMIC(EQUAL)); };
+  GEQ     => { push(ATOMIC(GEQ)); };
+  GREATER => { push(ATOMIC(GREATER)); };
+  NEQ     => { push(ATOMIC(NEQ)); };
   ID      => { push(ptr<IdToken>(ts, te - ts, start, end)); };
   INT     => {
     std::string str(ts, te - ts);

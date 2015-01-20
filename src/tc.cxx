@@ -55,15 +55,31 @@ namespace
 
     Ptr<Type> v(Ptr<BinOpExpr> e, Ptr<Env<Type>> env) override
     {
+      auto int_ = ptr<IntType>();
+      auto bool_ = ptr<BoolType>();
       switch (e->op()) {
       case BinOp::PLUS:
       case BinOp::MINUS:
       case BinOp::TIMES:
       case BinOp::DIVIDE:
-        auto int_ = ptr<IntType>();
         check_eq(v(e->left(), env), int_, e->left());
         check_eq(v(e->right(), env), int_, e->right());
         return int_;
+      case BinOp::LESS:
+      case BinOp::LEQ:
+      case BinOp::EQUAL:
+      case BinOp::GEQ:
+      case BinOp::GREATER:
+      case BinOp::NEQ:
+        check_eq(v(e->left(), env), int_, e->left());
+        check_eq(v(e->right(), env), int_, e->right());
+        return bool_;
+      case BinOp::IFF:
+      case BinOp::AND:
+      case BinOp::OR:
+        check_eq(v(e->left(), env), bool_, e->left());
+        check_eq(v(e->right(), env), bool_, e->right());
+        return bool_;
       }
     }
 

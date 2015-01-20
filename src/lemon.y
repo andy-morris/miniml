@@ -48,6 +48,10 @@
 %right TYARROW.
 %nonassoc COLON.
 %left FN.
+%right IFF.
+%right OR.
+%right AND.
+%left LESS LEQ EQUAL GEQ GREATER NEQ.
 %left PLUS MINUS.
 %left TIMES DIVIDE.
 
@@ -71,6 +75,24 @@ expr(X) ::= expr(L) TIMES expr(R).
   { X = new BinOpExpr(BinOp::TIMES, ptr(L), ptr(R), L->start(), R->end()); }
 expr(X) ::= expr(L) DIVIDE expr(R).
   { X = new BinOpExpr(BinOp::DIVIDE, ptr(L), ptr(R), L->start(), R->end()); }
+expr(X) ::= expr(L) AND expr(R).
+  { X = new BinOpExpr(BinOp::AND, ptr(L), ptr(R), L->start(), R->end()); }
+expr(X) ::= expr(L) OR expr(R).
+  { X = new BinOpExpr(BinOp::OR, ptr(L), ptr(R), L->start(), R->end()); }
+expr(X) ::= expr(L) IFF expr(R).
+  { X = new BinOpExpr(BinOp::IFF, ptr(L), ptr(R), L->start(), R->end()); }
+expr(X) ::= expr(L) LESS expr(R).
+  { X = new BinOpExpr(BinOp::LESS, ptr(L), ptr(R), L->start(), R->end()); }
+expr(X) ::= expr(L) LEQ expr(R).
+  { X = new BinOpExpr(BinOp::LEQ, ptr(L), ptr(R), L->start(), R->end()); }
+expr(X) ::= expr(L) EQUAL expr(R).
+  { X = new BinOpExpr(BinOp::EQUAL, ptr(L), ptr(R), L->start(), R->end()); }
+expr(X) ::= expr(L) GEQ expr(R).
+  { X = new BinOpExpr(BinOp::GEQ, ptr(L), ptr(R), L->start(), R->end()); }
+expr(X) ::= expr(L) GREATER expr(R).
+  { X = new BinOpExpr(BinOp::GREATER, ptr(L), ptr(R), L->start(), R->end()); }
+expr(X) ::= expr(L) NEQ expr(R).
+  { X = new BinOpExpr(BinOp::NEQ, ptr(L), ptr(R), L->start(), R->end()); }
 %destructor expr {delete $$;}
 
 %type aexprs {Expr*}

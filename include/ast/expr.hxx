@@ -234,29 +234,56 @@ private:
 
 
 /// Operators. \see OpExpr
-enum class BinOp { PLUS, MINUS, TIMES, DIVIDE };
+enum class BinOp
+{
+  PLUS, MINUS, TIMES, DIVIDE,
+  LESS, LEQ, EQUAL, GEQ, GREATER, NEQ,
+  AND, OR, IFF,
+};
 
 enum class OpAssoc { LEFT, NONE, RIGHT };
 
 inline unsigned prec(BinOp op)
 {
   switch (op) {
-  case BinOp::PLUS:
-  case BinOp::MINUS:
-    return 6;
   case BinOp::TIMES:
   case BinOp::DIVIDE:
     return 7;
+  case BinOp::PLUS:
+  case BinOp::MINUS:
+    return 6;
+  case BinOp::LESS:
+  case BinOp::LEQ:
+  case BinOp::EQUAL:
+  case BinOp::GEQ:
+  case BinOp::GREATER:
+  case BinOp::NEQ:
+    return 3;
+  case BinOp::AND:
+    return 2;
+  case BinOp::OR:
+    return 1;
+  case BinOp::IFF:
+    return 0;
   }
 }
 
 inline Ptr<Ppr> name(BinOp op)
 {
   switch (op) {
-  case BinOp::PLUS:   return '+'_p;
-  case BinOp::MINUS:  return '-'_p;
-  case BinOp::TIMES:  return '*'_p;
-  case BinOp::DIVIDE: return '/'_p;
+  case BinOp::PLUS:    return '+'_p;
+  case BinOp::MINUS:   return '-'_p;
+  case BinOp::TIMES:   return '*'_p;
+  case BinOp::DIVIDE:  return '/'_p;
+  case BinOp::LESS:    return '<'_p;
+  case BinOp::LEQ:     return "<="_p;
+  case BinOp::EQUAL:   return "=="_p;
+  case BinOp::GEQ:     return ">="_p;
+  case BinOp::GREATER: return '>'_p;
+  case BinOp::NEQ:     return "!="_p;
+  case BinOp::AND:     return "&&"_p;
+  case BinOp::OR:      return "||"_p;
+  case BinOp::IFF:     return "<->"_p;
   }
 }
 
@@ -268,6 +295,12 @@ inline OpAssoc assoc(BinOp op)
   case BinOp::TIMES:
   case BinOp::DIVIDE:
     return OpAssoc::LEFT;
+  case BinOp::AND:
+  case BinOp::OR:
+  case BinOp::IFF:
+    return OpAssoc::RIGHT;
+  default:
+    return OpAssoc::NONE;
   }
 }
 
@@ -275,6 +308,9 @@ inline OpAssoc assoc(BinOp op)
 class BinOpExpr final: public Expr
 {
 public:
+  BinOpExpr(const BinOpExpr&) = default;
+  BinOpExpr(BinOpExpr&&) = default;
+
   BinOpExpr(BinOp op, Ptr<Expr> left, Ptr<Expr> right,
             Pos start = Pos(), Pos end = Pos()):
     Expr(start, end), m_op(op), m_left(left), m_right(right)

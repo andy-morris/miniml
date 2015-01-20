@@ -1,4 +1,5 @@
 #include "eval.hxx"
+#include <functional>
 #include <cassert>
 
 namespace miniml
@@ -8,10 +9,11 @@ namespace
 {
   using ENV = Ptr<Env<Expr>>;
 
-  inline long INT(Ptr<Expr> e)
+  template <ExprType ty, typename T, typename E>
+  inline E lit(Ptr<Expr> e)
   {
-    assert(e->type() == ExprType::INT);
-    return dyn_cast<IntExpr>(e)->val();
+    assert(e->type() == ty);
+    return dyn_cast<T>(e)->val();
   }
 
   struct Eval final: public ExprVisitor<Expr, ENV>
@@ -49,17 +51,40 @@ namespace
 
     Ptr<Expr> v(Ptr<BinOpExpr> x, ENV env) override
     {
-      auto l = v(x->left(), env),
-           r = v(x->right(), env);
+      using namespace std;
+
+      auto l = v(x->left(), env), r = v(x->right(), env);
+
+      auto to_int = lit<ExprType::INT, IntExpr, long>;
+      auto to_bool = lit<ExprType::INT, BoolExpr, bool>;
+
+      auto int_op =
+        [&](function<long(long, long)> f) {
+          return ptr<IntExpr>(f(to_int(l), to_int(r)));
+        };
+      auto bool_op =
+        [&](function<bool(bool, bool)> f) {
+          return ptr<BoolExpr>(f(to_bool(l), to_bool(r)));
+        };
+      auto int_cmp =
+        [&](function<bool(long, long)> f) {
+          return ptr<BoolExpr>(f(to_int(l), to_int(r)));
+        };
+
       switch (x->op()) {
-      case BinOp::PLUS:
-        return ptr<IntExpr>(INT(l) + INT(r));
-      case BinOp::MINUS:
-        return ptr<IntExpr>(INT(l) - INT(r));
-      case BinOp::TIMES:
-        return ptr<IntExpr>(INT(l) * INT(r));
-      case BinOp::DIVIDE:
-        return ptr<IntExpr>(INT(l) / INT(r));
+      case BinOp::PLUS:    return int_op(plus<long>());
+      case BinOp::MINUS:   return int_op(minus<long>());
+      case BinOp::TIMES:   return int_op(multiplies<long>());
+      case BinOp::DIVIDE:  return int_op(divides<long>());
+      case BinOp::AND:     return bool_op(logical_and<bool>());
+      case BinOp::OR:      return bool_op(logical_or<bool>());
+      case BinOp::IFF:     return bool_op(equal_to<bool>());
+      case BinOp::LESS:    return int_cmp(less<long>());
+      case BinOp::LEQ:     return int_cmp(less_equal<long>());
+      case BinOp::EQUAL:   return int_cmp(equal_to<long>());
+      case BinOp::GEQ:     return int_cmp(greater_equal<long>());
+      case BinOp::GREATER: return int_cmp(greater<long>());
+      case BinOp::NEQ:     return int_cmp(not_equal_to<long>());
       }
     }
 

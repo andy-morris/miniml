@@ -49,6 +49,17 @@ enum class Token::Type
 
   TRUE,     ///< `true`
   FALSE,    ///< `false`
+
+  AND,      ///< `&&`
+  OR,       ///< `||`
+  IFF,      ///< `<->`
+
+  LESS,     ///< `<`
+  LEQ,      ///< `<=`
+  EQUAL,    ///< `==`
+  GEQ,      ///< `>=`
+  GREATER,  ///< `>`
+  NEQ,      ///< `!=`
 };
 
 
