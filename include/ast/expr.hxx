@@ -217,7 +217,7 @@ public:
   /// \return ExprType::TYPE
   inline ExprType type() const override { return ExprType::TYPE; }
 
-  virtual Ptr<Ppr> ppr(unsigned prec = 0, bool pos = false) const override;
+  Ptr<Ppr> ppr(unsigned prec = 0, bool pos = false) const override;
 
   /// \return The inner expression.
   inline Ptr<Expr> expr() const { return m_expr; }
