@@ -1,6 +1,7 @@
 %include {
   #include "ast.hxx"
   #include "token.hxx"
+  #include "parser.hxx"
   #include <cassert>
 
   using namespace miniml;
@@ -33,6 +34,10 @@
 
 %name MiniMLParser
 %extra_argument {Decl **decl}
+
+%parse_failure {
+  throw Parser::ParseFailInternal();
+}
 
 %token_prefix TOK_
 %token_type {Token*}

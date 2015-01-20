@@ -4,6 +4,8 @@
 #include "ast.hxx"
 #include "token.hxx"
 #include "lemon.hxx"
+#include "lexer.hxx"
+#include "exception.hxx"
 #include <vector>
 
 namespace miniml
@@ -14,8 +16,23 @@ struct Parser final
   Parser();
   ~Parser();
 
-  Ptr<Decl> parse(const String&);
-  Ptr<Decl> parse(const std::vector<Ptr<Token>>&);
+  struct ParseFail final: public Exception
+  {
+    ParseFail(Ptr<Token> t);
+    const char *what() const noexcept override;
+    Ptr<Token> tok;
+    String msg;
+  };
+
+  Ptr<Decl> parse(const String&)
+    throw(ParseFail, Lexer::LexicalError);
+  Ptr<Decl> parse(const std::vector<Ptr<Token>>&)
+    throw(ParseFail);
+
+  struct ParseFailInternal final: public Exception
+  {
+    const char *what() const noexcept override;
+  };
 
 private:
   void *parser;

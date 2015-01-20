@@ -21,17 +21,42 @@ namespace
 namespace miniml
 {
 
-Parser::Parser()
+const char *Parser::ParseFailInternal::what() const noexcept
 {
-  parser = MiniMLParserAlloc(&std::malloc);
+  return "parse error";
 }
 
+Parser::ParseFail::ParseFail(Ptr<Token> t):
+  tok(t)
+{
+  if (t) {
+    SStream s;
+    s << "parse error at token " << *t << t->start().ppr();
+    msg = s.str();
+  } else {
+    msg = "parse error at end of declaration";
+  }
+}
+
+const char *Parser::ParseFail::what() const noexcept
+{
+  return msg.data();
+}
+
+
+
+Parser::Parser():
+  parser(MiniMLParserAlloc(&std::malloc))
+{ }
+
 Ptr<Decl> Parser::parse(const String &input)
+  throw(Parser::ParseFail, Lexer::LexicalError)
 {
   return parse(Lexer(input).tokens());
 }
 
 Ptr<Decl> Parser::parse(const std::vector<Ptr<Token>>& toks)
+  throw(Parser::ParseFail)
 {
   Decl *decl = nullptr;
 
@@ -40,10 +65,16 @@ Ptr<Decl> Parser::parse(const std::vector<Ptr<Token>>& toks)
   MiniMLParserTrace(stderr, const_cast<char*>("parser: "));
 #endif
 
-  for (auto tok: toks) {
-    MiniMLParser(parser, token_id(*tok), tok.get(), &decl);
+  Ptr<Token> tok;
+  try {
+    for (auto it = begin(toks); it != end(toks); ++it) {
+      tok = *it;
+      MiniMLParser(parser, token_id(*tok), tok.get(), &decl);
+    }
+    MiniMLParser(parser, 0, nullptr, &decl);
+  } catch (ParseFailInternal) {
+    throw ParseFail(tok);
   }
-  MiniMLParser(parser, 0, nullptr, &decl);
 
   return Ptr<Decl>(decl);
 }
@@ -54,6 +85,7 @@ Parser::~Parser()
 }
 
 }
+
 
 namespace
 {
