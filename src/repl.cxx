@@ -47,16 +47,17 @@ Repl::get_next(String rest)
     do {
       prompt_line(line);
       input += line;
-      semi_line = line.find(';');
+      semi_line = line.find(";;");
       semi += semi_line == String::npos? line.size() : semi_line;
     } while (semi_line == String::npos);
 
   }
 
   assert(semi <= input.length());
-  assert(input[semi] == ';');
+  assert(input[semi]   == ';' &&
+         input[semi+1] == ';');
 
-  return std::make_pair(input.substr(0, semi), input.substr(semi+1));
+  return std::make_pair(input.substr(0, semi), input.substr(semi+2));
 }
 
 void Repl::process(Ptr<Decl> decl)
