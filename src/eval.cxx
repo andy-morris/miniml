@@ -66,7 +66,7 @@ namespace
   };
 }
 
-Ptr<Expr> eval(Ptr<Env<Expr>> env, Ptr<Expr> e)
+Ptr<Expr> eval(Ptr<Expr> e, Ptr<Env<Expr>> env)
 {
   Eval ev; return ev(e, env);
 }

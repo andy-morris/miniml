@@ -6,7 +6,7 @@
 namespace miniml
 {
 
-Ptr<Expr> eval(Ptr<Env<Expr>>, Ptr<Expr>);
+Ptr<Expr> eval(Ptr<Expr>, Ptr<Env<Expr>>);
 
 }
 
