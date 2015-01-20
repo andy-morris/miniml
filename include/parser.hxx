@@ -18,9 +18,8 @@ struct Parser final
 
   struct ParseFail final: public Exception
   {
-    ParseFail(Ptr<Token> t);
+    ParseFail(const Token *t);
     const char *what() const noexcept override;
-    Ptr<Token> tok;
     String msg;
   };
 
@@ -28,11 +27,6 @@ struct Parser final
     throw(ParseFail, Lexer::LexicalError);
   Ptr<Decl> parse(const std::vector<Ptr<Token>>&)
     throw(ParseFail);
-
-  struct ParseFailInternal final: public Exception
-  {
-    const char *what() const noexcept override;
-  };
 
 private:
   void *parser;

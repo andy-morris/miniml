@@ -37,8 +37,8 @@
 %name MiniMLParser
 %extra_argument {Decl **decl}
 
-%parse_failure {
-  throw Parser::ParseFailInternal();
+%syntax_error {
+  throw Parser::ParseFail(yyminor.yy0);
 }
 
 %token_prefix TOK_

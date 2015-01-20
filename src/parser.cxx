@@ -21,17 +21,11 @@ namespace
 namespace miniml
 {
 
-const char *Parser::ParseFailInternal::what() const noexcept
-{
-  return "parse error";
-}
-
-Parser::ParseFail::ParseFail(Ptr<Token> t):
-  tok(t)
+Parser::ParseFail::ParseFail(const Token *t)
 {
   if (t) {
     SStream s;
-    s << "parse error at token " << *t << t->start().ppr();
+    s << "parse error at token " << *t << *t->start().ppr();
     msg = s.str();
   } else {
     msg = "parse error at end of declaration";
@@ -65,16 +59,12 @@ Ptr<Decl> Parser::parse(const std::vector<Ptr<Token>>& toks)
   MiniMLParserTrace(stderr, const_cast<char*>("parser: "));
 #endif
 
-  Ptr<Token> tok;
-  try {
-    for (auto it = begin(toks); it != end(toks); ++it) {
-      tok = *it;
-      MiniMLParser(parser, token_id(*tok), tok.get(), &decl);
-    }
-    MiniMLParser(parser, 0, nullptr, &decl);
-  } catch (ParseFailInternal) {
-    throw ParseFail(tok);
+  Token *tok;
+  for (auto it = begin(toks); it != end(toks); ++it) {
+    tok = it->get();
+    MiniMLParser(parser, token_id(*tok), tok, &decl);
   }
+  MiniMLParser(parser, 0, nullptr, &decl);
 
   return Ptr<Decl>(decl);
 }
