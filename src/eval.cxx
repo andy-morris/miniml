@@ -31,10 +31,20 @@ namespace
     {
       auto l = v(x->left(),  env);
       auto r = v(x->right(), env);
-      if (l->type() == ExprType::LAM) {
-        auto ll = dyn_cast<LamExpr>(move(l));
-        return v(ll->apply(r), ll->env());
-      } else {
+
+      Ptr<LamExpr> lam; Ptr<BuiltinExpr> bi;
+
+      switch (l->type()) {
+      case ExprType::LAM:
+        lam = dyn_cast<LamExpr>(l);
+        return v(lam->apply(r), lam->env());
+      case ExprType::BUILTIN:
+        bi = dyn_cast<BuiltinExpr>(l);
+        if (bi->need_arg()) {
+          bi->give_arg(r);
+          return v(bi, env);
+        } // else fall thru
+      default:
         return ptr<AppExpr>(l, r);
       }
     }
@@ -90,6 +100,15 @@ namespace
 
     inline Ptr<Expr> v(Ptr<TypeExpr> x, ENV env) override
     { return v(x->expr(), env); }
+
+    inline Ptr<Expr> v(Ptr<BuiltinExpr> x, ENV env) override
+    {
+      if (x->need_arg()) {
+        return x;
+      } else {
+        return v(x->run(), env);
+      }
+    }
   };
 }
 

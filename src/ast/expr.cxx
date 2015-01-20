@@ -1,5 +1,6 @@
 #include "ast/expr.hxx"
 #include <sstream>
+#include <cassert>
 
 namespace miniml
 {
@@ -71,6 +72,27 @@ Ptr<Ppr> BinOpExpr::ppr(unsigned pr, bool pos) const
 }
 
 
+void BuiltinExpr::give_arg(Ptr<Expr> arg)
+{
+  assert(need_arg());
+  args()->push_back(arg);
+}
+
+Ptr<Expr> BuiltinExpr::run()
+{
+  assert(!need_arg());
+  return effect()(*args());
+}
+
+Ptr<Expr> BuiltinExpr::dup() const
+{
+  auto d = ptr<BuiltinExpr>(ty()->dup(), effect(), arity(), start(), end());
+  for (auto a: *args()) {
+    d->give_arg(a->dup());
+  }
+  return d;
+}
+
 namespace
 {
   /// Free variables
@@ -108,6 +130,16 @@ namespace
       auto s1 = v(e->left()), s2 = v(e->right());
       s1->insert(s2->begin(), s2->end());
       return s1;
+    }
+
+    Ret v(Ptr<BuiltinExpr> e) override
+    {
+      Ret fv;
+      for (auto arg: *e->args()) {
+        auto fv0 = v(arg);
+        fv->insert(fv0->begin(), fv0->end());
+      }
+      return fv;
     }
 
     static Ret single(const Id x)
@@ -178,6 +210,16 @@ namespace
       return ptr<BinOpExpr>(e->op(),
                             v(e->left(), x, arg, fv),
                             v(e->right(), x, arg, fv));
+    }
+
+    Ptr<Expr> v(Ptr<BuiltinExpr> e, const Id x, Ptr<Expr> arg, FV::Ret fv)
+      override
+    {
+      auto expr = ptr<BuiltinExpr>(e->ty(), e->effect(), e->arity());
+      for (auto a: *e->args()) {
+        expr->give_arg(v(a, x, arg, fv));
+      }
+      return expr;
     }
   };
 }

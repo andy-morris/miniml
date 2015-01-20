@@ -9,6 +9,8 @@
 #include "ast/type.hxx"
 #include "visitor.hxx"
 #include <unordered_set>
+#include <deque>
+#include <functional>
 
 namespace miniml
 {
@@ -16,13 +18,14 @@ namespace miniml
 /// Type of expression.
 enum class ExprType
 {
-  ID,     ///< Identifier
-  APP,    ///< Application
-  LAM,    ///< Lambda term
-  INT,    ///< Integer literal
-  BOOL,   ///< Boolean literal
-  TYPE,   ///< Typed expression
-  BINOP,  ///< Binary operator expression
+  ID,      ///< Identifier
+  APP,     ///< Application
+  LAM,     ///< Lambda term
+  INT,     ///< Integer literal
+  BOOL,    ///< Boolean literal
+  TYPE,    ///< Typed expression
+  BINOP,   ///< Binary operator expression
+  BUILTIN, ///< Builtin expression
 };
 
 /// Abstract base class for expressions.
@@ -233,6 +236,49 @@ private:
 };
 
 
+/// Builtin expressions for side effects.
+class BuiltinExpr final: public Expr
+{
+public:
+  using Args = std::deque<Ptr<Expr>>;
+  using Effect = std::function<Ptr<Expr>(Args&)>;
+
+  BuiltinExpr(const BuiltinExpr&) = default;
+  BuiltinExpr(BuiltinExpr&&) = default;
+
+  BuiltinExpr(Ptr<Type> ty, Effect effect, unsigned arity,
+              Pos start = Pos(), Pos end = Pos()):
+    Expr(start, end), m_effect(effect), m_ty(ty), m_arity(arity)
+  {
+    m_args = ptr<std::deque<Ptr<Expr>>>();
+  }
+
+  inline bool need_arg() const { return arity() > args()->size(); }
+
+  void give_arg(Ptr<Expr> arg);
+
+  Ptr<Expr> run();
+
+  inline ExprType type() const override { return ExprType::BUILTIN; }
+
+  Ptr<Expr> dup() const override;
+
+  inline Ptr<Ppr> ppr(unsigned=0, bool pos = false) const override
+  { return ppr::pos_if(pos, "<<builtin>>"_p, start(), end()); }
+
+  inline Effect effect() const { return m_effect; }
+  inline Ptr<std::deque<Ptr<Expr>>> args() const { return m_args; }
+  inline Ptr<Type> ty() const { return m_ty; }
+  inline unsigned arity() const { return m_arity; }
+
+private:
+  Effect m_effect;
+  Ptr<std::deque<Ptr<Expr>>> m_args;
+  Ptr<Type> m_ty;
+  unsigned m_arity;
+};
+
+
 /// Operators. \see OpExpr
 enum class BinOp
 {
@@ -345,13 +391,14 @@ struct ExprVisitor
 #define CASE(x,t) \
       case ExprType::x: \
         return v(std::dynamic_pointer_cast<t>(e), args...);
-      CASE(ID, IdExpr)
-      CASE(APP, AppExpr)
-      CASE(LAM, LamExpr)
-      CASE(INT, IntExpr)
-      CASE(BOOL, BoolExpr)
-      CASE(TYPE, TypeExpr)
-      CASE(BINOP, BinOpExpr)
+      CASE(ID,      IdExpr)
+      CASE(APP,     AppExpr)
+      CASE(LAM,     LamExpr)
+      CASE(INT,     IntExpr)
+      CASE(BOOL,    BoolExpr)
+      CASE(TYPE,    TypeExpr)
+      CASE(BINOP,   BinOpExpr)
+      CASE(BUILTIN, BuiltinExpr)
 #undef CASE
     }
   }
@@ -363,6 +410,7 @@ struct ExprVisitor
   virtual Ptr<T> v(Ptr<LamExpr>, Args...) = 0;
   virtual Ptr<T> v(Ptr<TypeExpr>, Args...) = 0;
   virtual Ptr<T> v(Ptr<BinOpExpr>, Args...) = 0;
+  virtual Ptr<T> v(Ptr<BuiltinExpr>, Args...) = 0;
 };
 
 Ptr<std::unordered_set<Id>> fv(const Ptr<Expr> expr);

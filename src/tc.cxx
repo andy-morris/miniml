@@ -83,6 +83,21 @@ namespace
       }
     }
 
+    Ptr<Type> v(Ptr<BuiltinExpr> e, Ptr<Env<Type>> env) override
+    {
+      auto ty = e->ty();
+      for (auto a: *e->args()) {
+        if (ty->type() == TypeType::ARROW) {
+          auto aty = dyn_cast<ArrowType>(ty);
+          check_eq(v(a, env), aty->left(), a);
+          ty = aty->right();
+        } else {
+          throw NotArrow(ty);
+        }
+      }
+      return ty;
+    }
+
     inline void check_eq(Ptr<Type> s, Ptr<Type> t, Ptr<Expr> e)
     { if (*s != *t) throw Clash(s, t, e); }
   };
