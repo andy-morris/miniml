@@ -1,5 +1,5 @@
 #include "eval.hxx"
-#include "panic.hxx"
+#include <cassert>
 
 namespace miniml
 {
@@ -21,11 +21,8 @@ namespace
     Ptr<Expr> v(Ptr<IdExpr> x, ENV env) override
     {
       auto e = env->lookup(x->id());
-      if (e) {
-        return v(e, env);
-      } else {
-        panic("failed name lookup in eval");
-      }
+      assert(e);
+      return v(e, env);
     }
 
     Ptr<Expr> v(Ptr<AppExpr> x, ENV env) override
