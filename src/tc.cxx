@@ -26,8 +26,8 @@ namespace
       auto ty_x = v(e->right(), env);
 
       if (ty_f0->type() == TypeType::ARROW) {
-        auto ty_f = std::dynamic_pointer_cast<ArrowType>(ty_f0);
-        check_eq(ty_f->left(), ty_x);
+        auto ty_f = dyn_cast<ArrowType>(ty_f0);
+        check_eq(ty_f->left(), ty_x, e->left());
         return ty_f->right();
       } else {
         throw NotArrow(ty_f0);
@@ -44,7 +44,7 @@ namespace
 
     inline Ptr<Type> v(Ptr<TypeExpr> e, Ptr<Env<Type>> env) override
     {
-      check_eq(v(e->expr(), env), nf(e->ty(), env));
+      check_eq(v(e->expr(), env), nf(e->ty(), env), e->expr());
       return e->ty();
     }
 
@@ -56,14 +56,14 @@ namespace
       case BinOp::TIMES:
       case BinOp::DIVIDE:
         auto int_ = ptr<IntType>();
-        check_eq(v(e->left(), env), int_);
-        check_eq(v(e->right(), env), int_);
+        check_eq(v(e->left(), env), int_, e->left());
+        check_eq(v(e->right(), env), int_, e->right());
         return int_;
       }
     }
 
-    inline void check_eq(Ptr<Type> s, Ptr<Type> t)
-    { if (*s != *t) throw Clash(s, t); }
+    inline void check_eq(Ptr<Type> s, Ptr<Type> t, Ptr<Expr> e)
+    { if (*s != *t) throw Clash(s, t, e); }
   };
 }
 

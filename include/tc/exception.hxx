@@ -22,13 +22,15 @@ struct NotInScope final: public TCException
 
 struct Clash final: public TCException
 {
-  Clash(const Ptr<Type> expected, const Ptr<Type> actual)
+  Clash(const Ptr<Type> expected, const Ptr<Type> actual, const Ptr<Expr> expr)
   {
     auto ppr =
       ppr::vcat({"type clash: expected type"_p,
                  expected->ppr() >> 1,
                  "but got type"_p,
-                 actual->ppr() >> 1});
+                 actual->ppr() >> 1,
+                 "in the expression"_p,
+                 expr->ppr() >> 1});
     msg = *ppr->string();
   }
   inline const char *what() const noexcept override { return msg.c_str(); }
