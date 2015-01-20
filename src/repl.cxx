@@ -96,6 +96,9 @@ void Repl::process(Ptr<Decl> decl)
     } catch (Parser::ParseFail &e) {
       out() << e.what() << std::endl;
       input = "";
+    } catch (TCException &e) {
+      out() << e.what() << std::endl;
+      input = "";
     }
   }
 }
