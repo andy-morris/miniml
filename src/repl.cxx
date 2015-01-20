@@ -79,9 +79,9 @@ void Repl::process(Ptr<Decl> decl)
 [[noreturn]] void Repl::run()
 {
   String input, rest;
-  Parser p;
 
   while (true) {
+    Parser p;
     auto inp = get_next(rest);
     input = inp.first;
     rest = inp.second;
