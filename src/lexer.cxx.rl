@@ -43,6 +43,7 @@ EQUAL   = "==" $bump;
 GEQ     = ">=" $bump;
 GREATER = ">" $bump;
 NEQ     = "!=" $bump;
+SEQ     = ";" $bump;
 WS      = (space+ | ("//" . [^\n] . "\n")) $ws;
 
 token := |*
@@ -69,6 +70,7 @@ token := |*
   GEQ     => { push(ATOMIC(GEQ)); };
   GREATER => { push(ATOMIC(GREATER)); };
   NEQ     => { push(ATOMIC(NEQ)); };
+  SEQ     => { push(ATOMIC(SEQ)); };
   ID      => { push(ptr<IdToken>(ts, te - ts, start, end)); };
   INT     => {
     std::string str(ts, te - ts);

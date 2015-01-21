@@ -285,6 +285,7 @@ enum class BinOp
   PLUS, MINUS, TIMES, DIVIDE,
   LESS, LEQ, EQUAL, GEQ, GREATER, NEQ,
   AND, OR, IFF,
+  SEQ,
 };
 
 enum class OpAssoc { LEFT, NONE, RIGHT };
@@ -304,13 +305,15 @@ inline unsigned prec(BinOp op)
   case BinOp::GEQ:
   case BinOp::GREATER:
   case BinOp::NEQ:
-    return 3;
+    return 5;
   case BinOp::AND:
-    return 2;
+    return 4;
   case BinOp::OR:
-    return 1;
+    return 3;
   case BinOp::IFF:
-    return 0;
+    return 2;
+  case BinOp::SEQ:
+    return 1;
   }
 }
 
@@ -330,6 +333,7 @@ inline Ptr<Ppr> name(BinOp op)
   case BinOp::AND:     return "&&"_p;
   case BinOp::OR:      return "||"_p;
   case BinOp::IFF:     return "<->"_p;
+  case BinOp::SEQ:     return ';'_p;
   }
 }
 

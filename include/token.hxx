@@ -60,6 +60,8 @@ enum class Token::Type
   GEQ,      ///< `>=`
   GREATER,  ///< `>`
   NEQ,      ///< `!=`
+
+  SEQ,      ///< `;`
 };
 
 

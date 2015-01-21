@@ -80,6 +80,8 @@ namespace
         check_eq(v(e->left(), env), bool_, e->left());
         check_eq(v(e->right(), env), bool_, e->right());
         return bool_;
+      case BinOp::SEQ:
+        return v(e->right(), env);
       }
     }
 

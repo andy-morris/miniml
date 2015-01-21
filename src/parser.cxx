@@ -109,6 +109,7 @@ namespace
       CASE(GEQ);
       CASE(GREATER);
       CASE(NEQ);
+      CASE(SEQ);
 #undef CASE
     }
   }

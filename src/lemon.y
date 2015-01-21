@@ -47,6 +47,7 @@
 %nonassoc EQ.
 %right TYARROW.
 %nonassoc COLON.
+%left SEQ.
 %left FN.
 %right IFF.
 %right OR.
@@ -93,6 +94,8 @@ expr(X) ::= expr(L) GREATER expr(R).
   { X = new BinOpExpr(BinOp::GREATER, ptr(L), ptr(R), L->start(), R->end()); }
 expr(X) ::= expr(L) NEQ expr(R).
   { X = new BinOpExpr(BinOp::NEQ, ptr(L), ptr(R), L->start(), R->end()); }
+expr(X) ::= expr(L) SEQ expr(R).
+  { X = new BinOpExpr(BinOp::SEQ, ptr(L), ptr(R), L->start(), R->end()); }
 %destructor expr {delete $$;}
 
 %type aexprs {Expr*}

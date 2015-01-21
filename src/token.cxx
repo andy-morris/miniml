@@ -75,6 +75,7 @@ ATOMIC_OUT(EQUAL, "'=='")
 ATOMIC_OUT(GEQ, "'>='")
 ATOMIC_OUT(GREATER, "'>'")
 ATOMIC_OUT(NEQ, "'!='")
+ATOMIC_OUT(SEQ, "';'")
 #undef ATOMIC_OUT
 
 OStream &operator<<(OStream &out, const Token &tok)

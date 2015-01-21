@@ -95,6 +95,7 @@ namespace
       case BinOp::GEQ:     return int_cmp(greater_equal<long>());
       case BinOp::GREATER: return int_cmp(greater<long>());
       case BinOp::NEQ:     return int_cmp(not_equal_to<long>());
+      case BinOp::SEQ:     return r;
       }
     }
 
