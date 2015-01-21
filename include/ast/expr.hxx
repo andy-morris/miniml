@@ -26,6 +26,7 @@ enum class ExprType
   TYPE,    ///< Typed expression
   BINOP,   ///< Binary operator expression
   TUPLE,   ///< Tuple
+  DOT,     ///< Dot expression (tuple indexing)
   BUILTIN, ///< Builtin expression
 };
 
@@ -274,6 +275,33 @@ private:
 };
 
 
+class DotExpr final: public Expr
+{
+public:
+  DotExpr(const DotExpr&) = default;
+  DotExpr(DotExpr&&) = default;
+
+  DotExpr(Ptr<Expr> expr, unsigned index,
+              Pos start = Pos(), Pos end = Pos()):
+    Expr(start, end), m_expr(expr), m_index(index)
+  {}
+
+  inline ExprType type() const override { return ExprType::DOT; }
+
+  Ptr<Ppr> ppr(unsigned=0, bool pos = false) const override;
+
+  inline Ptr<Expr> expr() const { return m_expr; }
+  inline unsigned index() const { return m_index; }
+
+  inline Ptr<Expr> dup() const override
+  { return ptr<DotExpr>(expr()->dup(), index(), start(), end()); }
+
+private:
+  Ptr<Expr> m_expr;
+  unsigned m_index;
+};
+
+
 /// Builtin expressions for side effects.
 class BuiltinExpr final: public Expr
 {
@@ -441,6 +469,7 @@ struct ExprVisitor
       CASE(TYPE,    TypeExpr)
       CASE(BINOP,   BinOpExpr)
       CASE(TUPLE,   TupleExpr)
+      CASE(DOT,     DotExpr)
       CASE(BUILTIN, BuiltinExpr)
 #undef CASE
     }
@@ -454,6 +483,7 @@ struct ExprVisitor
   virtual Ptr<T> v(Ptr<TypeExpr>, Args...) = 0;
   virtual Ptr<T> v(Ptr<BinOpExpr>, Args...) = 0;
   virtual Ptr<T> v(Ptr<TupleExpr>, Args...) = 0;
+  virtual Ptr<T> v(Ptr<DotExpr>, Args...) = 0;
   virtual Ptr<T> v(Ptr<BuiltinExpr>, Args...) = 0;
 };
 

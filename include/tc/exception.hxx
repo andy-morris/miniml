@@ -2,6 +2,7 @@
 #define EXCEPTION_HXX_HZM9ECFD
 
 #include "../exception.hxx"
+#include "../ppr.hxx"
 
 namespace miniml
 {
@@ -42,6 +43,20 @@ struct NotArrow final: public TCException
   NotArrow(const Ptr<Type> t)
   {
     msg = *ppr::vcat({"not an arrow type:"_p, t->ppr() >> 1})->string();
+  }
+  inline const char *what() const noexcept override { return msg.c_str(); }
+  String msg;
+};
+
+struct CannotProject final: public TCException
+{
+  CannotProject(Ptr<Expr> expr, Ptr<Type> ty, unsigned index)
+  {
+    msg = *ppr::vcat({ppr::hcat({"cannot project element "_p, ppr::num(index),
+                                 "from the expression"_p}),
+                      expr->ppr() >> 1,
+                      "which has type"_p,
+                      ty->ppr() >> 1})->string();
   }
   inline const char *what() const noexcept override { return msg.c_str(); }
   String msg;

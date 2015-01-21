@@ -111,6 +111,7 @@ namespace
       CASE(NEQ);
       CASE(SEQ);
       CASE(COMMA);
+      CASE(DOT);
 #undef CASE
     }
   }

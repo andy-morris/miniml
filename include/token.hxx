@@ -63,6 +63,8 @@ enum class Token::Type
 
   SEQ,      ///< `;`
   COMMA,    ///< `,`
+
+  DOT,      ///< `.`
 };
 
 

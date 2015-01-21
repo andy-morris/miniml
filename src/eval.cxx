@@ -112,6 +112,19 @@ namespace
       return ptr<TupleExpr>(es);
     }
 
+    Ptr<Expr> v(Ptr<DotExpr> x, ENV env) override
+    {
+      auto y = v(x->expr(), env);
+      auto i = x->index();
+      if (y->type() == ExprType::TUPLE) {
+        auto tup = dyn_cast<TupleExpr>(y);
+        assert(tup->exprs()->size() > i);
+        return tup->exprs()->at(i);
+      } else {
+        return ptr<DotExpr>(y, i);
+      }
+    }
+
     Ptr<Expr> v(Ptr<BuiltinExpr> x, ENV env) override
     {
       if (x->need_arg()) {

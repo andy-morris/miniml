@@ -105,6 +105,13 @@ Ptr<Ppr> TupleExpr::ppr(unsigned, bool pos) const
 }
 
 
+Ptr<Ppr> DotExpr::ppr(unsigned, bool pos) const
+{
+  return pos_if(pos,
+                hcat({expr()->ppr(), '.'_p, ppr::num(index())}),
+                start(), end());
+}
+
 
 namespace
 {
@@ -154,6 +161,8 @@ namespace
       }
       return s1;
     }
+
+    inline Ret v(Ptr<DotExpr> e) override { return v(e->expr()); }
 
     Ret v(Ptr<BuiltinExpr> e) override
     {
@@ -244,6 +253,12 @@ namespace
         es->push_back(v(elt, x, arg, fv));
       }
       return ptr<TupleExpr>(es);
+    }
+
+    inline Ptr<Expr> v(Ptr<DotExpr> e, const Id x, Ptr<Expr> arg, FV::Ret fv)
+      override
+    {
+      return ptr<DotExpr>(v(e->expr(), x, arg, fv), e->index());
     }
 
     Ptr<Expr> v(Ptr<BuiltinExpr> e, const Id x, Ptr<Expr> arg, FV::Ret fv)

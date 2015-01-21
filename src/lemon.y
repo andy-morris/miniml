@@ -65,6 +65,7 @@
 %left LESS LEQ EQUAL GEQ GREATER NEQ.
 %left PLUS MINUS.
 %left TIMES DIVIDE.
+%left DOT.
 
 %type start {Decl*}
 start(X) ::= decl(A).
@@ -122,6 +123,8 @@ aexpr(X) ::= INT(I).
   { X = new IntExpr(get_int(I),  I->start(), I->end()); }
 aexpr(X) ::= bool(B).
   { X = B; }
+aexpr(X) ::= aexpr(E) DOT INT(I).
+  { X = new DotExpr(ptr(E), get_int(I), E->start(), I->end()); }
 aexpr(X) ::= LPAR expr(A) RPAR.
   { X = A; }
 aexpr(X) ::= LPAR(L) RPAR(R).

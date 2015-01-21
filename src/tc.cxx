@@ -95,6 +95,22 @@ namespace
       return ptr<TupleType>(ts);
     }
 
+    Ptr<Type> v(Ptr<DotExpr> e, Ptr<Env<Type>> env) override
+    {
+      auto ty = v(e->expr(), env);
+      auto i = e->index();
+      if (ty->type() == TypeType::TUPLE) {
+        auto tys = dyn_cast<TupleType>(ty)->tys();
+        if (i < tys->size()) {
+          return tys->at(i);
+        } else {
+          throw CannotProject(e, ty, i);
+        }
+      } else {
+        throw CannotProject(e, ty, i);
+      }
+    }
+
     Ptr<Type> v(Ptr<BuiltinExpr> e, Ptr<Env<Type>> env) override
     {
       auto ty = e->ty();
