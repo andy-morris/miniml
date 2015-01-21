@@ -93,6 +93,19 @@ Ptr<Expr> BuiltinExpr::dup() const
   return d;
 }
 
+Ptr<Ppr> TupleExpr::ppr(unsigned, bool pos) const
+{
+  auto pprs = ptr<std::list<Ptr<Ppr>>>();
+  for (auto e: *exprs()) {
+    pprs->push_back(e->ppr(0, pos));
+    pprs->push_back(", "_p);
+  }
+  pprs->pop_back(); // final comma
+  return pos_if(pos, parens_if(true, hcat(pprs)), start(), end());
+}
+
+
+
 namespace
 {
   /// Free variables
@@ -129,6 +142,16 @@ namespace
     {
       auto s1 = v(e->left()), s2 = v(e->right());
       s1->insert(s2->begin(), s2->end());
+      return s1;
+    }
+
+    Ret v(Ptr<TupleExpr> es) override
+    {
+      auto s1 = ptr<unordered_set<Id>>();
+      for (auto e: *es->exprs()) {
+        auto s2 = v(e);
+        s1->insert(s2->begin(), s2->end());
+      }
       return s1;
     }
 
@@ -210,6 +233,17 @@ namespace
       return ptr<BinOpExpr>(e->op(),
                             v(e->left(), x, arg, fv),
                             v(e->right(), x, arg, fv));
+    }
+
+    Ptr<Expr> v(Ptr<TupleExpr> e, const Id x, Ptr<Expr> arg, FV::Ret fv)
+      override
+    {
+      auto es = ptr<TupleExpr::Exprs>();
+      es->reserve(e->exprs()->size());
+      for (auto elt: *e->exprs()) {
+        es->push_back(v(elt, x, arg, fv));
+      }
+      return ptr<TupleExpr>(es);
     }
 
     Ptr<Expr> v(Ptr<BuiltinExpr> e, const Id x, Ptr<Expr> arg, FV::Ret fv)

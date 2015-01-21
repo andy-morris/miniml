@@ -25,6 +25,7 @@ enum class ExprType
   BOOL,    ///< Boolean literal
   TYPE,    ///< Typed expression
   BINOP,   ///< Binary operator expression
+  TUPLE,   ///< Tuple
   BUILTIN, ///< Builtin expression
 };
 
@@ -236,6 +237,43 @@ private:
 };
 
 
+class TupleExpr final: public Expr
+{
+public:
+  using Exprs = std::vector<Ptr<Expr>>;
+
+  TupleExpr(const TupleExpr&) = default;
+  TupleExpr(TupleExpr&&) = default;
+
+  TupleExpr(Ptr<Exprs> exprs,
+            Pos start = Pos(), Pos end = Pos()):
+    Expr(start, end), m_exprs(exprs)
+  {}
+
+  TupleExpr(std::initializer_list<Ptr<Expr>> exprs,
+            Pos start = Pos(), Pos end = Pos()):
+    TupleExpr(ptr<Exprs>(exprs), start, end)
+  {}
+
+  inline ExprType type() const override { return ExprType::TUPLE; }
+
+  Ptr<Ppr> ppr(unsigned prec = 0, bool pos = false) const override;
+
+  inline Ptr<Exprs> exprs() const { return m_exprs; }
+
+  inline Ptr<Expr> dup() const override
+  {
+    auto es = ptr<Exprs>();
+    es->reserve(exprs()->size());
+    for (auto e: *exprs()) { es->push_back(e->dup()); }
+    return ptr<TupleExpr>(es, start(), end());
+  }
+
+private:
+  Ptr<Exprs> m_exprs;
+};
+
+
 /// Builtin expressions for side effects.
 class BuiltinExpr final: public Expr
 {
@@ -402,6 +440,7 @@ struct ExprVisitor
       CASE(BOOL,    BoolExpr)
       CASE(TYPE,    TypeExpr)
       CASE(BINOP,   BinOpExpr)
+      CASE(TUPLE,   TupleExpr)
       CASE(BUILTIN, BuiltinExpr)
 #undef CASE
     }
@@ -414,6 +453,7 @@ struct ExprVisitor
   virtual Ptr<T> v(Ptr<LamExpr>, Args...) = 0;
   virtual Ptr<T> v(Ptr<TypeExpr>, Args...) = 0;
   virtual Ptr<T> v(Ptr<BinOpExpr>, Args...) = 0;
+  virtual Ptr<T> v(Ptr<TupleExpr>, Args...) = 0;
   virtual Ptr<T> v(Ptr<BuiltinExpr>, Args...) = 0;
 };
 

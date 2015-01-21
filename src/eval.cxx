@@ -102,7 +102,17 @@ namespace
     inline Ptr<Expr> v(Ptr<TypeExpr> x, ENV env) override
     { return v(x->expr(), env); }
 
-    inline Ptr<Expr> v(Ptr<BuiltinExpr> x, ENV env) override
+    Ptr<Expr> v(Ptr<TupleExpr> x, ENV env) override
+    {
+      auto es = ptr<TupleExpr::Exprs>();
+      es->reserve(x->exprs()->size());
+      for (auto e: *x->exprs()) {
+        es->push_back(v(e, env));
+      }
+      return ptr<TupleExpr>(es);
+    }
+
+    Ptr<Expr> v(Ptr<BuiltinExpr> x, ENV env) override
     {
       if (x->need_arg()) {
         return x;

@@ -85,6 +85,16 @@ namespace
       }
     }
 
+    Ptr<Type> v(Ptr<TupleExpr> es, Ptr<Env<Type>> env) override
+    {
+      auto ts = ptr<TupleType::Types>();
+      ts->reserve(es->exprs()->size());
+      for (auto e: *es->exprs()) {
+        ts->push_back(v(e, env));
+      }
+      return ptr<TupleType>(ts);
+    }
+
     Ptr<Type> v(Ptr<BuiltinExpr> e, Ptr<Env<Type>> env) override
     {
       auto ty = e->ty();

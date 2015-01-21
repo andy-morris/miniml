@@ -124,7 +124,18 @@ aexpr(X) ::= bool(B).
   { X = B; }
 aexpr(X) ::= LPAR expr(A) RPAR.
   { X = A; }
+aexpr(X) ::= LPAR(L) RPAR(R).
+  { X = new TupleExpr({}, L->start(), R->end()); }
+aexpr(X) ::= LPAR(L) expr2(E) RPAR(R).
+  { X = new TupleExpr(ptr(vec(E)), L->start(), R->end()); }
 %destructor aexpr {delete $$;}
+
+%type expr2 {std::deque<Ptr<Expr>>*}
+expr2(X) ::= expr(A) COMMA expr(B).
+  { X = new std::deque<Ptr<Expr>>({ptr(A), ptr(B)}); }
+expr2(X) ::= expr(A) COMMA expr2(B).
+  { B->push_front(ptr(A)); X = B; }
+%destructor expr2 {delete $$;}
 
 %type bool {Expr*}
 bool(X) ::= TRUE(T).
