@@ -11,6 +11,25 @@
 namespace miniml
 {
 
+enum class InputType { DECL, EXPR };
+struct Input
+{
+  virtual ~Input() {}
+  virtual InputType type() const = 0;
+};
+struct DeclInput final: public Input
+{
+  DeclInput(Ptr<Decl> d): decl(d) {}
+  inline InputType type() const override { return InputType::DECL; }
+  Ptr<Decl> decl;
+};
+struct ExprInput final: public Input
+{
+  ExprInput(Ptr<Expr> e): expr(e) {}
+  inline InputType type() const override { return InputType::EXPR; }
+  Ptr<Expr> expr;
+};
+
 struct Parser final
 {
   Parser();
@@ -23,9 +42,9 @@ struct Parser final
     String msg;
   };
 
-  Ptr<Decl> parse(const String&)
+  Ptr<Input> parse(const String&)
     throw(ParseFail, Lexer::LexicalError);
-  Ptr<Decl> parse(const std::vector<Ptr<Token>>&)
+  Ptr<Input> parse(const std::vector<Ptr<Token>>&)
     throw(ParseFail);
 
 private:

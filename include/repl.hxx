@@ -3,6 +3,7 @@
 
 #include "string.hxx"
 #include "ptr.hxx"
+#include "parser.hxx"
 #include "ast.hxx"
 #include "env.hxx"
 #include "init_env.hxx"
@@ -27,6 +28,8 @@ public:
 private:
   void prompt_line(String&);
   std::pair<String, String> get_next(String);
+  void process(Ptr<Input> decl);
+  void process(Ptr<Expr> decl);
   void process(Ptr<Decl> decl);
 
   [[noreturn]] inline void quit() { std::exit(0); }

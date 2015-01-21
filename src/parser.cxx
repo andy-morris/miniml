@@ -7,7 +7,7 @@ using namespace miniml;
 
 void *MiniMLParserAlloc(void* (*)(size_t));
 void MiniMLParserFree(void*, void(*)(void*));
-void MiniMLParser(void*, int, Token*, Decl**);
+void MiniMLParser(void*, int, Token*, Input**);
 
 #ifndef NDEBUG
 void MiniMLParserTrace(FILE*, char*);
@@ -43,16 +43,16 @@ Parser::Parser():
   parser(MiniMLParserAlloc(&std::malloc))
 { }
 
-Ptr<Decl> Parser::parse(const String &input)
+Ptr<Input> Parser::parse(const String &input)
   throw(Parser::ParseFail, Lexer::LexicalError)
 {
   return parse(Lexer(input).tokens());
 }
 
-Ptr<Decl> Parser::parse(const std::vector<Ptr<Token>>& toks)
+Ptr<Input> Parser::parse(const std::vector<Ptr<Token>>& toks)
   throw(Parser::ParseFail)
 {
-  Decl *decl = nullptr;
+  Input *input = nullptr;
 
 #ifndef NDEBUG
   // lemon forgot a const :(
@@ -62,11 +62,11 @@ Ptr<Decl> Parser::parse(const std::vector<Ptr<Token>>& toks)
   Token *tok;
   for (auto it = begin(toks); it != end(toks); ++it) {
     tok = it->get();
-    MiniMLParser(parser, token_id(*tok), tok, &decl);
+    MiniMLParser(parser, token_id(*tok), tok, &input);
   }
-  MiniMLParser(parser, 0, nullptr, &decl);
+  MiniMLParser(parser, 0, nullptr, &input);
 
-  return Ptr<Decl>(decl);
+  return Ptr<Input>(input);
 }
 
 Parser::~Parser()

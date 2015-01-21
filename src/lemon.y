@@ -45,7 +45,7 @@
 }
 
 %name MiniMLParser
-%extra_argument {Decl **decl}
+%extra_argument {Input **input}
 
 %syntax_error {
   throw Parser::ParseFail(yyminor.yy0);
@@ -67,9 +67,11 @@
 %left TIMES DIVIDE.
 %left DOT.
 
-%type start {Decl*}
+%type start {Input*}
 start(X) ::= decl(A).
-  { *decl = X = A; }
+  { *input = X = new DeclInput(ptr(A)); }
+start(X) ::= expr(A).
+  { *input = X = new ExprInput(ptr(A)); }
 %destructor start {delete $$;}
 
 %type expr {Expr*}

@@ -24,8 +24,8 @@ void Repl::prompt_line(String &into)
   cout << prompt();
   flush(cout);
   try {
-    std::getline(cin, into);
-  } catch (std::ios_base::failure) {
+    getline(cin, into);
+  } catch (ios_base::failure) {
     if (cin.eof()) {
       quit();
     } else {
@@ -35,7 +35,7 @@ void Repl::prompt_line(String &into)
 }
 
 
-std::pair<String, String>
+pair<String, String>
 Repl::get_next(String rest)
 {
   String input(move(rest));
@@ -59,8 +59,32 @@ Repl::get_next(String rest)
   assert(input[semi]   == ';' &&
          input[semi+1] == ';');
 
-  return std::make_pair(input.substr(0, semi), input.substr(semi+2));
+  return make_pair(input.substr(0, semi), input.substr(semi+2));
 }
+
+void Repl::process(Ptr<Input> inp)
+{
+  switch (inp->type()) {
+  case InputType::DECL:
+    process(dyn_cast<DeclInput>(inp)->decl);
+    break;
+  case InputType::EXPR:
+    process(dyn_cast<ExprInput>(inp)->expr);
+    break;
+  }
+}
+
+
+void Repl::process(Ptr<Expr> expr)
+{
+  using namespace ppr;
+
+  auto ty = type_of(expr, type_env());
+  auto nf = eval(expr, value_env());
+
+  cout << *vcat({nf->ppr(), hcat({':'_p, ty->ppr() >> 1})}) << endl;
+}
+
 
 void Repl::process(Ptr<Decl> decl)
 {
@@ -75,9 +99,10 @@ void Repl::process(Ptr<Decl> decl)
     auto msg = vcat({hcat({"val"_p, +val->name().ppr(),
                            ':'_p, +ty->ppr(), +'='_p}),
                      def->ppr() >> 1});
-    cout << *msg << std::endl;
+    cout << *msg << endl;
   }
 }
+
 
 [[noreturn]] void Repl::run()
 {
@@ -85,22 +110,22 @@ void Repl::process(Ptr<Decl> decl)
 
   while (true) {
     Parser p;
-    auto inp = get_next(rest);
-    input = inp.first;
-    rest = inp.second;
+    auto input_pair = get_next(rest);
+    input = input_pair.first;
+    rest = input_pair.second;
 
-    Ptr<Decl> decl;
+    Ptr<Input> inp;
     try {
-      decl = p.parse(input);
-      process(decl);
+      inp = p.parse(input);
+      process(inp);
     } catch (Lexer::LexicalError &e) {
-      cout << e.what() << std::endl;
+      cout << e.what() << endl;
       input = "";
     } catch (Parser::ParseFail &e) {
-      cout << e.what() << std::endl;
+      cout << e.what() << endl;
       input = "";
     } catch (TCException &e) {
-      cout << e.what() << std::endl;
+      cout << e.what() << endl;
       input = "";
     }
   }
