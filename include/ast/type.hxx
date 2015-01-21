@@ -116,7 +116,7 @@ public:
   Ptr<Ppr> ppr(unsigned prec = 0, bool pos = false) const override;
 
   inline Ptr<Type> dup() const override
-  { return ptr<ArrowType>(left(), right(), start(), end()); }
+  { return ptr<ArrowType>(left()->dup(), right()->dup(), start(), end()); }
 
   inline Ptr<Type> left() const { return m_left; }
   inline Ptr<Type> right() const { return m_right; }

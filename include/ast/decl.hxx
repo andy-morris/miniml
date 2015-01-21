@@ -39,7 +39,7 @@ public:
   Ptr<Ppr> ppr(unsigned=0, bool pos = false) const;
 
   inline Ptr<Decl> dup() const
-  { return ptr<ValDecl>(name(), def(), start(), end()); }
+  { return ptr<ValDecl>(name(), def()->dup(), start(), end()); }
 
   inline Id name() const { return m_name; }
   inline Ptr<Expr> def() const { return m_def; }

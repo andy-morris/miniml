@@ -193,7 +193,7 @@ public:
   inline void set_env(Ptr<Env<Expr>> env) { m_env = env; }
 
   inline Ptr<Expr> dup() const override
-  { return ptr<LamExpr>(var(), ty(), body()->dup(), start(), end()); }
+  { return ptr<LamExpr>(var(), ty()->dup(), body()->dup(), start(), end()); }
 
 private:
   Id m_var;           ///< Bound variable.
@@ -228,7 +228,7 @@ public:
   inline Ptr<Type> ty() const { return m_ty; }
 
   inline Ptr<Expr> dup() const override
-  { return ptr<TypeExpr>(expr()->dup(), ty(), start(), end()); }
+  { return ptr<TypeExpr>(expr()->dup(), ty()->dup(), start(), end()); }
 
 private:
   Ptr<Expr> m_expr; ///< Expression.
@@ -367,7 +367,7 @@ public:
   virtual Ptr<Ppr> ppr(unsigned prec = 0, bool pos = false) const override;
 
   inline Ptr<Expr> dup() const override
-  { return ptr<BinOpExpr>(op(), left(), right()); }
+  { return ptr<BinOpExpr>(op(), left()->dup(), right()->dup()); }
 
   inline BinOp op() const { return m_op; }
   inline Ptr<Expr> left() const { return m_left; }
