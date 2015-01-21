@@ -10,9 +10,6 @@
 #include <fstream>
 #include <string>
 
-using namespace std;
-using namespace miniml;
-
 /*
 namespace
 {
@@ -33,5 +30,5 @@ namespace
 
 int main(int, char**)
 {
-  Repl(cout, cin).run();
+  miniml::Repl().run();
 }

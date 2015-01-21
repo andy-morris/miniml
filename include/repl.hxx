@@ -5,22 +5,15 @@
 #include "ptr.hxx"
 #include "ast.hxx"
 #include "env.hxx"
+#include "init_env.hxx"
 
 namespace miniml
 {
 
-struct EnvEntry final
-{
-  EnvEntry(Ptr<Type> t, Ptr<Expr> v): type(t), value(v) {}
-
-  Ptr<Type> type;
-  Ptr<Expr> value;
-};
-
 class Repl final
 {
 public:
-  Repl(OStream &out, IStream &in);
+  Repl();
 
   [[noreturn]] void run();
 
@@ -31,9 +24,6 @@ public:
   inline Ptr<Env<Type>> type_env() const;
   inline Ptr<Env<Expr>> value_env() const;
 
-  inline OStream &out() { return m_out; }
-  inline IStream &in() { return m_in; }
-
 private:
   void prompt_line(String&);
   std::pair<String, String> get_next(String);
@@ -43,9 +33,6 @@ private:
 
   String m_prompt;
   Ptr<Env<EnvEntry>> m_env;
-
-  OStream &m_out;
-  IStream &m_in;
 };
 
 

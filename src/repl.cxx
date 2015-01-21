@@ -9,22 +9,24 @@
 namespace miniml
 {
 
-Repl::Repl(OStream &out, IStream &in):
-  m_prompt("> "), m_out(out), m_in(in)
+namespace { using namespace std; }
+
+Repl::Repl():
+  m_prompt("> ")
 {
-  m_env = ptr<Env<EnvEntry>>();
-  in.exceptions(in.badbit | in.failbit);
+  m_env = init_val_env();
+  cin.exceptions(cin.badbit | cin.failbit);
 }
 
 
 void Repl::prompt_line(String &into)
 {
-  out() << prompt();
-  std::flush(out());
+  cout << prompt();
+  flush(cout);
   try {
-    std::getline(in(), into);
+    std::getline(cin, into);
   } catch (std::ios_base::failure) {
-    if (in().eof()) {
+    if (cin.eof()) {
       quit();
     } else {
       throw;
@@ -73,7 +75,7 @@ void Repl::process(Ptr<Decl> decl)
     auto msg = hcat({"val"_p, +val->name().ppr(),
                      ':'_p, +ty->ppr(),
                      +'='_p, +def->ppr()});
-    out() << *msg << std::endl;
+    cout << *msg << std::endl;
   }
 }
 
@@ -92,13 +94,13 @@ void Repl::process(Ptr<Decl> decl)
       decl = p.parse(input);
       process(decl);
     } catch (Lexer::LexicalError &e) {
-      out() << e.what() << std::endl;
+      cout << e.what() << std::endl;
       input = "";
     } catch (Parser::ParseFail &e) {
-      out() << e.what() << std::endl;
+      cout << e.what() << std::endl;
       input = "";
     } catch (TCException &e) {
-      out() << e.what() << std::endl;
+      cout << e.what() << std::endl;
       input = "";
     }
   }
