@@ -47,6 +47,33 @@ Ptr<Ppr> ArrowType::ppr(unsigned prec, bool pos) const
 }
 
 
+bool TupleType::operator==(const Type &other) const
+{
+  if (type() == other.type()) {
+    auto other0 = dynamic_cast<const TupleType&>(other);
+    auto it1 = tys()->begin();
+    auto it2 = other0.tys()->begin();
+    for (; it1 != tys()->end() && it2 != other0.tys()->end();
+           ++it1, ++it2) {
+      if (*it1 != *it2) return false;
+    }
+    return (it1 == tys()->end() && it2 == other0.tys()->end());
+  }
+  return false;
+}
+
+Ptr<Ppr> TupleType::ppr(unsigned, bool pos) const
+{
+  auto pprs = ptr<std::list<Ptr<Ppr>>>();
+  for (auto e: *tys()) {
+    pprs->push_back(e->ppr(0, pos));
+    pprs->push_back(", "_p);
+  }
+  pprs->pop_back(); // final comma
+  return pos_if(pos, parens_if(true, hcat(pprs)), start(), end());
+}
+
+
 namespace
 {
   struct TypeNF final: public TypeVisitor<Type, Ptr<Env<Type>>>

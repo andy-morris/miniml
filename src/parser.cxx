@@ -110,6 +110,7 @@ namespace
       CASE(GREATER);
       CASE(NEQ);
       CASE(SEQ);
+      CASE(COMMA);
 #undef CASE
     }
   }

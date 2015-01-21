@@ -62,6 +62,7 @@ enum class Token::Type
   NEQ,      ///< `!=`
 
   SEQ,      ///< `;`
+  COMMA,    ///< `,`
 };
 
 

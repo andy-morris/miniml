@@ -72,9 +72,9 @@ void Repl::process(Ptr<Decl> decl)
     auto ty = type_of(val->def(), type_env());
     auto def = eval(val->def(), value_env());
     env()->insert(val->name(), ptr<EnvEntry>(ty, def));
-    auto msg = hcat({"val"_p, +val->name().ppr(),
-                     ':'_p, +ty->ppr(),
-                     +'='_p, +def->ppr()});
+    auto msg = vcat({hcat({"val"_p, +val->name().ppr(),
+                           ':'_p, +ty->ppr(), +'='_p}),
+                     def->ppr() >> 1});
     cout << *msg << std::endl;
   }
 }

@@ -28,6 +28,16 @@
         return new IdType(*i, i->start(), i->end());
       }
     }
+
+    template <typename T>
+    inline std::vector<T> *vec(std::deque<T> *deq)
+    {
+      auto v = new std::vector<T>;
+      v->reserve(deq->size());
+      for (auto x: *deq) { v->push_back(x); }
+      delete deq;
+      return v;
+    }
   }
 
 #pragma clang diagnostic ignored "-Wunused-variable"
@@ -129,8 +139,23 @@ type(X) ::= id(I).
   { X = id_type(I); }
 type(X) ::= type(L) TYARROW type(R).
   { X = new ArrowType(ptr(L), ptr(R),  L->start(), R->end()); }
+type(X) ::= LPAR types(T) RPAR.
+  { X = new TupleType(ptr(T), T->front()->start(), T->back()->end()); }
 %destructor type {delete $$;}
 
+%type types {TupleType::Types*}
+types(X) ::= .
+  { X = new TupleType::Types; }
+types(X) ::= types1(T).
+  { X = vec(T); }
+%destructor types {delete $$;}
+
+%type types1 {std::deque<Ptr<Type>>*}
+types1(X) ::= type(T).
+  { X = new std::deque<Ptr<Type>>({ptr(T)}); }
+types1(X) ::= type(T) COMMA types1(U).
+  { U->push_front(ptr(T)); X = U; }
+%destructor types1 {delete $$;}
 
 %type id {Id*}
 id(X) ::= ID(I).

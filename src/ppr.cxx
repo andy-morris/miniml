@@ -90,14 +90,16 @@ namespace ppr
   }
 
   Ptr<Ppr> vcat(std::initializer_list<Ptr<Ppr>> pprs)
-  {
-    return ptr<PprVCat>(pprs);
-  }
+  { return ptr<PprVCat>(pprs); }
+
+  Ptr<Ppr> vcat(Ptr<std::list<Ptr<Ppr>>> pprs)
+  { return ptr<PprVCat>(pprs); }
 
   Ptr<Ppr> hcat(std::initializer_list<Ptr<Ppr>> pprs)
-  {
-    return ptr<PprHCat>(pprs);
-  }
+  { return ptr<PprHCat>(pprs); }
+
+  Ptr<Ppr> hcat(Ptr<std::list<Ptr<Ppr>>> pprs)
+  { return ptr<PprHCat>(pprs); }
 }
 
 

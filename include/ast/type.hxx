@@ -8,6 +8,7 @@
 #include "ppr.hxx"
 #include "env.hxx"
 #include "visitor.hxx"
+#include <vector>
 
 namespace miniml
 {
@@ -18,6 +19,7 @@ enum class TypeType
   INT,
   BOOL,
   ARROW,
+  TUPLE,
 };
 
 class Type: public Pretty, public HasPos, public Dup<Type>
@@ -126,6 +128,40 @@ private:
 };
 
 
+class TupleType final: public Type
+{
+public:
+  using Types = std::vector<Ptr<Type>>;
+
+  TupleType(const TupleType&) = default;
+  TupleType(TupleType&&) = default;
+
+  TupleType(const std::initializer_list<Ptr<Type>> tys,
+            Pos start = Pos(), Pos end = Pos()):
+    TupleType(ptr<std::vector<Ptr<Type>>>(tys), start, end)
+  {}
+
+  TupleType(Ptr<std::vector<Ptr<Type>>> tys,
+            Pos start = Pos(), Pos end = Pos()):
+    Type(start, end), m_tys(tys)
+  {}
+
+  inline TypeType type() const override { return TypeType::TUPLE; }
+
+  bool operator==(const Type &other) const override;
+
+  Ptr<Ppr> ppr(unsigned prec = 0, bool pos = false) const override;
+
+  inline Ptr<Type> dup() const override
+  { return ptr<TupleType>(ptr<Types>(*tys())); }
+
+  inline Ptr<Types> tys() const { return m_tys; }
+
+private:
+  Ptr<Types> m_tys;
+};
+
+
 template <typename T, typename... Args>
 struct TypeVisitor
 {
@@ -142,6 +178,7 @@ struct TypeVisitor
       CASE(INT, IntType)
       CASE(BOOL, BoolType)
       CASE(ARROW, ArrowType)
+      CASE(TUPLE, TupleType)
 #undef CASE
     }
   }

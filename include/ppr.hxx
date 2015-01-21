@@ -86,6 +86,10 @@ protected:
     m_children(ptr<List<Ptr<Ppr>>>(lst))
   {}
 
+  PprCat(Ptr<List<Ptr<Ppr>>> lst):
+    m_children(lst)
+  {}
+
   Ptr<List<Ptr<Ppr>>> m_children;
 };
 
@@ -98,6 +102,10 @@ public:
     PprCat(lst)
   {}
 
+  PprVCat(Ptr<List<Ptr<Ppr>>> lst):
+    PprCat(lst)
+  {}
+
   void output(OStream&, unsigned indent = 0) const override;
 };
 
@@ -107,6 +115,10 @@ class PprHCat: public PprCat
 {
 public:
   PprHCat(std::initializer_list<Ptr<Ppr>> lst):
+    PprCat(lst)
+  {}
+
+  PprHCat(Ptr<List<Ptr<Ppr>>> lst):
     PprCat(lst)
   {}
 
@@ -132,8 +144,10 @@ namespace ppr
   Ptr<Ppr> parens_if(bool b, const Ptr<Ppr> ppr);
   /// Concatenate vertically.
   Ptr<Ppr> vcat(std::initializer_list<Ptr<Ppr>> pprs);
+  Ptr<Ppr> vcat(Ptr<std::list<Ptr<Ppr>>> pprs);
   /// Concatenate horizontally.
   Ptr<Ppr> hcat(std::initializer_list<Ptr<Ppr>> pprs);
+  Ptr<Ppr> hcat(Ptr<std::list<Ptr<Ppr>>> pprs);
 }
 
 /// Indent a \ref Ppr by a multiple of \ref Ppr::default_indent.
