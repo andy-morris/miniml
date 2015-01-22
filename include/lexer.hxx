@@ -5,6 +5,7 @@
 #include "string.hxx"
 #include "exception.hxx"
 #include <vector>
+#include <deque>
 
 namespace miniml
 {
@@ -30,7 +31,7 @@ private:
   Pos start, end;
 
   /// The tokens.
-  std::vector<Ptr<Token>> m_tokens;
+  std::deque<Ptr<Token>> m_tokens;
 
   /// Add a token to the vector.
   void push(Ptr<Token> &&tok);
