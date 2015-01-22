@@ -3,33 +3,6 @@
 namespace miniml
 {
 
-Pos Pos::operator+(const char c) const
-{
-  Pos p2 = *this;
-  p2 += c;
-  return p2;
-}
-
-Pos &Pos::operator+=(const char c)
-{
-  ++pos;
-  switch (c) {
-    case '\n':
-    case '\r':
-    case '\f': // form feed
-    case '\v': // vertical tab
-      ++line;
-      col = 0;
-      break;
-    case '\t':
-      col += 8 - (col % 8);
-      break;
-    default:
-      ++col;
-  }
-  return *this;
-}
-
 OStream &operator<<(OStream &out, const Pos &p)
 {
   return out << p.line << ':' << p.col;

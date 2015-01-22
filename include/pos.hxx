@@ -12,8 +12,11 @@ struct Pos final: public Pretty
          col = 0,   ///< Column number
          pos = 0;   ///< File position
 
-  Pos operator+(const char c) const;
-  Pos &operator+=(const char c);
+  Pos operator+(const char) const;
+  Pos &operator+=(const char);
+
+  Pos operator+(const String&) const;
+  Pos &operator+=(const String&);
 
   inline Ptr<Ppr> ppr(unsigned=0, bool=false) const override
   { return ppr::hcat({ppr::num(line), ":"_p, ppr::num(col)}); }
