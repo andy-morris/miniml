@@ -44,7 +44,7 @@ Parser::Parser():
 { }
 
 Ptr<Input> Parser::parse(const String &input)
-  throw(Parser::ParseFail, Lexer::LexicalError)
+  throw(Parser::ParseFail, LexicalError)
 {
   return parse(Lexer(input).tokens());
 }

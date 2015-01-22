@@ -43,7 +43,7 @@ struct Parser final
   };
 
   Ptr<Input> parse(const String&)
-    throw(ParseFail, Lexer::LexicalError);
+    throw(ParseFail, LexicalError);
   Ptr<Input> parse(const std::vector<Ptr<Token>>&)
     throw(ParseFail);
 

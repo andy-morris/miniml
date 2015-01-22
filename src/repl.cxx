@@ -118,7 +118,7 @@ void Repl::process(Ptr<Decl> decl)
     try {
       inp = p.parse(input);
       process(inp);
-    } catch (Lexer::LexicalError &e) {
+    } catch (LexicalError &e) {
       cout << e.what() << endl;
       input = "";
     } catch (Parser::ParseFail &e) {

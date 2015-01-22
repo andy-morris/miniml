@@ -15,32 +15,11 @@ namespace miniml
 class Lexer
 {
 public:
-  /// Exception thrown when a lexical error is enountered.
-  struct LexicalError: public Exception
-  {
-    virtual ~LexicalError() {}
-
-    LexicalError(char c_, Pos pos_);
-
-    /// \return the value of \ref text.
-    virtual const char *what() const noexcept override
-    { return text.c_str(); }
-
-    /// The text of the exception. \sa what
-    std::string text;
-    /// The character at the position the error occurred.
-    char c;
-    /// The position that the error occurred.
-    Pos pos;
-  };
-
-
   /// Creates a Lexer over the given string.
   Lexer(const String&) throw(LexicalError);
 
   /// \return The tokens read.
-  std::vector<Ptr<Token>> &tokens()
-  { return m_tokens; }
+  std::vector<Ptr<Token>> tokens() const;
 
 private:
   // values used by Ragel {
