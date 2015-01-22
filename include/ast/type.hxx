@@ -176,12 +176,13 @@ struct TypeVisitor
     switch (t->type()) {
 #define CASE(x,T) \
       case TypeType::x: \
-        return v(std::dynamic_pointer_cast<T>(t), args...);
-      CASE(ID, IdType)
-      CASE(INT, IntType)
-      CASE(BOOL, BoolType)
-      CASE(ARROW, ArrowType)
-      CASE(TUPLE, TupleType)
+        return v(std::dynamic_pointer_cast<T>(t), args...)
+      CASE(ID, IdType);
+      CASE(INT, IntType);
+      CASE(STRING, StringType);
+      CASE(BOOL, BoolType);
+      CASE(ARROW, ArrowType);
+      CASE(TUPLE, TupleType);
 #undef CASE
     }
   }
