@@ -11,6 +11,7 @@
 #include <unordered_set>
 #include <deque>
 #include <functional>
+#include <utility>
 
 namespace miniml
 {
@@ -23,6 +24,7 @@ enum class ExprType
   LAM,     ///< Lambda term
   INT,     ///< Integer literal
   BOOL,    ///< Boolean literal
+  STRING,  ///< String literal
   TYPE,    ///< Typed expression
   BINOP,   ///< Binary operator expression
   TUPLE,   ///< Tuple
@@ -130,6 +132,45 @@ public:
 
 private:
   bool m_val;
+};
+
+
+/// String literals.
+class StringExpr final: public Expr
+{
+public:
+  StringExpr(const StringExpr&) = default;
+  StringExpr(StringExpr&&) = default;
+
+  /// \param[in] val The value of this literal.
+  StringExpr(Ptr<String> val, Pos start = Pos(), Pos end = Pos()):
+    Expr(start, end), m_val(val)
+  {}
+
+  /// \param[in] val The value of this literal.
+  StringExpr(String &&val, Pos start = Pos(), Pos end = Pos()):
+    Expr(start, end), m_val(ptr<String>(std::forward<String>(val)))
+  {}
+
+  /// \param[in] val The value of this literal.
+  StringExpr(const String &val, Pos start = Pos(), Pos end = Pos()):
+    Expr(start, end), m_val(ptr<String>(val))
+  {}
+
+  /// \return ExprType::STRING
+  inline ExprType type() const override { return ExprType::STRING; }
+
+  /// \param prec Ignored, since literals are always atomic.
+  Ptr<Ppr> ppr(unsigned prec = 0, bool pos = false) const override;
+
+  /// \return The value of this literal.
+  inline Ptr<String> val() const { return m_val; }
+
+  inline Ptr<Expr> dup() const override
+  { return ptr<StringExpr>(val(), start(), end()); }
+
+private:
+  Ptr<String> m_val;
 };
 
 
@@ -466,6 +507,7 @@ struct ExprVisitor
       CASE(LAM,     LamExpr)
       CASE(INT,     IntExpr)
       CASE(BOOL,    BoolExpr)
+      CASE(STRING,  StringExpr)
       CASE(TYPE,    TypeExpr)
       CASE(BINOP,   BinOpExpr)
       CASE(TUPLE,   TupleExpr)
@@ -479,6 +521,7 @@ struct ExprVisitor
   virtual Ptr<T> v(Ptr<AppExpr>, Args...) = 0;
   virtual Ptr<T> v(Ptr<IntExpr>, Args...) = 0;
   virtual Ptr<T> v(Ptr<BoolExpr>, Args...) = 0;
+  virtual Ptr<T> v(Ptr<StringExpr>, Args...) = 0;
   virtual Ptr<T> v(Ptr<LamExpr>, Args...) = 0;
   virtual Ptr<T> v(Ptr<TypeExpr>, Args...) = 0;
   virtual Ptr<T> v(Ptr<BinOpExpr>, Args...) = 0;

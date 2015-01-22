@@ -18,6 +18,7 @@ enum class TypeType
   ID,
   INT,
   BOOL,
+  STRING,
   ARROW,
   TUPLE,
 };
@@ -100,6 +101,27 @@ public:
 
   inline Ptr<Type> dup() const override
   { return ptr<BoolType>(); }
+};
+
+
+class StringType final: public Type
+{
+public:
+  StringType(const StringType &other) = default;
+  StringType(StringType &&other) = default;
+
+  StringType(Pos start = Pos(), Pos end = Pos()): Type(start, end) {}
+
+  inline TypeType type() const override { return TypeType::STRING; }
+
+  inline bool operator==(const Type &other) const override
+  { return other.type() == type(); }
+
+  inline Ptr<Ppr> ppr(unsigned=0, bool pos = false) const override
+  { return ppr::pos_if(pos, "string"_p, start(), end()); }
+
+  inline Ptr<Type> dup() const override
+  { return ptr<StringType>(); }
 };
 
 

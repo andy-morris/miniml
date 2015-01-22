@@ -1,3 +1,4 @@
+#include "token.hxx"
 #include "ast/expr.hxx"
 #include <sstream>
 #include <cassert>
@@ -23,6 +24,13 @@ Ptr<Ppr> IntExpr::ppr(unsigned, bool pos) const
 Ptr<Ppr> BoolExpr::ppr(unsigned, bool pos) const
 {
   return pos_if(pos, bool_(val()), start(), end());
+}
+
+
+Ptr<Ppr> StringExpr::ppr(unsigned, bool pos) const
+{
+  return pos_if(pos, hcat({'"'_p, string(escaped(*val())), '"'_p}),
+                start(), end());
 }
 
 
@@ -125,6 +133,7 @@ namespace
     Ret v(Ptr<IdExpr> i) override { return single(i->id()); }
     Ret v(Ptr<IntExpr>) override { return Ret(); }
     Ret v(Ptr<BoolExpr>) override { return Ret(); }
+    Ret v(Ptr<StringExpr>) override { return Ret(); }
 
     Ret v(Ptr<AppExpr> e) override
     {
@@ -203,6 +212,10 @@ namespace
 
     Ptr<Expr> v(Ptr<BoolExpr> e, const Id, Ptr<Expr>, FV::Ret) override
     { return e; }
+
+    Ptr<Expr> v(Ptr<StringExpr> e, const Id, Ptr<Expr>, FV::Ret) override
+    { return e; }
+
 
     Ptr<Expr> v(Ptr<LamExpr> e, const Id x, Ptr<Expr> arg, FV::Ret fv) override
     {

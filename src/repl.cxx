@@ -82,7 +82,7 @@ void Repl::process(Ptr<Expr> expr)
   auto ty = type_of(expr, type_env());
   auto nf = eval(expr, value_env());
 
-  cout << *vcat({nf->ppr(), hcat({':'_p, ty->ppr() >> 1})}) << endl;
+  cout << *vcat({nf->ppr(), hcat({": "_p, ty->ppr()}) >> 1}) << endl;
 }
 
 

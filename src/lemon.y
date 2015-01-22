@@ -18,6 +18,9 @@
     inline long get_int(Token *t)
     { return dynamic_cast<IntToken*>(t)->val; }
 
+    inline String get_string(Token *t)
+    { return dynamic_cast<StringToken*>(t)->val; }
+
     inline Type *id_type(Id *i)
     {
       if (*i == String("int")) {
@@ -125,6 +128,8 @@ aexpr(X) ::= INT(I).
   { X = new IntExpr(get_int(I),  I->start(), I->end()); }
 aexpr(X) ::= bool(B).
   { X = B; }
+aexpr(X) ::= STRING(S).
+  { X = new StringExpr(get_string(S), S->start(), S->end()); }
 aexpr(X) ::= aexpr(E) DOT INT(I).
   { X = new DotExpr(ptr(E), get_int(I), E->start(), I->end()); }
 aexpr(X) ::= LPAR expr(A) RPAR.
