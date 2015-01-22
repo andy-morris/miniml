@@ -1,4 +1,5 @@
 #include "lexer.hxx"
+#include "lexer/exception.hxx"
 #include "token.hxx"
 
 namespace miniml
@@ -18,8 +19,11 @@ action bump { end += fc; }
 idstart  = (alpha | "_");
 idletter = (idstart | digit | "'");
 
+strelt = (print - ["\\]) | ('\\' [nrtfvae"]) | ('\\' digit{3});
+
 ID      = (idstart idletter*) $bump;
 INT     = ('~'? [0-9]+) $bump;
+STRING  = '"' (strelt*) '"' $bump;
 FN      = "fn" $bump;
 ARROW   = "=>" $bump;
 TYARROW = "->" $bump;
@@ -82,6 +86,10 @@ token := |*
     long x = std::stol(str);
     push(ptr<IntToken>(x, start, end));
   };
+  STRING  => {
+    std::string str(ts, te - ts);
+    push(ptr<StringToken>(unescaped(str, start), start, end));
+  };
   WS;
 *|;
 }%%
@@ -93,7 +101,7 @@ token := |*
 #pragma clang diagnostic pop
 
 
-Lexer::Lexer(const String &str) throw(Lexer::LexicalError)
+Lexer::Lexer(const String &str) throw(LexicalError)
 {
   p = begin = str.data();
   eof = pe = str.data() + str.size();
@@ -104,19 +112,21 @@ Lexer::Lexer(const String &str) throw(Lexer::LexicalError)
     throw LexicalError(*p, end);
 }
 
-Lexer::LexicalError::LexicalError(char c_, Pos pos_):
-  c(c_), pos(pos_)
-{
-  std::stringstream s;
-  s << pos << ": lexical error at char '" << c << "'";
-  text = s.str();
-}
-
-
 void Lexer::push(Ptr<Token> &&tok)
 {
   m_tokens.push_back(tok);
   start = end;
+}
+
+
+std::vector<Ptr<Token>> Lexer::tokens() const
+{
+  std::vector<Ptr<Token>> v;
+  v.reserve(m_tokens.size());
+  for (auto t: m_tokens) {
+    v.push_back(t);
+  }
+  return v;
 }
 
 }

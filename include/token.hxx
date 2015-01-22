@@ -1,12 +1,17 @@
 #ifndef TOKEN_HXX_LGIKOUIZ
 #define TOKEN_HXX_LGIKOUIZ
 
+#include "lexer/exception.hxx"
 #include "id.hxx"
 #include "pos.hxx"
 #include "string.hxx"
+#include <utility>
 
 namespace miniml
 {
+
+String escaped(const String&);
+String unescaped(const String&, Pos) throw(InvalidEscape);
 
 /// Abstract class for tokens.
 struct Token: public HasPos
@@ -33,6 +38,7 @@ enum class Token::Type
 {
   ID,       ///< identifier
   INT,      ///< integer literal
+  STRING,   ///< string literal
   FN,       ///< `fn`
   ARROW,    ///< `=>`
   TYARROW,  ///< `->`
@@ -102,6 +108,22 @@ struct IntToken final: public Token
   long val;
 
   inline Token::Type type() const override { return Token::Type::INT; }
+
+  virtual void out(OStream &) const;
+};
+
+
+struct StringToken final: public Token
+{
+  StringToken(const String &val_, Pos start, Pos end):
+    Token(start, end), val(val_)
+  {}
+  StringToken(String &&val_, Pos start, Pos end):
+    Token(start, end), val(std::forward<String>(val_))
+  {}
+  const String val;
+
+  inline Token::Type type() const override { return Token::Type::STRING; }
 
   virtual void out(OStream &) const;
 };

@@ -1,7 +1,73 @@
 #include "token.hxx"
+#include <string>
+#include <limits>
+#include <cassert>
 
 namespace miniml
 {
+
+String unescaped(const String &str, Pos pos) throw(InvalidEscape)
+{
+  String out; out.reserve(str.size());
+  for (size_t i = 1; i < str.size() - 1; ++i) { // 1's because quotes
+    char c = str[i];
+    pos += c;
+    if (c == '\\') {
+      ++i; c = str[i];
+      if (c >= '0' && c <= '9') {
+        assert(e < str.size());
+        auto idx_ = str.substr(i, 3);
+        pos += idx_;
+        int idx = std::stoi(idx_);
+        if (idx > std::numeric_limits<char>::max()) {
+          throw InvalidEscape(idx, pos);
+        }
+        out.push_back((char) idx);
+        i += 3;
+      } else {
+        switch (c) {
+        case 'n': out.push_back('\n'); break;
+        case 'r': out.push_back('\r'); break;
+        case 't': out.push_back('\t'); break;
+        case 'f': out.push_back('\f'); break;
+        case 'v': out.push_back('\v'); break;
+        case 'a': out.push_back('\a'); break;
+        case 'e': out.push_back('\033'); break; // escape
+        default:  abort(); // lexer should've rejected
+        }
+      }
+    } else {
+      out.push_back(c);
+    }
+  }
+  out.shrink_to_fit();
+  return out;
+}
+
+String escaped(const String &str)
+{
+  String out; out.reserve(str.size()*2); // generous guess
+  for (char c: str) {
+    if (std::isprint(c)) {
+      out.push_back(c);
+    } else {
+      out.push_back('\\');
+      switch (c) {
+      case '\n':   out.push_back('n'); break;
+      case '\r':   out.push_back('r'); break;
+      case '\t':   out.push_back('t'); break;
+      case '\f':   out.push_back('f'); break;
+      case '\v':   out.push_back('v'); break;
+      case '\a':   out.push_back('a'); break;
+      case '\033': out.push_back('e'); break;
+      default:     out += std::to_string((int) c); break;
+      }
+    }
+  }
+  out.shrink_to_fit();
+  return out;
+}
+
 
 OStream &operator<<(OStream &out, const Pos &p)
 {
@@ -17,6 +83,11 @@ void IdToken::out(OStream &o) const
 void IntToken::out(OStream &o) const
 {
   o << "INT(" << val << ")";
+}
+
+void StringToken::out(OStream &o) const
+{
+  o << "STRING(" << escaped(val) << ")";
 }
 
 
