@@ -48,7 +48,8 @@ public:
 
   bool operator==(const Type &other) const override;
 
-  Ptr<Ppr> ppr(unsigned prec = 0, bool pos = false) const override;
+  inline Ptr<Ppr> ppr(unsigned=0, bool pos = false) const override
+  { return ppr::pos_if(pos, id().ppr(pos), start(), end()); }
 
   inline Ptr<Type> dup() const override
   { return ptr<IdType>(id(), start(), end()); }
@@ -73,7 +74,8 @@ public:
   inline bool operator==(const Type &other) const override
   { return other.type() == type(); }
 
-  Ptr<Ppr> ppr(unsigned prec = 0, bool pos = false) const override;
+  inline Ptr<Ppr> ppr(unsigned=0, bool pos = false) const override
+  { return ppr::pos_if(pos, "int"_p, start(), end()); }
 
   inline Ptr<Type> dup() const override
   { return ptr<IntType>(); }
@@ -93,7 +95,8 @@ public:
   inline bool operator==(const Type &other) const override
   { return other.type() == type(); }
 
-  Ptr<Ppr> ppr(unsigned prec = 0, bool pos = false) const override;
+  inline Ptr<Ppr> ppr(unsigned=0, bool pos = false) const override
+  { return ppr::pos_if(pos, "bool"_p, start(), end()); }
 
   inline Ptr<Type> dup() const override
   { return ptr<BoolType>(); }

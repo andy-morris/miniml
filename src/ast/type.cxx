@@ -12,20 +12,6 @@ bool IdType::operator==(const Type &other) const
   return false;
 }
 
-Ptr<Ppr> IdType::ppr(unsigned, bool pos) const
-{
-  return pos_if(pos, id().ppr(pos), start(), end());
-}
-
-Ptr<Ppr> IntType::ppr(unsigned, bool pos) const
-{
-  return pos_if(pos, "int"_p, start(), end());
-}
-
-Ptr<Ppr> BoolType::ppr(unsigned, bool pos) const
-{
-  return pos_if(pos, "bool"_p, start(), end());
-}
 
 bool ArrowType::operator==(const Type &other) const
 {
