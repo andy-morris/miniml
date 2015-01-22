@@ -116,7 +116,7 @@ public:
     Expr(start, end), m_val(val)
   {}
 
-  /// \return ExprType::INT
+  /// \return ExprType::BOOL
   inline ExprType type() const override { return ExprType::BOOL; }
 
   /// \param prec Ignored, since literals are always atomic.
