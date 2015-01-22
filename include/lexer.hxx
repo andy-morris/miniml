@@ -17,7 +17,7 @@ class Lexer
 {
 public:
   /// Creates a Lexer over the given string.
-  Lexer(const String&) throw(LexicalError);
+  Lexer(const String&);
 
   /// \return The tokens read.
   std::vector<Ptr<Token>> tokens() const;

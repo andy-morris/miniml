@@ -101,7 +101,7 @@ token := |*
 #pragma clang diagnostic pop
 
 
-Lexer::Lexer(const String &str) throw(LexicalError)
+Lexer::Lexer(const String &str)
 {
   p = begin = str.data();
   eof = pe = str.data() + str.size();

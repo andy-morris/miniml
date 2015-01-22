@@ -44,13 +44,11 @@ Parser::Parser():
 { }
 
 Ptr<Input> Parser::parse(const String &input)
-  throw(Parser::ParseFail, LexicalError)
 {
   return parse(Lexer(input).tokens());
 }
 
 Ptr<Input> Parser::parse(const std::vector<Ptr<Token>>& toks)
-  throw(Parser::ParseFail)
 {
   Input *input = nullptr;
 
@@ -86,6 +84,7 @@ namespace
 #define CASE(t) case Ty::t: return TOK_ ## t
       CASE(ID);
       CASE(INT);
+      CASE(STRING);
       CASE(FN);
       CASE(ARROW);
       CASE(TYARROW);

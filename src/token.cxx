@@ -6,7 +6,7 @@
 namespace miniml
 {
 
-String unescaped(const String &str, Pos pos) throw(InvalidEscape)
+String unescaped(const String &str, Pos pos)
 {
   String out; out.reserve(str.size());
   for (size_t i = 1; i < str.size() - 1; ++i) { // 1's because quotes

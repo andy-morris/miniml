@@ -42,10 +42,8 @@ struct Parser final
     String msg;
   };
 
-  Ptr<Input> parse(const String&)
-    throw(ParseFail, LexicalError);
-  Ptr<Input> parse(const std::vector<Ptr<Token>>&)
-    throw(ParseFail);
+  Ptr<Input> parse(const String&);
+  Ptr<Input> parse(const std::vector<Ptr<Token>>&);
 
 private:
   void *parser;

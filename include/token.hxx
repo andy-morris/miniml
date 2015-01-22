@@ -11,7 +11,7 @@ namespace miniml
 {
 
 String escaped(const String&);
-String unescaped(const String&, Pos) throw(InvalidEscape);
+String unescaped(const String&, Pos);
 
 /// Abstract class for tokens.
 struct Token: public HasPos
