@@ -22,6 +22,7 @@ enum class ExprType
   ID,      ///< Identifier
   APP,     ///< Application
   LAM,     ///< Lambda term
+  IF,      ///< If expression
   INT,     ///< Integer literal
   BOOL,    ///< Boolean literal
   STRING,  ///< String literal
@@ -245,6 +246,38 @@ private:
 
   /// Captured environment, or null if we're not evaluating yet.
   Ptr<Env<Expr>> m_env;
+};
+
+
+class IfExpr final: public Expr
+{
+public:
+  IfExpr(const IfExpr&) = default;
+  IfExpr(IfExpr&&) = default;
+
+  IfExpr(const Ptr<Expr> cond, const Ptr<Expr> thenCase,
+         const Ptr<Expr> elseCase,
+         Pos start = Pos(), Pos end = Pos()):
+    Expr(start, end), m_cond(cond), m_then(thenCase), m_else(elseCase)
+  {}
+
+  inline Ptr<Expr> cond() const { return m_cond; }
+  inline Ptr<Expr> thenCase() const { return m_then; }
+  inline Ptr<Expr> elseCase() const { return m_else; }
+
+  /// \return ExprType::IF
+  inline ExprType type() const override { return ExprType::IF; }
+
+  Ptr<Ppr> ppr(unsigned prec = 0, bool pos = false) const override;
+
+  inline Ptr<Expr> dup() const override
+  {
+    return ptr<IfExpr>(cond()->dup(), thenCase()->dup(), elseCase()->dup(),
+                       start(), end());
+  }
+
+private:
+  Ptr<Expr> m_cond, m_then, m_else;
 };
 
 
@@ -505,6 +538,7 @@ struct ExprVisitor
       CASE(ID,      IdExpr)
       CASE(APP,     AppExpr)
       CASE(LAM,     LamExpr)
+      CASE(IF,      IfExpr)
       CASE(INT,     IntExpr)
       CASE(BOOL,    BoolExpr)
       CASE(STRING,  StringExpr)
@@ -523,6 +557,7 @@ struct ExprVisitor
   virtual Ptr<T> v(Ptr<BoolExpr>, Args...) = 0;
   virtual Ptr<T> v(Ptr<StringExpr>, Args...) = 0;
   virtual Ptr<T> v(Ptr<LamExpr>, Args...) = 0;
+  virtual Ptr<T> v(Ptr<IfExpr>, Args...) = 0;
   virtual Ptr<T> v(Ptr<TypeExpr>, Args...) = 0;
   virtual Ptr<T> v(Ptr<BinOpExpr>, Args...) = 0;
   virtual Ptr<T> v(Ptr<TupleExpr>, Args...) = 0;

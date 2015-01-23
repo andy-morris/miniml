@@ -96,6 +96,7 @@ void StringToken::out(OStream &o) const
   { o << str; }
 
 ATOMIC_OUT(FN, "'fn'")
+ATOMIC_OUT(IF, "'if'")
 ATOMIC_OUT(ARROW, "'=>'")
 ATOMIC_OUT(TYARROW, "'->'")
 ATOMIC_OUT(LPAR, "'('")

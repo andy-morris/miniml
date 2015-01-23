@@ -86,6 +86,7 @@ namespace
       CASE(INT);
       CASE(STRING);
       CASE(FN);
+      CASE(IF);
       CASE(ARROW);
       CASE(TYARROW);
       CASE(LPAR);

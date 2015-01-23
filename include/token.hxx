@@ -40,6 +40,7 @@ enum class Token::Type
   INT,      ///< integer literal
   STRING,   ///< string literal
   FN,       ///< `fn`
+  IF,       ///< `if`
   ARROW,    ///< `=>`
   TYARROW,  ///< `->`
   LPAR,     ///< `(`
@@ -81,7 +82,7 @@ OStream &operator<<(OStream &out, const Token &tok);
 constexpr bool Token::is_atomic(Token::Type ty)
 {
   using Type = Token::Type;
-  return !(ty == Type::ID || ty == Type::INT);
+  return !(ty == Type::ID || ty == Type::INT || ty == Type::STRING);
 }
 
 

@@ -1,5 +1,5 @@
 prelude =>
-  val println = fn (s: string) => print s; newline ()
+  val println = fn (s: string) => (print s; newline ())
   val print_int = fn (i: int) => print (string_int i)
   val even = fn (i: int) => i/2 == 0
   val odd  = fn (i: int) => i/2 == 1

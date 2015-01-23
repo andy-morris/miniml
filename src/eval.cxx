@@ -65,6 +65,15 @@ namespace
       return x;
     }
 
+    Ptr<Expr> v(Ptr<IfExpr> x, ENV env) override
+    {
+      if (lit<ExprType::BOOL, BoolExpr, bool>(v(x->cond(), env))) {
+        return v(x->thenCase(), env);
+      } else {
+        return v(x->elseCase(), env);
+      }
+    }
+
     Ptr<Expr> v(Ptr<BinOpExpr> x, ENV env) override
     {
       using namespace std;
@@ -72,7 +81,7 @@ namespace
       auto l = v(x->left(), env), r = v(x->right(), env);
 
       auto to_int = lit<ExprType::INT, IntExpr, long>;
-      auto to_bool = lit<ExprType::INT, BoolExpr, bool>;
+      auto to_bool = lit<ExprType::BOOL, BoolExpr, bool>;
 
       auto int_op =
         [&](function<long(long, long)> f) {

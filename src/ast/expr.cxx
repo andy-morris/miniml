@@ -55,6 +55,16 @@ Ptr<Ppr> LamExpr::ppr(unsigned prec, bool pos) const
                 start(), end());
 }
 
+Ptr<Ppr> IfExpr::ppr(unsigned prec, bool pos) const
+{
+  return pos_if(pos,
+                parens_if(prec > 10 || pos,
+                          vcat({hcat({"if "_p, cond()->ppr(10, pos)}),
+                                thenCase()->ppr(10, pos) >> 1,
+                                elseCase()->ppr(10, pos) >> 1})),
+                start(), end());
+}
+
 
 Ptr<Ppr> TypeExpr::ppr(unsigned prec, bool pos) const
 {
@@ -149,6 +159,18 @@ namespace
       return s;
     }
 
+    Ret v(Ptr<IfExpr> e) override
+    {
+      auto s = ptr<unordered_set<Id>>(),
+           sc = v(e->cond()),
+           st = v(e->thenCase()),
+           se = v(e->elseCase());
+      s->insert(sc->begin(), sc->end());
+      s->insert(st->begin(), st->end());
+      s->insert(se->begin(), se->end());
+      return s;
+    }
+
     Ret v(Ptr<TypeExpr> e) override
     {
       return v(e->expr());
@@ -205,6 +227,13 @@ namespace
     {
       return ptr<AppExpr>(v(e->left(), x, arg, fv),
                           v(e->right(), x, arg, fv));
+    }
+
+    Ptr<Expr> v(Ptr<IfExpr> e, const Id x, Ptr<Expr> arg, FV::Ret fv) override
+    {
+      return ptr<IfExpr>(v(e->cond(), x, arg, fv),
+                         v(e->thenCase(), x, arg, fv),
+                         v(e->elseCase(), x, arg, fv));
     }
 
     Ptr<Expr> v(Ptr<IntExpr> e, const Id, Ptr<Expr>, FV::Ret) override

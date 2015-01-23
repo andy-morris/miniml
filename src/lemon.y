@@ -29,6 +29,8 @@
         return new IntType(i->start(), i->end());
       } else if (*i == String("bool")) {
         return new BoolType(i->start(), i->end());
+      } else if (*i == String("string")) {
+        return new StringType(i->start(), i->end());
       } else {
         return new IdType(*i, i->start(), i->end());
       }
@@ -103,6 +105,8 @@ expr(X) ::= aexprs(A).
   { X = A; }
 expr(X) ::= FN(L) LPAR id(I) COLON type(T) RPAR ARROW expr(R).
   { X = new LamExpr(*I, ptr(T), ptr(R),  L->start(), R->end()); }
+expr(X) ::= IF(L) aexpr(B) aexpr(T) aexpr(E).
+  { X = new IfExpr(ptr(B), ptr(T), ptr(E), L->start(), E->end()); }
 expr(X) ::= expr(A) COLON type(T).
   { X = new TypeExpr(ptr(A), ptr(T),  A->start(), T->end()); }
 expr(X) ::= expr(L) PLUS expr(R).

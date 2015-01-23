@@ -52,6 +52,14 @@ namespace
       return ptr<ArrowType>(e->ty(), t);
     }
 
+    Ptr<Type> v(Ptr<IfExpr> e, Ptr<Env<Type>> env) override
+    {
+      check_eq(v(e->cond(), env), ptr<BoolType>(), e->cond());
+      auto t = v(e->thenCase(), env);
+      check_eq(t, v(e->elseCase(), env), e->elseCase());
+      return t;
+    }
+
     inline Ptr<Type> v(Ptr<TypeExpr> e, Ptr<Env<Type>> env) override
     {
       check_eq(v(e->expr(), env), nf(e->ty(), env), e->expr());

@@ -25,6 +25,7 @@ ID      = (idstart idletter*) $bump;
 INT     = ('~'? [0-9]+) $bump;
 STRING  = '"' (strelt*) '"' $bump;
 FN      = "fn" $bump;
+IF      = "if" $bump;
 ARROW   = "=>" $bump;
 TYARROW = "->" $bump;
 LPAR    = "(" $bump;
@@ -54,6 +55,7 @@ WS      = (space+ | ("//" . [^\n] . "\n")) $ws;
 
 token := |*
   FN      => { push(ATOMIC(FN)); };
+  IF      => { push(ATOMIC(IF)); };
   ARROW   => { push(ATOMIC(ARROW)); };
   TYARROW => { push(ATOMIC(TYARROW)); };
   LPAR    => { push(ATOMIC(LPAR)); };
