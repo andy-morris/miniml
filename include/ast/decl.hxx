@@ -2,6 +2,7 @@
 #define DECL_HXX_TP5RLJSC
 
 #include "id.hxx"
+#include "env.hxx"
 #include "ast/expr.hxx"
 #include "ast/type.hxx"
 #include "ppr.hxx"
@@ -30,8 +31,9 @@ protected:
 class ValDecl final: public Decl
 {
 public:
-  ValDecl(Id name, Ptr<Expr> def, Pos start = Pos(), Pos end = Pos()):
-    Decl(start, end), m_name(name), m_def(def)
+  ValDecl(Id name, Ptr<Expr> def, Ptr<Type> ty = nullptr, bool rec = false,
+          Pos start = Pos(), Pos end = Pos()):
+    Decl(start, end), m_name(name), m_def(def), m_ty(ty), m_rec(rec)
   {}
 
   inline DeclType type() const { return DeclType::VAL; }
@@ -39,14 +41,23 @@ public:
   Ptr<Ppr> ppr(unsigned=0, bool pos = false) const;
 
   inline Ptr<Decl> dup() const
-  { return ptr<ValDecl>(name(), def()->dup(), start(), end()); }
+  {
+    return ptr<ValDecl>(name(), def()->dup(), ty()? ty()->dup(): nullptr,
+                        rec(), start(), end());
+  }
+
+  Ptr<Type> type_of(Ptr<Env<Type>>) const;
 
   inline Id name() const { return m_name; }
   inline Ptr<Expr> def() const { return m_def; }
+  inline Ptr<Type> ty() const { return m_ty; }
+  inline bool rec() const { return m_rec; }
 
 private:
   Id m_name;
   Ptr<Expr> m_def;
+  Ptr<Type> m_ty;
+  bool m_rec;
 };
 
 }

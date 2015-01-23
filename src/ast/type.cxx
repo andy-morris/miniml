@@ -17,7 +17,7 @@ bool ArrowType::operator==(const Type &other) const
 {
   if (type() == other.type()) {
     auto other0 = dynamic_cast<const ArrowType&>(other);
-    return left() == other0.left() && right() == other0.right();
+    return *left() == *other0.left() && *right() == *other0.right();
   }
   return false;
 }
@@ -65,36 +65,47 @@ namespace
   struct TypeNF final: public TypeVisitor<Type, Ptr<Env<Type>>>
   {
     using TypeVisitor<Type, Ptr<Env<Type>>>::v;
-    Ptr<Type> v(Ptr<IdType>, Ptr<Env<Type>>) override;
-    Ptr<Type> v(Ptr<IntType>, Ptr<Env<Type>>) override;
-    Ptr<Type> v(Ptr<BoolType>, Ptr<Env<Type>>) override;
-    Ptr<Type> v(Ptr<ArrowType>, Ptr<Env<Type>>) override;
+
+    Ptr<Type> v(Ptr<IdType> id, Ptr<Env<Type>> env) override
+    {
+      auto t = env->lookup(id->id());
+      return t? v(t, env): id;
+    }
+
+    Ptr<Type> v(Ptr<IntType>, Ptr<Env<Type>>) override
+    {
+      return ptr<IntType>();
+    }
+
+    Ptr<Type> v(Ptr<BoolType>, Ptr<Env<Type>>) override
+    {
+      return ptr<BoolType>();
+    }
+
+    Ptr<Type> v(Ptr<StringType>, Ptr<Env<Type>>) override
+    {
+      return ptr<StringType>();
+    }
+
+    Ptr<Type> v(Ptr<ArrowType> ty, Ptr<Env<Type>> env) override
+    {
+      auto l = v(ty->left(), env),
+           r = v(ty->right(), env);
+      return ptr<ArrowType>(l, r);
+    }
+
+    Ptr<Type> v(Ptr<TupleType> ty, Ptr<Env<Type>> env) override
+    {
+      auto tys = ptr<std::vector<Ptr<Type>>>();
+      tys->reserve(ty->tys()->size());
+      for (auto t: *ty->tys()) {
+        tys->push_back(v(t, env));
+      }
+      return ptr<TupleType>(tys);
+    }
   };
 
 
-  Ptr<Type> TypeNF::v(Ptr<IdType> id, Ptr<Env<Type>> env)
-  {
-    auto t = env->lookup(id->id());
-    return t? t: id;
-  }
-
-  Ptr<Type> TypeNF::v(Ptr<IntType>, Ptr<Env<Type>>)
-  {
-    return ptr<IntType>();
-  }
-
-  Ptr<Type> TypeNF::v(Ptr<BoolType>, Ptr<Env<Type>>)
-  {
-    return ptr<BoolType>();
-  }
-
-
-  Ptr<Type> TypeNF::v(Ptr<ArrowType> ty, Ptr<Env<Type>> env)
-  {
-    auto l = v(ty->left(), env),
-         r = v(ty->right(), env);
-    return ptr<ArrowType>(l, r);
-  }
 }
 
 Ptr<Type> nf(Ptr<Type> t, Ptr<Env<Type>> env)

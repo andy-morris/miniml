@@ -211,7 +211,9 @@ struct TypeVisitor
   virtual Ptr<T> v(Ptr<IdType>, Args...) = 0;
   virtual Ptr<T> v(Ptr<IntType>, Args...) = 0;
   virtual Ptr<T> v(Ptr<BoolType>, Args...) = 0;
+  virtual Ptr<T> v(Ptr<StringType>, Args...) = 0;
   virtual Ptr<T> v(Ptr<ArrowType>, Args...) = 0;
+  virtual Ptr<T> v(Ptr<TupleType>, Args...) = 0;
 };
 
 Ptr<Type> nf(Ptr<Type> t, Ptr<Env<Type>> env);

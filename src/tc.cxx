@@ -139,12 +139,13 @@ namespace
       return ty;
     }
 
-    inline void check_eq(Ptr<Type> s, Ptr<Type> t, Ptr<Expr> e)
-    { if (*s != *t) throw Clash(s, t, e); }
   };
 }
 
 Ptr<Type> type_of(Ptr<Expr> expr, Ptr<Env<Type>> env)
 { return TypeOf()(expr, env); }
+
+void check_eq(Ptr<Type> s, Ptr<Type> t, Ptr<Expr> e)
+{ if (*s != *t) throw Clash(s, t, e); }
 
 }

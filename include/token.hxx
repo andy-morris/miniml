@@ -52,6 +52,7 @@ enum class Token::Type
   DIVIDE,   ///< `/`
 
   VAL,      ///< `val`
+  REC,      ///< `rec`
   EQ,       ///< `=`
 
   TRUE,     ///< `true`

@@ -209,6 +209,15 @@ id(X) ::= ID(I).
 %destructor id {delete $$;}
 
 %type decl {Decl*}
-decl(X) ::= VAL(V) id(I) EQ expr(D).
-  { X = new ValDecl(*I, ptr(D), V->start(), D->end()); }
+decl(X) ::= VAL(V) rec_opt(R) id(I) tyann_opt(T) EQ expr(D).
+  { X = new ValDecl(*I, ptr(D), ptr(T), R, V->start(), D->end()); }
 %destructor decl {delete $$;}
+
+%type rec_opt {bool}
+rec_opt(X) ::= REC. { X = true; }
+rec_opt(X) ::= .    { X = false; }
+%destructor rec_opt {}
+
+%type tyann_opt {Type*}
+tyann_opt(X) ::= .              { X = nullptr; }
+tyann_opt(X) ::= COLON type(T). { X = T; }

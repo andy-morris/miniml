@@ -97,6 +97,7 @@ namespace
       CASE(TIMES);
       CASE(DIVIDE);
       CASE(VAL);
+      CASE(REC);
       CASE(EQ);
       CASE(TRUE);
       CASE(FALSE);

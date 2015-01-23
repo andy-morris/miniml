@@ -36,6 +36,7 @@ MINUS   = "-" $bump;
 TIMES   = "*" $bump;
 DIVIDE  = "/" $bump;
 VAL     = "val" $bump;
+REC     = "rec" $bump;
 EQ      = "=" $bump;
 TRUE    = "true" $bump;
 FALSE   = "false" $bump;
@@ -66,6 +67,7 @@ token := |*
   TIMES   => { push(ATOMIC(TIMES)); };
   DIVIDE  => { push(ATOMIC(DIVIDE)); };
   VAL     => { push(ATOMIC(VAL)); };
+  REC     => { push(ATOMIC(REC)); };
   EQ      => { push(ATOMIC(EQ)); };
   TRUE    => { push(ATOMIC(TRUE)); };
   FALSE   => { push(ATOMIC(FALSE)); };

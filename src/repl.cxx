@@ -99,23 +99,36 @@ void Repl::process(Ptr<Expr> expr, bool output)
 
 void Repl::process(Ptr<Decl> decl, bool output)
 {
-  using namespace ppr;
-
   switch (decl->type()) {
   case DeclType::VAL:
-    auto val = dyn_cast<ValDecl>(decl);
-    auto ty = type_of(val->def(), type_env());
-    auto def = eval(val->def(), value_env());
-    env()->insert(val->name(), ptr<EnvEntry>(ty, def));
-    if (output) {
-      auto msg = vcat({hcat({"val"_p, +val->name().ppr(),
-                             ':'_p, +ty->ppr(), +'='_p}),
-                       def->ppr() >> 1});
-      cout << *msg << endl;
-    }
+    process_val(dyn_cast<ValDecl>(decl), output);
   }
 }
 
+void Repl::process_val(Ptr<ValDecl> val, bool output)
+{
+  auto local_env = type_env();
+
+  if (val->rec()) {
+    local_env = ptr<Env<Type>>(local_env);
+    if (!val->ty()) {
+      throw UntypedRec(val);
+    }
+    local_env->insert(val->name(), val->ty());
+  }
+
+  auto ty = val->type_of(local_env);
+  auto def = eval(val->def(), value_env());
+
+  env()->insert(val->name(), ptr<EnvEntry>(ty, def));
+
+  if (output) {
+    auto msg = ppr::vcat({ppr::hcat({"val"_p, +val->name().ppr(),
+                                     ':'_p, +ty->ppr(), +'='_p}),
+                          def->ppr() >> 1});
+    cout << *msg << endl;
+  }
+}
 
 bool Repl::try_parse_process(const String &input, bool output)
 {
