@@ -55,7 +55,7 @@ Ptr<Ppr> TupleType::ppr(unsigned, bool pos) const
     pprs->push_back(e->ppr(0, pos));
     pprs->push_back(", "_p);
   }
-  pprs->pop_back(); // final comma
+  if (pprs->size() > 0) pprs->pop_back(); // final comma
   return pos_if(pos, parens_if(true, hcat(pprs)), start(), end());
 }
 

@@ -1,6 +1,6 @@
 INCLUDES += -Iinclude -Ibuild
-WARNS    += -Wall -Wextra -pedantic -Wdocumentation
-CXXFLAGS += -std=c++11 $(WARNS) -g $(INCLUDES) $(DEFINES)
+WARNS    += -Wall -Wextra -pedantic -Wdocumentation -Werror
+CXXFLAGS += -std=c++11 $(WARNS) -g $(INCLUDES) $(DEFINES) -fexceptions
 CFLAGS   += $(WARNS) -g $(INCLUDES) $(DEFINES)
 DEFINES  += -DNDEBUG
 RAGELFLAGS += -G2

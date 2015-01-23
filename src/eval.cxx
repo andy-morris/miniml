@@ -24,7 +24,11 @@ namespace
     {
       auto e = env->lookup(x->id());
       assert(e);
-      return v(e, env);
+      if (e->type() == ExprType::BUILTIN) {
+        return v(e->dup(), env);
+      } else {
+        return v(e, env);
+      }
     }
 
     Ptr<Expr> v(Ptr<AppExpr> x, ENV env) override

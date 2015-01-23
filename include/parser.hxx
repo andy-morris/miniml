@@ -11,7 +11,7 @@
 namespace miniml
 {
 
-enum class InputType { DECL, EXPR };
+enum class InputType { DECL, EXPR, MODULE };
 struct Input
 {
   virtual ~Input() {}
@@ -29,6 +29,17 @@ struct ExprInput final: public Input
   inline InputType type() const override { return InputType::EXPR; }
   Ptr<Expr> expr;
 };
+struct ModuleInput final: public Input
+{
+  using Decls = std::vector<Ptr<Decl>>;
+  ModuleInput(Id n, Ptr<Decls> ds):
+    name(n), decls(ds)
+  {}
+  inline InputType type() const override { return InputType::MODULE; }
+  Id name;
+  Ptr<Decls> decls;
+};
+
 
 struct Parser final
 {

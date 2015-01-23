@@ -6,6 +6,8 @@
 
   using namespace miniml;
 
+  using Decls = ModuleInput::Decls;
+
   namespace
   {
     template <typename T>
@@ -57,6 +59,7 @@
 %token_prefix TOK_
 %token_type {Token*}
 
+%left HEADER.
 %nonassoc EQ.
 %right TYARROW.
 %nonassoc COLON.
@@ -75,7 +78,25 @@ start(X) ::= decl(A).
   { *input = X = new DeclInput(ptr(A)); }
 start(X) ::= expr(A).
   { *input = X = new ExprInput(ptr(A)); }
+start(X) ::= module(A).
+  { *input = X = new ModuleInput(*A->first, ptr(A->second)); }
 %destructor start {delete $$;}
+
+%type module {std::pair<Id*, Decls*>*}
+module(X) ::= header(I) decls(D).
+  { X = new std::pair<Id*, Decls*>(I, vec(D)); }
+%destructor module {delete $$;}
+
+%type header {Id*}
+header(X) ::= ID(I) ARROW. [HEADER]
+  { X = get_id(I); }
+
+%type decls {std::deque<Ptr<Decl>>*}
+decls(X) ::= .
+  { X = new std::deque<Ptr<Decl>>; }
+decls(X) ::= decl(A) decls(B).
+  { B->push_front(ptr(A)); X = B; }
+%destructor decls {delete $$;}
 
 %type expr {Expr*}
 expr(X) ::= aexprs(A).

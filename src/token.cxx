@@ -15,7 +15,6 @@ String unescaped(const String &str, Pos pos)
     if (c == '\\') {
       ++i; c = str[i];
       if (c >= '0' && c <= '9') {
-        assert(e < str.size());
         auto idx_ = str.substr(i, 3);
         pos += idx_;
         int idx = std::stoi(idx_);

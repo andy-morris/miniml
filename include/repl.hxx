@@ -28,9 +28,11 @@ public:
 private:
   void prompt_line(String&);
   std::pair<String, String> get_next(String);
-  void process(Ptr<Input> decl);
-  void process(Ptr<Expr> decl);
-  void process(Ptr<Decl> decl);
+  bool try_parse_process(const String &input, bool output = true);
+  void process(Ptr<Input> decl, bool output);
+  void process(Ptr<Expr> decl, bool output);
+  void process(Ptr<Decl> decl, bool output);
+  void read_file(const char *filename);
 
   [[noreturn]] inline void quit() { std::exit(0); }
 

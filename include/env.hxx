@@ -15,6 +15,7 @@ class EnvBase
 public:
   virtual ~EnvBase() {}
   virtual Ptr<T> lookup(const Id&) const = 0;
+  virtual void debug() const = 0;
 };
 
 template <typename T>
@@ -74,6 +75,8 @@ public:
 
   inline Ptr<Env<U>> inner() const { return m_inner; }
   inline Ptr<T> map(Ptr<U> x) const { return m_func(x); }
+
+  inline void debug() const { m_inner->debug(); }
 
   Ptr<T> lookup(const Id &id) const override;
 private:

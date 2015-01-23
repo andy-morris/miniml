@@ -12,11 +12,13 @@ struct EnvEntry final
   inline EnvEntry(Ptr<Type> t, Ptr<Expr> v): type(t), value(v) {}
   Ptr<Type> type;
   Ptr<Expr> value;
+
+  Ptr<Ppr> ppr()
+  { return ppr::hcat({value->ppr(), ": "_p, type->ppr()}); }
 };
 
 
 Ptr<Env<EnvEntry>> init_val_env();
-Ptr<Env<Type>> init_type_env();
 }
 
 #endif /* end of include guard: INIT_ENV_HXX_CE0WIC1R */
