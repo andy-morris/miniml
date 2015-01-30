@@ -51,7 +51,7 @@ clean:
 Makefile: $(DEPS)
 build/%.d: src/%.cxx
 	@mkdir -p $(dir $@)
-	$(CXX) $(INCLUDES) -MM $< -MF $@ -MT build/$(basename $*).o
+	$(CXX) $(CXXFLAGS) $(INCLUDES) -MM $< -MF $@ -MT build/$(basename $*).o
 build/%.d: build/%.cxx
-	$(CXX) $(INCLUDES) -MM $< -MF $@ -MT build/$(basename $*).o
+	$(CXX) $(CXXFLAGS) $(INCLUDES) -MM $< -MF $@ -MT build/$(basename $*).o
 -include $(DEPS)
