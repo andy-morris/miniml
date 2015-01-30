@@ -18,6 +18,26 @@ struct EnvEntry final
 };
 
 
+Ptr<Type> arr(Ptr<Type> l, Ptr<Type> r);
+
+extern Ptr<Type> int_;
+extern Ptr<Type> string_;
+extern Ptr<Type> bool_;
+extern Ptr<Type> unit;
+
+extern Ptr<Expr> UNIT;
+
+long INT(Ptr<Expr> e);
+String STRING(Ptr<Expr> e);
+Ptr<Expr> STRING(String &&e);
+
+Ptr<EnvEntry> builtin(Ptr<Type> ty, unsigned arity, BuiltinExpr::Effect eff);
+Ptr<EnvEntry> builtin(Ptr<Type> ty, std::function<Ptr<Expr>(Ptr<Expr>)> f);
+Ptr<EnvEntry> builtin(Ptr<Type> ty, std::function<void(Ptr<Expr>)> f);
+Ptr<EnvEntry> builtin(Ptr<Type> ty,
+                      std::function<Ptr<Expr>(Ptr<Expr>,Ptr<Expr>)> f);
+Ptr<EnvEntry> builtin(Ptr<Type> ty, std::function<void()> f);
+
 Ptr<Env<EnvEntry>> init_val_env();
 }
 
