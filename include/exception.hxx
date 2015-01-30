@@ -9,7 +9,7 @@ namespace miniml
 
 struct Exception: public std::exception
 {
-  ~Exception() {}
+  virtual ~Exception() noexcept {}
 };
 
 inline OStream &operator<<(OStream &out, const Exception &e)

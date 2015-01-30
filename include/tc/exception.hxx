@@ -10,7 +10,7 @@ namespace miniml
 
 struct TCException: public Exception
 {
-  virtual ~TCException() {}
+  virtual ~TCException() noexcept {}
   inline const char *what() const noexcept override { return msg.c_str(); }
   String msg;
 };

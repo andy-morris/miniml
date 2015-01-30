@@ -8,7 +8,7 @@ namespace miniml
 {
   struct LexerError: public Exception
   {
-    virtual ~LexerError() {}
+    virtual ~LexerError() noexcept {}
 
     /// \return the value of \ref text.
     virtual const char *what() const noexcept override
