@@ -33,7 +33,7 @@ private:
   void process(Ptr<Expr> decl, bool output);
   void process(Ptr<Decl> decl, bool output);
   void process_val(Ptr<ValDecl> val, bool output);
-  void read_file(const char *filename);
+  void read_file(const char *filename, bool output = false);
 
   [[noreturn]] inline void quit() { std::exit(0); }
 

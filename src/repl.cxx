@@ -17,6 +17,11 @@ Repl::Repl():
 {
   m_env = init_val_env();
   read_file("prelude.mml");
+  m_env->insert("use"_i,
+                builtin(arr(string_, unit),
+                        [&](Ptr<Expr> file) {
+                          read_file(STRING(file).data());
+                        }));
 #ifndef NDEBUG
   m_env->debug();
 #endif
@@ -151,19 +156,23 @@ bool Repl::try_parse_process(const String &input, bool output)
 }
 
 
-void Repl::read_file(const char *filename)
+void Repl::read_file(const char *filename, bool output)
 {
 #ifndef NDEBUG
   clog << "reading " << filename << " ..." << endl;
 #endif
   ifstream in(filename);
+  if (in.fail()) {
+    cerr << "file " << filename << " doesn't exist" << endl;
+    return;
+  }
   string contents;
   while (in.good()) {
     string line;
     getline(in, line);
     contents += line + "\n";
   }
-  try_parse_process(contents, false);
+  try_parse_process(contents, output);
 }
 
 
