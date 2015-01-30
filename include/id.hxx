@@ -74,7 +74,7 @@ inline Id Id::suffix(T suf)
 inline OStream& operator<<(OStream &out, const Id &id)
 { return out << *id.val(); }
 
-inline Id operator""_i(const char *s, size_t) { return Id(s); }
+inline Id operator"" _i(const char *s, size_t) { return Id(s); }
 
 }
 

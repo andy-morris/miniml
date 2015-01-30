@@ -154,10 +154,10 @@ namespace ppr
 Ptr<Ppr> operator>>(Ptr<Ppr>, unsigned);
 
 /// Creates a document from a string literal.
-Ptr<Ppr> operator""_p(const Char*, size_t);
+Ptr<Ppr> operator"" _p(const Char*, size_t);
 
 /// Creates a (single-character) document from a \c char literal.
-Ptr<Ppr> operator""_p(Char);
+Ptr<Ppr> operator"" _p(Char);
 
 /// Inserts a space before a document.
 Ptr<Ppr> operator+(Ptr<Ppr>);
