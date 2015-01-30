@@ -53,6 +53,7 @@ enum class Token::Type
 
   VAL,      ///< `val`
   REC,      ///< `rec`
+  FUN,      ///< `fun`
   EQ,       ///< `=`
 
   TRUE,     ///< `true`

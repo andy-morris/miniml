@@ -3,6 +3,7 @@
   #include "token.hxx"
   #include "parser.hxx"
   #include <cassert>
+  #include <utility>
 
   using namespace miniml;
 
@@ -10,6 +11,8 @@
 
   namespace
   {
+    struct Arg { Id name; Type *type; };
+
     template <typename T>
     inline Ptr<T> ptr(T *t)
     { return Ptr<T>(t); }
@@ -35,6 +38,27 @@
         return new IdType(*i, i->start(), i->end());
       }
     }
+
+    // NB: args in reverse order
+    inline Ptr<Expr> make_lam(const std::deque<Ptr<Arg>> &args, Expr *body)
+    {
+      auto e = ptr(body);
+      for (auto a: args) {
+        e = ptr<LamExpr>(a->name, ptr(a->type), e);
+      }
+      return e;
+    }
+
+    // NB: args in reverse order, still
+    inline Ptr<Type> make_lam_type(const std::deque<Ptr<Arg>> &args, Type *ret)
+    {
+      auto t = ptr(ret);
+      for (auto a: args) {
+        t = ptr<ArrowType>(ptr(a->type), t);
+      }
+      return t;
+    }
+
 
     template <typename T>
     inline std::vector<T> *vec(std::deque<T> *deq)
@@ -211,6 +235,9 @@ id(X) ::= ID(I).
 %type decl {Decl*}
 decl(X) ::= VAL(V) rec_opt(R) id(I) tyann_opt(T) EQ expr(D).
   { X = new ValDecl(*I, ptr(D), ptr(T), R, V->start(), D->end()); }
+decl(X) ::= FUN(F) id(I) args(A) COLON type(T) EQ expr(D).
+  { X = new ValDecl(*I, make_lam(*A, D), make_lam_type(*A, T), true,
+                    F->start(), D->end()); }
 %destructor decl {delete $$;}
 
 %type rec_opt {bool}
@@ -221,3 +248,15 @@ rec_opt(X) ::= .    { X = false; }
 %type tyann_opt {Type*}
 tyann_opt(X) ::= .              { X = nullptr; }
 tyann_opt(X) ::= COLON type(T). { X = T; }
+%destructor tyann_opt {delete $$;}
+
+%type args {std::deque<Ptr<Arg>>*}
+args(X) ::= arg(A).
+  { X = new std::deque<Ptr<Arg>>({ptr(A)}); }
+args(X) ::= arg(A) args(B).
+  { B->push_back(ptr(A)); X = B; }
+%destructor args {delete $$;}
+
+%type arg {Arg*}
+arg(X) ::= LPAR ID(I) COLON type(T) RPAR.
+  { X = new Arg {*get_id(I), T}; }

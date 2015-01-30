@@ -98,6 +98,7 @@ namespace
       CASE(DIVIDE);
       CASE(VAL);
       CASE(REC);
+      CASE(FUN);
       CASE(EQ);
       CASE(TRUE);
       CASE(FALSE);
