@@ -1,6 +1,5 @@
 INCLUDES += -Iinclude -Ibuild
-# -Wdocumentation not supported by GCC
-WARNS    += -Wall -Wextra -pedantic -Werror #-Wdocumentation
+WARNS    += -Wall -Wextra -pedantic -Werror
 CXXFLAGS += -std=c++11 $(WARNS) -g $(INCLUDES) $(DEFINES) -fexceptions
 CFLAGS   += $(WARNS) -g $(INCLUDES) $(DEFINES)
 DEFINES  += -DNDEBUG
