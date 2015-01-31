@@ -6,6 +6,7 @@
 #include "pos.hxx"
 #include "string.hxx"
 #include <utility>
+#include <cstddef>
 
 namespace miniml
 {
@@ -91,7 +92,7 @@ constexpr bool Token::is_atomic(Token::Type ty)
 struct IdToken final: public Token
 {
   IdToken(Id *id_, Pos start, Pos end): Token(start, end), id(id_) {}
-  IdToken(const Char *c, ptrdiff_t size, Pos start, Pos end):
+  IdToken(const Char *c, std::ptrdiff_t size, Pos start, Pos end):
     IdToken(new Id(ptr<String>(c, size)), start, end)
   {}
 
