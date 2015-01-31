@@ -48,9 +48,9 @@ public:
   /// \return `DeclType::VAL`
   inline DeclType type() const { return DeclType::VAL; }
 
-  Ptr<Ppr> ppr(unsigned=0, bool pos = false) const;
+  Ptr<Ppr> ppr(unsigned=0, bool pos = false) const override;
 
-  inline Ptr<Decl> dup() const
+  inline Ptr<Decl> dup() const override
   {
     return ptr<ValDecl>(name(), def()->dup(), ty()? ty()->dup(): nullptr,
                         rec(), start(), end());
