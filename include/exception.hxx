@@ -7,6 +7,7 @@
 namespace miniml
 {
 
+/// Base class for exceptions used inside MiniML.
 struct Exception: public std::exception
 {
   virtual ~Exception() noexcept {}

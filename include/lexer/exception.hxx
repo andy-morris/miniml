@@ -6,6 +6,7 @@
 
 namespace miniml
 {
+  /// Errors that occur during lexing.
   struct LexerError: public Exception
   {
     virtual ~LexerError() noexcept {}
@@ -20,7 +21,7 @@ namespace miniml
     Pos pos;
   };
 
-  /// Exception thrown when a lexical error is enountered.
+  /// Exception thrown when an unexpected character is found.
   struct LexicalError final: public LexerError
   {
     LexicalError(char c_, Pos pos_);

@@ -13,6 +13,7 @@
 namespace miniml
 {
 
+/// Syntactic kinds of types.
 enum class TypeType
 {
   ID,
@@ -23,6 +24,7 @@ enum class TypeType
   TUPLE,
 };
 
+/// Base class for types.
 class Type: public Pretty, public HasPos, public Dup<Type>
 {
 public:
@@ -35,6 +37,7 @@ protected:
 };
 
 
+/// Type names (other than `int`/`string`/`bool`).
 class IdType final: public Type
 {
 public:
@@ -62,6 +65,7 @@ private:
 };
 
 
+/// Integer type.
 class IntType final: public Type
 {
 public:
@@ -83,6 +87,7 @@ public:
 };
 
 
+/// Boolean type.
 class BoolType final: public Type
 {
 public:
@@ -104,6 +109,7 @@ public:
 };
 
 
+/// String type.
 class StringType final: public Type
 {
 public:
@@ -125,6 +131,7 @@ public:
 };
 
 
+/// Arrow type `a -> b`.
 class ArrowType final: public Type
 {
 public:
@@ -145,7 +152,9 @@ public:
   inline Ptr<Type> dup() const override
   { return ptr<ArrowType>(left()->dup(), right()->dup(), start(), end()); }
 
+  /// Domain.
   inline Ptr<Type> left() const { return m_left; }
+  /// Range.
   inline Ptr<Type> right() const { return m_right; }
 
 private:
@@ -153,6 +162,7 @@ private:
 };
 
 
+/// Tuple type `(a, b, c)`.
 class TupleType final: public Type
 {
 public:
@@ -180,6 +190,7 @@ public:
   inline Ptr<Type> dup() const override
   { return ptr<TupleType>(ptr<Types>(*tys())); }
 
+  /// Get the inner types.
   inline Ptr<Types> tys() const { return m_tys; }
 
 private:
@@ -219,6 +230,7 @@ struct TypeVisitor
   virtual Ptr<T> v(Ptr<TupleType>, Args...) = 0;
 };
 
+/// Reduce a type to normal form, substituting names as given.
 Ptr<Type> nf(Ptr<Type> t, Ptr<Env<Type>> env);
 
 

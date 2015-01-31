@@ -6,6 +6,7 @@
 namespace miniml
 {
 
+/// Source code position.
 struct Pos final: public Pretty
 {
   size_t line = 1,  ///< Line number
@@ -13,9 +14,12 @@ struct Pos final: public Pretty
          pos = 0;   ///< File position
 
   Pos operator+(const char) const;
+  /// Advance the position depending on what the character is.
   Pos &operator+=(const char);
 
   Pos operator+(const String&) const;
+  /// Advance the position by the contents of a string.
+  /// \sa #operator+=(const char)
   Pos &operator+=(const String&);
 
   inline Ptr<Ppr> ppr(unsigned=0, bool=false) const override
@@ -25,6 +29,7 @@ struct Pos final: public Pretty
 OStream &operator<<(OStream&, const Pos&);
 
 
+/// Span of positions. \sa Pos
 struct Span final
 {
   inline Ptr<Ppr> ppr() const
@@ -37,10 +42,12 @@ struct Span final
 
 namespace ppr
 {
+  /// Maybe follow a Ppr fragment with a source span.
   Ptr<Ppr> pos_if(bool, Ptr<Ppr>, Pos start, Pos end);
 }
 
 
+/// Base class for values which have source code positions.
 struct HasPos
 {
   inline Pos start() const { return m_start; }

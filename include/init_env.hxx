@@ -7,6 +7,7 @@
 
 namespace miniml
 {
+/// An environment entry containing a type and a definition.
 struct EnvEntry final
 {
   inline EnvEntry(Ptr<Type> t, Ptr<Expr> v): type(t), value(v) {}
@@ -18,6 +19,7 @@ struct EnvEntry final
 };
 
 
+/// Construct an arrow type.
 Ptr<Type> arr(Ptr<Type> l, Ptr<Type> r);
 
 extern Ptr<Type> int_;
@@ -25,6 +27,7 @@ extern Ptr<Type> string_;
 extern Ptr<Type> bool_;
 extern Ptr<Type> unit;
 
+/// The expression `()`.
 extern Ptr<Expr> UNIT;
 
 long INT(Ptr<Expr> e);
@@ -38,6 +41,7 @@ Ptr<EnvEntry> builtin(Ptr<Type> ty,
                       std::function<Ptr<Expr>(Ptr<Expr>,Ptr<Expr>)> f);
 Ptr<EnvEntry> builtin(Ptr<Type> ty, std::function<void()> f);
 
+/// Builds an environment containing the magical builtins.
 Ptr<Env<EnvEntry>> init_val_env();
 }
 

@@ -8,6 +8,7 @@
 namespace miniml
 {
 
+/// Exceptions that might occur during type checking.
 struct TCException: public Exception
 {
   virtual ~TCException() noexcept {}
@@ -15,6 +16,7 @@ struct TCException: public Exception
   String msg;
 };
 
+/// A definition of an identifier couldn't be found.
 struct NotInScope final: public TCException
 {
   NotInScope(const Id id)
@@ -23,6 +25,7 @@ struct NotInScope final: public TCException
   }
 };
 
+/// Two types should be equal but aren't.
 struct Clash final: public TCException
 {
   Clash(const Ptr<Type> expected, const Ptr<Type> actual, const Ptr<Expr> expr)
@@ -38,6 +41,7 @@ struct Clash final: public TCException
   }
 };
 
+/// An arrow type `a -> b` was expected but something else was found.
 struct NotArrow final: public TCException
 {
   NotArrow(const Ptr<Type> t)
@@ -46,6 +50,8 @@ struct NotArrow final: public TCException
   }
 };
 
+/// A projection was either applied to a tuple that was too short or something
+/// that wasn't a tuple at all.
 struct CannotProject final: public TCException
 {
   CannotProject(Ptr<Expr> expr, Ptr<Type> ty, unsigned index)
@@ -58,6 +64,7 @@ struct CannotProject final: public TCException
   }
 };
 
+/// A recursive value doesn't have a type.
 struct UntypedRec final: public TCException
 {
   UntypedRec(Ptr<ValDecl> decl)

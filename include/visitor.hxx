@@ -7,6 +7,8 @@
 namespace miniml
 {
 
+/// Exception when a visitor can't find the specific subclass for an object.
+/// \sa ExprVisitor \sa TypeVisitor
 struct AbstractVisit final: public std::exception
 {
   AbstractVisit(const std::string &cls):

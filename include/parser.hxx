@@ -11,24 +11,28 @@
 namespace miniml
 {
 
+/// Different possibilities for the parser to produce.
 enum class InputType { DECL, EXPR, MODULE };
 struct Input
 {
   virtual ~Input() {}
   virtual InputType type() const = 0;
 };
+/// The input was a declaration.
 struct DeclInput final: public Input
 {
   DeclInput(Ptr<Decl> d): decl(d) {}
   inline InputType type() const override { return InputType::DECL; }
   Ptr<Decl> decl;
 };
+/// The input was an expression.
 struct ExprInput final: public Input
 {
   ExprInput(Ptr<Expr> e): expr(e) {}
   inline InputType type() const override { return InputType::EXPR; }
   Ptr<Expr> expr;
 };
+/// The input was a module.
 struct ModuleInput final: public Input
 {
   using Decls = std::vector<Ptr<Decl>>;
@@ -41,11 +45,13 @@ struct ModuleInput final: public Input
 };
 
 
+/// Wrapper for a <a href="http://www.hwaci.com/sw/lemon/">lemon</a> parser.
 struct Parser final
 {
   Parser();
   ~Parser();
 
+  /// Exception when parsing fails.
   struct ParseFail final: public Exception
   {
     ParseFail(const Token *t);
@@ -53,11 +59,13 @@ struct Parser final
     String msg;
   };
 
+  /// Lex & parse a string. \sa Lexer
   Ptr<Input> parse(const String&);
+  /// Parse a token stream that was already produced.
   Ptr<Input> parse(const std::vector<Ptr<Token>>&);
 
 private:
-  void *parser;
+  void *parser; ///< The object lemon produces.
 };
 
 }

@@ -6,9 +6,12 @@
 namespace miniml
 {
 
+/// Base class for values that can be duplicated (and need to be at some
+/// point).
 template <typename T>
 struct Dup
 {
+  /// Duplicate a value.
   virtual Ptr<T> dup() const = 0;
 };
 

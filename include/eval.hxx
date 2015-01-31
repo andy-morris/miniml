@@ -6,6 +6,7 @@
 namespace miniml
 {
 
+/// Evaluate an expression with the given value environment.
 Ptr<Expr> eval(Ptr<Expr>, Ptr<Env<Expr>>);
 
 }

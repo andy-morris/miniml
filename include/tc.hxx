@@ -8,6 +8,7 @@
 namespace miniml
 {
 
+/// Typechecks an expression.
 Ptr<Type> type_of(Ptr<Expr> expr, Ptr<Env<Type>> env);
 
 /// If the types aren't equal throws a Clash exception with \a expr marked as

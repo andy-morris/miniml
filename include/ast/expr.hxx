@@ -39,7 +39,7 @@ class Expr: public Pretty, public HasPos, public Dup<Expr>
 public:
   virtual ~Expr() {}
   /// Get the (syntactic) type of the expression.
-  /// \see ExprType
+  /// \sa ExprType
   virtual ExprType type() const = 0;
 
   // Substitutes \a expr for all occurrences of \a var in \a this.
@@ -312,6 +312,7 @@ private:
 };
 
 
+/// Tuple expressions.
 class TupleExpr final: public Expr
 {
 public:
@@ -330,10 +331,12 @@ public:
     TupleExpr(ptr<Exprs>(exprs), start, end)
   {}
 
+  /// \return `ExprType::TUPLE`
   inline ExprType type() const override { return ExprType::TUPLE; }
 
   Ptr<Ppr> ppr(unsigned prec = 0, bool pos = false) const override;
 
+  /// The inner expressions.
   inline Ptr<Exprs> exprs() const { return m_exprs; }
 
   inline Ptr<Expr> dup() const override
@@ -349,6 +352,7 @@ private:
 };
 
 
+/// Dot expressions, i.e. tuple projections
 class DotExpr final: public Expr
 {
 public:
@@ -360,11 +364,14 @@ public:
     Expr(start, end), m_expr(expr), m_index(index)
   {}
 
+  /// \return `ExprType::DOT`
   inline ExprType type() const override { return ExprType::DOT; }
 
   Ptr<Ppr> ppr(unsigned=0, bool pos = false) const override;
 
+  /// Tuple expression
   inline Ptr<Expr> expr() const { return m_expr; }
+  /// Which element to project
   inline unsigned index() const { return m_index; }
 
   inline Ptr<Expr> dup() const override
@@ -376,11 +383,16 @@ private:
 };
 
 
-/// Builtin expressions for side effects.
+/**
+  * Builtin expressions for side effects or other things that can't be
+  * expressed in the language itself.
+  */
 class BuiltinExpr final: public Expr
 {
 public:
+  /// Function arguments.
   using Args = std::deque<Ptr<Expr>>;
+  /// What the function does. Might include side effects hence the name.
   using Effect = std::function<Ptr<Expr>(Args&)>;
 
   BuiltinExpr(const BuiltinExpr&) = default;
@@ -393,12 +405,21 @@ public:
     m_args = ptr<std::deque<Ptr<Expr>>>();
   }
 
+  /// Whether the function has had all its arguments given yet.
+  /// \sa #give_arg
   inline bool need_arg() const { return arity() > args()->size(); }
 
+  /// Give another argument. Make sure more arguments are actually needed or an
+  /// assert will fail.
+  /// \sa #need_arg
   void give_arg(Ptr<Expr> arg);
 
+  /// Run the effects. Make sure all arguments are given otherwise an
+  /// assert will fail.
+  /// \sa #need_arg \sa #give_arg
   Ptr<Expr> run();
 
+  /// \return `ExprType::BUILTIN`
   inline ExprType type() const override { return ExprType::BUILTIN; }
 
   Ptr<Expr> dup() const override;
@@ -406,9 +427,13 @@ public:
   inline Ptr<Ppr> ppr(unsigned=0, bool pos = false) const override
   { return ppr::pos_if(pos, "<<builtin>>"_p, start(), end()); }
 
+  /// Function which #run will call.
   inline Effect effect() const { return m_effect; }
+  /// Already-given arguments.
   inline Ptr<std::deque<Ptr<Expr>>> args() const { return m_args; }
+  /// Type of the function.
   inline Ptr<Type> ty() const { return m_ty; }
+  /// Total number of arguments (including ones already given).
   inline unsigned arity() const { return m_arity; }
 
 private:
@@ -419,7 +444,7 @@ private:
 };
 
 
-/// Operators. \see OpExpr
+/// Operators. \sa OpExpr
 enum class BinOp
 {
   PLUS, MINUS, TIMES, DIVIDE,
@@ -428,8 +453,10 @@ enum class BinOp
   SEQ,
 };
 
+/// Associativities.
 enum class OpAssoc { LEFT, NONE, RIGHT };
 
+/// Precedence; lower is looser.
 inline unsigned prec(BinOp op)
 {
   switch (op) {
@@ -460,6 +487,7 @@ inline unsigned prec(BinOp op)
   }
 }
 
+/// Name of an operator as seen in the source.
 inline Ptr<Ppr> name(BinOp op)
 {
   switch (op) {
@@ -483,6 +511,7 @@ inline Ptr<Ppr> name(BinOp op)
   }
 }
 
+/// Associativity of operator.
 inline OpAssoc assoc(BinOp op)
 {
   switch (op) {
@@ -500,7 +529,7 @@ inline OpAssoc assoc(BinOp op)
   }
 }
 
-/// Binary operator expressions. \see OpType
+/// Binary operator expressions. \sa OpType
 class BinOpExpr final: public Expr
 {
 public:
@@ -512,6 +541,7 @@ public:
     Expr(start, end), m_op(op), m_left(left), m_right(right)
   {}
 
+  /// \return ExprType::BINOP
   inline ExprType type() const override { return ExprType::BINOP; }
 
   virtual Ptr<Ppr> ppr(unsigned prec = 0, bool pos = false) const override;
@@ -519,8 +549,11 @@ public:
   inline Ptr<Expr> dup() const override
   { return ptr<BinOpExpr>(op(), left()->dup(), right()->dup()); }
 
+  /// Which operator this expression uses.
   inline BinOp op() const { return m_op; }
+  /// Left hand side.
   inline Ptr<Expr> left() const { return m_left; }
+  /// Right hand side.
   inline Ptr<Expr> right() const { return m_right; }
 
 private:
@@ -574,6 +607,7 @@ struct ExprVisitor
   virtual Ptr<T> v(Ptr<BuiltinExpr>, Args...) = 0;
 };
 
+/// Free variables of an expression.
 Ptr<std::unordered_set<Id>> fv(const Ptr<Expr> expr);
 
 }

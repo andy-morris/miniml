@@ -9,15 +9,23 @@
 namespace miniml
 {
 
+/// Base class for environments, which are layers of mappings from identifiers
+/// to `T`s. On lookup, if an identifier isn't present in one layer, the next
+/// one is checked, to model nested scopes.
+/// \sa Env
 template <typename T>
 class EnvBase
 {
 public:
   virtual ~EnvBase() {}
+  /// Look up a name.
+  /// \return `nullptr` if the name isn't present.
   virtual Ptr<T> lookup(const Id&) const = 0;
+  /// Dump the contents of the environment and any inner ones.
   virtual void debug() const = 0;
 };
 
+/// Normal environments backed by a map data structure.
 template <typename T>
 class Env final: public EnvBase<T>
 {
@@ -27,6 +35,7 @@ public:
 
   Ptr<T> lookup(const Id&) const override;
 
+  /// Add a new binding.
   void insert(const Id&, const Ptr<T>);
 
   void debug() const
@@ -62,6 +71,9 @@ void Env<T>::insert(const Id &id, const Ptr<T> val)
 }
 
 
+/// Environments which map some other Env's contents on the fly.
+/// Since the function may not be bijective, mapped environments don't support
+/// insertion.
 template <typename T, typename U>
 class MappedEnv final: public EnvBase<T>
 {
@@ -73,6 +85,7 @@ public:
     m_inner(inner), m_func(func)
   {}
 
+  /// The backing environment.
   inline Ptr<Env<U>> inner() const { return m_inner; }
   inline Ptr<T> map(Ptr<U> x) const { return m_func(x); }
 

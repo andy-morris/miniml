@@ -11,7 +11,9 @@
 namespace miniml
 {
 
+/// \\-escape a string.
 String escaped(const String&);
+/// Remove \\-escapes from a string.
 String unescaped(const String&, Pos);
 
 /// Abstract class for tokens.
@@ -89,6 +91,7 @@ constexpr bool Token::is_atomic(Token::Type ty)
 }
 
 
+/// Identifiers.
 struct IdToken final: public Token
 {
   IdToken(Id *id_, Pos start, Pos end): Token(start, end), id(id_) {}
@@ -106,6 +109,7 @@ struct IdToken final: public Token
 };
 
 
+/// Integer literals.
 struct IntToken final: public Token
 {
   IntToken(long val_, Pos start, Pos end): Token(start, end), val(val_) {}
@@ -117,6 +121,7 @@ struct IntToken final: public Token
 };
 
 
+/// String literals.
 struct StringToken final: public Token
 {
   StringToken(const String &val_, Pos start, Pos end):
@@ -133,6 +138,7 @@ struct StringToken final: public Token
 };
 
 
+/// Atomic tokens, i.e. ones with no value other than their Token::Type.
 template <Token::Type Ty>
 class AtomicToken final: public Token
 {
@@ -148,6 +154,7 @@ static_assert(Token::is_atomic(Ty),
 };
 
 
+/// Make an AtomicToken.
 template <Token::Type Ty>
 inline Ptr<Token> Token::atomic(Pos start, Pos end)
 {
