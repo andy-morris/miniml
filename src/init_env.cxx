@@ -47,7 +47,7 @@ Ptr<EnvEntry> builtin(Ptr<Type> ty, std::function<Ptr<Expr>(Ptr<Expr>)> f)
   return builtin(ty, 1, [f](Args a) { return f(a[0]); });
 }
 
-Ptr<EnvEntry> builtin(Ptr<Type> ty, std::function<void(Ptr<Expr>)> f)
+Ptr<EnvEntry> builtin_v(Ptr<Type> ty, std::function<void(Ptr<Expr>)> f)
 {
   return builtin(ty, 1, [f](Args a) { f(a[0]); return UNIT; });
 }
@@ -75,8 +75,8 @@ Ptr<Env<EnvEntry>> init_val_env()
                         return STRING(std::to_string(INT(e)));
                       }));
   env->insert("print"_i,
-              builtin(arr(string_, unit),
-                      [] (Ptr<Expr> e) { std::cout << STRING(e); }));
+              builtin_v(arr(string_, unit),
+                        [] (Ptr<Expr> e) { std::cout << STRING(e); }));
   env->insert("app"_i,
               builtin(arr(string_, arr(string_, string_)),
                       [] (Ptr<Expr> s, Ptr<Expr> t) {

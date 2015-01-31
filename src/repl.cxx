@@ -18,10 +18,10 @@ Repl::Repl():
   m_env = init_val_env();
   read_file("prelude.mml");
   m_env->insert("use"_i,
-                builtin(arr(string_, unit),
-                        [&](Ptr<Expr> file) {
-                          read_file(STRING(file).data());
-                        }));
+                builtin_v(arr(string_, unit),
+                          [&](Ptr<Expr> file) {
+                            read_file(STRING(file).data());
+                          }));
 #ifndef NDEBUG
   m_env->debug();
 #endif

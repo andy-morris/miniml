@@ -33,7 +33,7 @@ Ptr<Expr> STRING(String &&e);
 
 Ptr<EnvEntry> builtin(Ptr<Type> ty, unsigned arity, BuiltinExpr::Effect eff);
 Ptr<EnvEntry> builtin(Ptr<Type> ty, std::function<Ptr<Expr>(Ptr<Expr>)> f);
-Ptr<EnvEntry> builtin(Ptr<Type> ty, std::function<void(Ptr<Expr>)> f);
+Ptr<EnvEntry> builtin_v(Ptr<Type> ty, std::function<void(Ptr<Expr>)> f);
 Ptr<EnvEntry> builtin(Ptr<Type> ty,
                       std::function<Ptr<Expr>(Ptr<Expr>,Ptr<Expr>)> f);
 Ptr<EnvEntry> builtin(Ptr<Type> ty, std::function<void()> f);
