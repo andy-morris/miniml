@@ -101,10 +101,10 @@ token := |*
 }%%
 
 
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wunused-const-variable"
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-variable"
 %% write data;
-#pragma clang diagnostic pop
+#pragma GCC diagnostic pop
 
 
 Lexer::Lexer(const String &str)
