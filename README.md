@@ -75,5 +75,7 @@ with GCC 4.9 on Debian and Xcode's version of clang on OS X).
 - GCC [doesn't check exhaustiveness of `switch`][gcc_switch], which is what the
   `#ifdef __GNUC__` business is all about.
 - `#pragma GCC diagnostic` is understood by Clang too.
+- If something seems redundant (say, non-builtin type names), it probably is.
+  There was going to be a lot more to this but I ran out of time.
 
 [gcc_switch]: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=28236
