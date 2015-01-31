@@ -206,6 +206,9 @@ struct TypeVisitor
       CASE(ARROW, ArrowType);
       CASE(TUPLE, TupleType);
 #undef CASE
+#ifdef __GNUC__
+      default: std::abort();
+#endif
     }
   }
   virtual Ptr<T> v(Ptr<IdType>, Args...) = 0;

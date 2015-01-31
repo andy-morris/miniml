@@ -115,6 +115,9 @@ namespace
       CASE(COMMA);
       CASE(DOT);
 #undef CASE
+#ifdef __GNUC__
+      default: std::abort();
+#endif
     }
   }
 }

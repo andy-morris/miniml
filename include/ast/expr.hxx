@@ -454,6 +454,9 @@ inline unsigned prec(BinOp op)
     return 2;
   case BinOp::SEQ:
     return 1;
+#ifdef __GNUC__
+  default: std::abort();
+#endif
   }
 }
 
@@ -474,6 +477,9 @@ inline Ptr<Ppr> name(BinOp op)
   case BinOp::OR:      return "||"_p;
   case BinOp::IFF:     return "<->"_p;
   case BinOp::SEQ:     return ';'_p;
+#ifdef __GNUC__
+  default: std::abort();
+#endif
   }
 }
 
@@ -548,6 +554,9 @@ struct ExprVisitor
       CASE(DOT,     DotExpr)
       CASE(BUILTIN, BuiltinExpr)
 #undef CASE
+#ifdef __GNUC__
+      default: std::abort();
+#endif
     }
   }
 

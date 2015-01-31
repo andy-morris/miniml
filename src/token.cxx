@@ -32,7 +32,7 @@ String unescaped(const String &str, Pos pos)
         case 'v': out.push_back('\v'); break;
         case 'a': out.push_back('\a'); break;
         case 'e': out.push_back('\033'); break; // escape
-        default:  abort(); // lexer should've rejected
+        default:  std::abort(); // lexer should've rejected
         }
       }
     } else {

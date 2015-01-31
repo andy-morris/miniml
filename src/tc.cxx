@@ -1,4 +1,5 @@
 #include "tc.hxx"
+#include <cstdlib>
 
 namespace miniml
 {
@@ -95,6 +96,9 @@ namespace
         return bool_;
       case BinOp::SEQ:
         return v(e->right(), env);
+#ifdef __GNUC__
+      default: std::abort();
+#endif
       }
     }
 

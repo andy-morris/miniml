@@ -111,6 +111,9 @@ namespace
       case BinOp::GREATER: return int_cmp(greater<long>());
       case BinOp::NEQ:     return int_cmp(not_equal_to<long>());
       case BinOp::SEQ:     return r;
+#ifdef __GNUC__
+      default:             std::abort();
+#endif
       }
     }
 
