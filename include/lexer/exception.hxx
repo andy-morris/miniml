@@ -30,8 +30,6 @@ namespace miniml
   };
 
   /// Exception thrown when a numeric escape sequence in a string is too high.
-  /// `pos` indicates the whole string literal, though, which is probably not
-  /// ideal.
   struct InvalidEscape final: public LexerError
   {
     InvalidEscape(int, Pos pos_);
